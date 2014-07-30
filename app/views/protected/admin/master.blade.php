@@ -36,14 +36,14 @@
 		        <span class="icon-bar"></span>
 		        <span class="icon-bar"></span>
 		      </button>
-		      <a class="navbar-brand" href="/">	<span class="glyphicon glyphicon-wrench"></span></a>
+		      <a class="navbar-brand" href="{{URL::to(' ')}}">	<span class="glyphicon glyphicon-wrench"></span></a>
 		    </div>
 
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		      <ul class="nav navbar-nav">
-		        <li class="{{ set_active_admin('admin') }}"><a href="/admin">Home</a></li>
-  		        <li class="{{ set_active_admin('admin/profiles') }}"><a href="/admin/profiles">List Users</a></li>
+		        <li class="{{ set_active_admin('admin') }}"><a href="{{URL::to('admin')}}">Home</a></li>
+  		        <li class="{{ set_active_admin('admin/profiles') }}"><a href="{{URL::to('/admin/profiles')}}">List Users</a></li>
   		        <li class="{{ set_active('database*') }}"><a href="{{ URL::to('database') }}">Database</a></li>
   		        
   		        <li class="{{ set_active('#') }}"><a href="{{ URL::to('import') }}">Schedule</a></li>

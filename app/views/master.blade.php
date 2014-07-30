@@ -78,7 +78,7 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 		        <li class="{{ set_active('contact') }}"><a href="/contact">Contact</a></li> --> 
 		        <li class="{{ set_active('graph') }}"><a href="{{ URL::to('graph') }}">Graph</a></li>
 		        <li class="{{ set_active('import') }}"><a href="{{ URL::to('import') }}">Import</a></li>
-		        <li class="{{ set_active('log') }}"><a href="/log">Log</a></li>
+		        <li class="{{ set_active('log') }}"><a href="{{URL::to('log') }}">Log</a></li>
 		        <li class="{{ set_active('#') }}"><a href="{{ URL::to('import') }}">Report</a></li>
 		        <li class="{{ set_active('#') }}"><a href="/userProtected">Forecast</a></li>
 		     
@@ -88,8 +88,8 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 		      
 		    
 		      	@if (!Sentry::check())
-					<li class="{{ set_active('register') }}"><a href="/register">Sing up</a></li>
-					<li class="{{ set_active('login') }}"><a href="/login">
+					<li class="{{ set_active('register') }}"><a href="{{URL::to('register') }}">Sing up</a></li>
+					<li class="{{ set_active('login') }}"><a href="{{URL::to('login') }}">
 			
 				
 					Login</a></li>
