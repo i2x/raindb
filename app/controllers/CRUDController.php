@@ -11,11 +11,6 @@ class CRUDController extends AdminController {
 		return View::make('crud.index');
 	}
 	
-	public function AmpherIndex()
-	{
-	
-		return View::make('crud.amphur.index');
-	}
 	
 
 	/**
@@ -23,7 +18,7 @@ class CRUDController extends AdminController {
 	 *
 	 * @return Datatables JSON
 	 */
-	public function getData()
+	public function getData_Ampher()
 	{
 		
 		$amphur = DB::table('amphur')->select(array('amphur.AMPHUR_ID',
@@ -33,10 +28,14 @@ class CRUDController extends AdminController {
 		return Datatables::of($amphur)
 
 		
-		->add_column('actions', '<a href="{{{ URL::to(\'admin/blogs/\' . $AMPHUR_ID . \'/edit\' ) }}}
-				" class="btn btn-default btn-xs iframe" >{{{ Lang::get(\'button.edit\') }}}</a>
-                <a href="{{{ URL::to(\'admin/blogs/\' . $AMPHUR_ID . \'/delete\' ) }}}
-				" class="btn btn-xs btn-danger iframe">{{{ Lang::get(\'button.delete\') }}}</a>
+		->add_column('actions', '<a href="{{{ URL::to(\'database/amphur/\' . $AMPHUR_ID . \'/edit\' ) }}}
+				" class="btn btn-default btn-xs iframe" >
+				Edit
+				</a>
+                <a href="{{{ URL::to(\'database/amphur/\' . $AMPHUR_ID . \'/delete\' ) }}}
+				" class="btn btn-xs btn-danger iframe">
+				
+				Delete</a>
             ')
 		
 		            ->remove_column('id')
@@ -47,6 +46,46 @@ class CRUDController extends AdminController {
 
 		
 	}
+	
+	
+	
+
+	public function Index_Ampher()
+	{
+	
+		return View::make('crud.amphur.index');
+	}
+	
+	
+	public function Edit_Ampher($post)
+	{
+		echo $post;
+		return View::make('crud.amphur.create_edit');
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	
 

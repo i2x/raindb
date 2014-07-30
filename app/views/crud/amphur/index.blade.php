@@ -35,13 +35,7 @@
 							</thead>
 						</table>
 
-  				
-  				
-  	
-
-	
-
-
+						
 {{ Form::open(array('url' => 'import/upload','files' => true)) }}
 <?php 
 
@@ -58,12 +52,6 @@
 </div>
 {{ Form::close() }}
 
-
-
-
-
-
-	
 @endsection
 
 
@@ -73,6 +61,8 @@
 @section('style')
 	
 	{{ HTML::style('packages/datatables/css/dataTables.bootstrap.css')}}
+	{{ HTML::style('packages/colorbox/css/colorbox.css')}}
+	
 
 
 @endsection
@@ -80,23 +70,9 @@
 {{-- Scripts --}}
 @section('scripts')
 
-
-
-                
-        
-        
-         
-
     {{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
 	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
-	
-	
-    
-
-         
-     
-    
-
+	{{ HTML::script('packages/colorbox/js/jquery.colorbox.js')}}
 
 	<script type="text/javascript">
 		var oTable;
@@ -111,12 +87,11 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        
-		        
-		        
-		        
-		        
 		        "sAjaxSource": "{{ URL::to('database/amphur/data') }}",
+		        "fnDrawCallback": function ( oSettings ) {
+	           		$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%"});
+	     		}
+		
 		    
 			});
 

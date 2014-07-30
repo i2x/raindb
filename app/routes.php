@@ -1,10 +1,20 @@
 <?php
 
-# CSRF Protection
 
 
 
-//CRUD
+
+
+
+
+/** ------------------------------------------
+ *  Route constraint patterns
+ *  ------------------------------------------
+ */
+Route::pattern('post', '[0-9]+');
+
+
+
 
 
 
@@ -94,10 +104,16 @@ Route::group(['before' => 'auth|admin'], function()
     Route::resource('admin/profiles', 'AdminUsersController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
     
     
+    
+    //index
     Route::get('database', 'CRUDController@getIndex');
-    Route::get('database/amphur', 'CRUDController@AmpherIndex');
-    Route::get('database/amphur/data', 'CRUDController@getData');
-    Route::resource('database','CRUDController',['only' => ['getIndex']]);
+    
+    
+    //Amphur CRUD
+    Route::get('database/amphur', 'CRUDController@Index_Ampher');
+    Route::get('database/amphur/data', 'CRUDController@getData_Ampher');
+    Route::get('database/amphur/{post}/edit', 'CRUDController@Edit_Ampher');
+    
     
     
     

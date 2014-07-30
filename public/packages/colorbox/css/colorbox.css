@@ -5,9 +5,9 @@
 
 #cboxOverlay{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
 #colorbox, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;
--webkit-box-shadow: 0px 0px 10px 0px rgba(104,165,230,1);
--moz-box-shadow: 0px 0px 10px 0px rgba(104,165,230,1);
-box-shadow: 0px 0px 10px 0px rgba(104,165,230,1);
+-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
 border-radius: 6px 6px 6px 6px;
 -moz-border-radius: 6px 6px 6px 6px;
 -webkit-border-radius: 6px 6px 6px 6px;
