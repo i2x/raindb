@@ -26,6 +26,7 @@
 								<tr>
 									<th class="col-md-1">AMPHUR_ID</th>
 									<th class="col-md-1">AMPHUR_CODE</th>
+									<th class="col-md-1">AMPHUR_NAME</th>
 									<th class="col-md-1">GEO_ID</th>
 									<th class="col-md-1">PROVINCE_ID</th>
 									<th class="col-md-1"> </th>
