@@ -2,10 +2,21 @@
 
 {{-- Content --}}
 @section('content')
+
+<?php 
+
+if(isset($success))echo $success;
+
+?>
 				
 
+@if(isset($data['AMPHUR_ID']))
+{{ Form::open(array('url' => URL::to('database/amphur/'.$data['AMPHUR_ID'].'/update') )) }}
+@else
+{{ Form::open(array('url' => URL::to('database/amphur/'."create".'/post') )) }}
+@endif
 
-{{ Form::open(array('url' => 'foo/bar')) }}
+	
 
 
 

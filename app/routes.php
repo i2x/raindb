@@ -110,9 +110,15 @@ Route::group(['before' => 'auth|admin'], function()
     
     
     //Amphur CRUD
-    Route::get('database/amphur', 'CRUDController@Index_Ampher');
-    Route::get('database/amphur/data', 'CRUDController@getData_Ampher');
-    Route::get('database/amphur/{post}/edit', 'CRUDController@Edit_Ampher');
+    Route::get('database/amphur', 'xAmphurController@Index_Ampher');
+    Route::get('database/amphur/data', 'xAmphurController@getData_Ampher');
+    
+    Route::get('database/amphur/{post}/edit', 'xAmphurController@Get_Edit_Ampher');
+    Route::post('database/amphur/{post}/update', 'xAmphurController@Update_Ampher');
+        
+    Route::post('database/amphur/create', 'xAmphurController@Create_Ampher');
+    
+    
     
     
     
