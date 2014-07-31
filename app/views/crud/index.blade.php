@@ -8,14 +8,8 @@
   	<li><a href="{{URL::to('database')}}">Database</a></li>
   	<li class="active">Index</li>
 	</ol>
-	
-	<div class="page-header">
-	
-	</div>
-	
-
-	<table class="table table-striped table-bordered table-hover">
-		<thead>
+	<table class="table table-striped table-bordered table-hover ">
+			<thead>
 	        <tr>
 	          <th>#</th>
 	          <th>Table Name</th>
@@ -23,9 +17,8 @@
 	        </tr>
       	</thead>
       	      		<?php $i = 1?>
-		@foreach ($contents['name'] as $key => $name)
       	<tbody>
-      		
+      	    @foreach ($contents['name'] as $key => $name)
       		@if($contents['link'][$key] != '#')
     		<tr>
 	      		<td>{{ $i++ }}</td>
@@ -35,22 +28,13 @@
 		     </tr>
 			@endif
 			@endforeach
-		
-      	</tbody>
+			</tbody>
 	</table>
-
-
-
-@stop
-
-
-<?php 
-
-
-
-
-
-?>
+	
+	
+		<div class="page-header">
+	
+	</div>
 
 
 

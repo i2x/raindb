@@ -86,7 +86,7 @@
 	
 	
 
-	<table id="gridview" class="table table-striped table-hover" >
+	<table id="gridview" class="table table-striped table-hover table-condensed" >
 	
 		<thead>
 			<tr>
@@ -154,11 +154,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-	
-			        
-		        
-		        
-		        "sAjaxSource": "{{ URL::to('historical/data') }}",
+				"sAjaxSource": "{{ URL::to('historical/data') }}",
 		    
 			});
 
