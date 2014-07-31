@@ -3,11 +3,9 @@
 {{-- Content --}}
 @section('content')
 
-<?php 
+@if($ampher_message != NULL){{$ampher_message}}
+@endif
 
-if(isset($success))echo $success;
-
-?>
 				
 
 @if(isset($data['AMPHUR_ID']))

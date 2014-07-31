@@ -51,13 +51,18 @@ class xAmphurController extends AdminController {
 	
 	public function Get_Edit_Ampher($post)
 	{
-		
-		
+		$ampher_message = NULL;
+		if(Session::get('amphur_message') != NULL) 
+		{
+			$ampher_message = Session::get('amphur_message');
+			Session::forget('amphur_message');
+		}
 		Session::put('post',$post);
 		$ampher = xAmphur::where('AMPHUR_ID',$post)->first()->toArray();
 		return View::make('crud.amphur.create_edit')
 		->with('data',$ampher)
 		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('ampher_message',$ampher_message)
 		;
 		
 		
@@ -79,13 +84,19 @@ class xAmphurController extends AdminController {
             ));
 		
 			// Redirect to the new ampher ..
-			Session::put('update_success','Create Success');
+			
+          
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">
+            update success.
+            </div>');
 			return Redirect::to('database/amphur/'. $post.'/edit');
 
 		} catch (Exception $e) {
 			
 
-			Session::put('update_error','Create Fail');
+			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
+            update fail.
+            </div>');
 		    return Redirect::to('database/amphur/'.$post.'/edit');
 
 		}
@@ -108,25 +119,6 @@ class xAmphurController extends AdminController {
 
 	}
 //END CREATE
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 	
