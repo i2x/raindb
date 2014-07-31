@@ -7,9 +7,6 @@ class xAmphurController extends AdminController {
 	
 //GET 
 
-
-
-
 	/**
 	 * Show a list of all the blog posts formatted for Datatables.
 	 *
