@@ -24,11 +24,11 @@
 						
 
 								<tr>
-									<th class="col-md-1">1</th>
-									<th class="col-md-1">2</th>
-									<th class="col-md-1">3</th>
-									<th class="col-md-1">4</th>
-									<th class="col-md-1">5</th>
+									<th class="col-md-1">AMPHUR_ID</th>
+									<th class="col-md-1">AMPHUR_CODE</th>
+									<th class="col-md-1">GEO_ID</th>
+									<th class="col-md-1">PROVINCE_ID</th>
+									<th class="col-md-1"> </th>
 
 								
 								</tr>
@@ -36,21 +36,7 @@
 						</table>
 
 						
-{{ Form::open(array('url' => 'import/upload','files' => true)) }}
-<?php 
 
-		echo Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Submit',
-		 array('class' => 'btn btn-primary btn-sm','id' => 'submit','type'=>'submit'))
-
-?>
-		 <a href="{{ URL::previous() }}">
-		 <button type="button" class="btn btn-danger">
-			  <span class="glyphicon glyphicon-remove-circle"></span>
-			 cancle
-		 </button></a>
-		 
-</div>
-{{ Form::close() }}
 
 @endsection
 
@@ -73,6 +59,8 @@
     {{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
 	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
 	{{ HTML::script('packages/colorbox/js/jquery.colorbox.js')}}
+	{{ HTML::script('packages/datatables/js/fnReloadAjax.js')}}
+
 
 	<script type="text/javascript">
 		var oTable;

@@ -59,8 +59,12 @@ class CRUDController extends AdminController {
 	
 	public function Edit_Ampher($post)
 	{
-		echo $post;
-		return View::make('crud.amphur.create_edit');
+		
+		$ampher = xAmphur::where('AMPHUR_ID',$post)->first()->toArray();
+		return View::make('crud.amphur.create_edit')
+		->with('data',$ampher)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		;
 		
 		
 	}

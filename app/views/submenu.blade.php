@@ -26,6 +26,21 @@
 
 
 	<div class="container">
+	
+	
+	
+		<div class="page-header">
+	
+				<div class="push-right">
+					<button class="btn btn-default btn-small btn-inverse close_popup"><span class="glyphicon glyphicon-circle-arrow-left"></span> Back</button>
+				</div>
+				
+		<h4><center>{{$title}}</center> </h4>
+
+		
+		</div>
+		
+		
 		@yield('content')
 	</div>
 
@@ -39,12 +54,39 @@
     
  	{{ HTML::script('packages/jquery/jquery.min.js'); }}
 	{{ HTML::script('packages/bootstrap/js/bootstrap.min.js'); }}
+	{{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
+	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
+	{{ HTML::script('packages/datatables/js/fnReloadAjax.js')}}
 	
-		
-       
 
 
     @yield('scripts')
+    
+    
+    
+    
+    	<!-- Javascripts -->
+
+
+ <script type="text/javascript">
+
+ //Back to Table and Refresh Data
+ $(document).ready(function(){
+
+	 $('.close_popup').click(function(){
+
+	 parent.oTable.fnReloadAjax();
+	 parent.jQuery.fn.colorbox.close();
+	 return false;
+
+	})
+
+
+	});
+	
+
+	
+</script>
 
 </body>
 </html>
