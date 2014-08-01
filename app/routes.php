@@ -120,6 +120,10 @@ Route::group(['before' => 'auth|admin'], function()
     Route::post('database/amphur/create', 'xAmphurController@postCreate');
     
     
+    Route::get('database/amphur/{id}/delete', 'xAmphurController@getDelete');
+        
+    
+    
     
     
     

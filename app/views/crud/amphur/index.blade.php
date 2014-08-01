@@ -90,7 +90,7 @@
 		        "iDisplayLength": 25,
 		        "sAjaxSource": "{{ URL::to('database/amphur/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
-	           		$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
+	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
 	     		}
 		

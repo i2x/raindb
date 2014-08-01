@@ -26,7 +26,7 @@ class xAmphurController extends AdminController {
 				Edit
 				</a>
                 <a href="{{{ URL::to(\'database/amphur/\' . $AMPHUR_ID . \'/delete\' ) }}}
-				" class="btn btn-xs btn-danger iframe">
+				" class="btn btn-xs btn-danger iframe" method = "post">
 				Delete</a>
             ')
 		->make();
@@ -170,6 +170,20 @@ class xAmphurController extends AdminController {
 		
 	}
 //END CREATE
+
+	//Delete
+
+	
+	public function getDelete($id)
+	{
+		DB::table('amphur')
+		->where('AMPHUR_ID', $id)
+		->delete();
+		
+		return View::make('crud/amphur/delete');
+		
+	}
+	
 	
 
 	

@@ -26,7 +26,7 @@
   @else
   {{ 
   
-  	Form::text('AMPHUR_CODE', ' ',
+  	Form::text('AMPHUR_CODE','',
  	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
   }}
   @endif
@@ -40,13 +40,13 @@
   @if(isset($data['AMPHUR_NAME']))
   {{
   	 Form::text('AMPHUR_NAME', $data['AMPHUR_NAME'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
+ 	 array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
   }}
   @else
   {{ 
   
-  	Form::text('AMPHUR_NAME', ' ',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
+  	Form::text('AMPHUR_NAME', '',
+ 	array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
   }}
   @endif
   <p class="text-danger">{{$errors->first('AMPHUR_NAME')}}</p>
@@ -61,13 +61,13 @@
   @if(isset($data['GEO_ID']))
   {{
   	 Form::text('GEO_ID', $data['GEO_ID'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
+ 	 array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
   }}
   @else
   {{ 
   
-  	Form::text('GEO_ID', ' ',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
+  	Form::text('GEO_ID', '',
+ 	array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
   }}
   @endif
   <p class="text-danger">{{$errors->first('GEO_ID')}}</p>
@@ -82,13 +82,13 @@
   @if(isset($data['PROVINCE_ID']))
   {{
   	 Form::text('PROVINCE_ID', $data['PROVINCE_ID'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
+ 	 array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
   }}
   @else
   {{ 
   
-  	Form::text('PROVINCE_ID', ' ',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
+  	Form::text('PROVINCE_ID', '',
+ 	array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
   }}
   @endif
   <p class="text-danger">{{$errors->first('PROVINCE_ID')}}</p>
