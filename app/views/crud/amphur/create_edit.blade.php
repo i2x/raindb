@@ -6,19 +6,16 @@
 @if($ampher_message != NULL){{$ampher_message}}
 @endif
 
+
 				
 
 @if(isset($data['AMPHUR_ID']))
 {{ Form::open(array('url' => URL::to('database/amphur/'.$data['AMPHUR_ID'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/'."create".'/post') )) }}
+{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
 @endif
 
 	
-
-
-
-  
    <div class="form-group">
   {{ Form::label('AMPHUR_CODE')}}
   @if(isset($data['AMPHUR_CODE']))
@@ -32,7 +29,10 @@
   	Form::text('AMPHUR_CODE', ' ',
  	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
   }}
-  @endif</div>
+  @endif
+  <p class="text-danger">{{$errors->first('AMPHUR_CODE')}}</p>
+   
+  </div>
   
   
      <div class="form-group">
@@ -48,7 +48,11 @@
   	Form::text('AMPHUR_NAME', ' ',
  	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
   }}
-  @endif</div>
+  @endif
+  <p class="text-danger">{{$errors->first('AMPHUR_NAME')}}</p>
+    </div>
+
+  
   
   
   
@@ -65,7 +69,11 @@
   	Form::text('GEO_ID', ' ',
  	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
   }}
-  @endif</div>
+  @endif
+  <p class="text-danger">{{$errors->first('GEO_ID')}}</p>
+    
+  </div>
+  
   
   
   
@@ -82,7 +90,11 @@
   	Form::text('PROVINCE_ID', ' ',
  	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
   }}
-  @endif</div>
+  @endif
+  <p class="text-danger">{{$errors->first('PROVINCE_ID')}}</p>
+  
+  
+  </div>
   
   
   
@@ -91,7 +103,12 @@
   	<div class="form-group">
 		
 				<!--  <element class="btn btn-default close_popup">Cancel</element>-->
-				<button type="submit" class="btn btn-success">Update</button>
+				
+				<button type="submit" class="btn btn-success">
+				{{
+				($mode == 'Create') ? 'Create' : 'Update'
+				}}
+				</button>
 				
 				<button type="reset" class="btn btn-default">
 				

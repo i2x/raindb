@@ -14,12 +14,24 @@
   	<li class="active">Ampur</li>
 	</ol>
 	
-	<div class="page-header">
+	
+	
+
+			<div class="pull-right">
+				<a href="{{{ URL::to('database/amphur/create') }}}" class="btn btn-small btn-info iframe">
+				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
+			</div>
+			<br>
+		
+	
+	
+	 <div class="page-header">
+	
 	
 	</div>
 	
 			
-						<table id="gridview" class="table table-striped table-hover" >
+						<table id="gridview" class="table table-striped table-hover table-condensed " >
 						<thead>
 						
 

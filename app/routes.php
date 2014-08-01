@@ -11,7 +11,7 @@
  *  Route constraint patterns
  *  ------------------------------------------
  */
-Route::pattern('post', '[0-9]+');
+Route::pattern('id', '[0-9]+');
 
 
 
@@ -110,13 +110,15 @@ Route::group(['before' => 'auth|admin'], function()
     
     
     //Amphur CRUD
-    Route::get('database/amphur', 'xAmphurController@Index_Ampher');
-    Route::get('database/amphur/data', 'xAmphurController@getData_Ampher');
+    Route::get('database/amphur', 'xAmphurController@index');
+    Route::get('database/amphur/data', 'xAmphurController@getData');
     
-    Route::get('database/amphur/{post}/edit', 'xAmphurController@Get_Edit_Ampher');
-    Route::post('database/amphur/{post}/update', 'xAmphurController@Update_Ampher');
+    Route::get('database/amphur/{id}/update', 'xAmphurController@getUpdate');
+    Route::post('database/amphur/{id}/update', 'xAmphurController@postUpdate');
         
-    Route::post('database/amphur/create', 'xAmphurController@Create_Ampher');
+    Route::get('database/amphur/create', 'xAmphurController@getCreate');
+    Route::post('database/amphur/create', 'xAmphurController@postCreate');
+    
     
     
     

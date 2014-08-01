@@ -9,6 +9,26 @@ class xAmphur extends Eloquent{
 	 * @var string
 	 */
 	protected $table = 'amphur';
+	
+	
+	public static function  validate($data)
+	{
+	
+	
+	$validator = Validator::make($data,
+			array(
+					'AMPHUR_CODE' => 'required|numeric',
+					'AMPHUR_NAME' => 'required',
+					'GEO_ID' => 'required|numeric',
+					'PROVINCE_ID' => 'required|numeric'
+			)
+	);
+	
+	
+	
+	return $validator;
+	
+	}
 
 
 

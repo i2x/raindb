@@ -13,14 +13,15 @@ class xAmphurController extends AdminController {
 	 * @return Datatables JSON
 	 */
 	
-	public function getData_Ampher()
+	public function getData()
 	{
 		
 		$amphur = DB::table('amphur')->select(array('amphur.AMPHUR_ID',
 				 'amphur.AMPHUR_CODE', 'amphur.AMPHUR_NAME', 'amphur.GEO_ID','amphur.PROVINCE_ID'));
 		return Datatables::of($amphur)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $AMPHUR_ID . \'/edit\' ) }}}
+				 '<a href="{{{ URL::to(\'database/amphur/\' . $AMPHUR_ID . \'/update
+				\' ) }}}
 				" class="btn btn-default btn-xs iframe" >
 				Edit
 				</a>
@@ -37,7 +38,7 @@ class xAmphurController extends AdminController {
 
 	
 // INDEX
-	public function Index_Ampher()
+	public function index()
 	{
 	
 		return View::make('crud.amphur.index');
@@ -49,7 +50,7 @@ class xAmphurController extends AdminController {
 	
 //EDIT
 	
-	public function Get_Edit_Ampher($post)
+	public function getUpdate($post)
 	{
 		$ampher_message = NULL;
 		if(Session::get('amphur_message') != NULL) 
@@ -63,18 +64,30 @@ class xAmphurController extends AdminController {
 		->with('data',$ampher)
 		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
 		->with('ampher_message',$ampher_message)
+		->with('mode','Edit')
+		
 		;
 		
 		
 	}
-	public function Update_Ampher($post)
+	public function postUpdate($id)
 	{
+		$input = Input::get();
+		$validator = xAmphur::validate($input);
 		
+		if($validator->fails())
+				{
+				
+			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
+			
+		
+				
+		}
 
 		try {
 	
 			DB::table('amphur')
-            ->where('AMPHUR_ID', $post)
+            ->where('AMPHUR_ID', $id)
             ->update(
             array(
             'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
@@ -89,7 +102,7 @@ class xAmphurController extends AdminController {
 			Session::put('amphur_message','<div class="alert alert-success" role="alert">
             update success.
             </div>');
-			return Redirect::to('database/amphur/'. $post.'/edit');
+			return Redirect::to('database/amphur/'. $id.'/update');
 
 		} catch (Exception $e) {
 			
@@ -97,7 +110,7 @@ class xAmphurController extends AdminController {
 			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
             update fail.
             </div>');
-		    return Redirect::to('database/amphur/'.$post.'/edit');
+		    return Redirect::to('database/amphur/'.$id.'/update');
 
 		}
 			
@@ -108,15 +121,53 @@ class xAmphurController extends AdminController {
 	
 // CREATE	
 	
-	public function Create_Ampher()
+	public function getCreate()
 	{
 	
-		$ampher = '';
+		
 		return View::make('crud.amphur.create_edit')
-		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('ampher_message','')
+		->with('title','Create Amphur')
+		->with('mode','Create')
 		;
 
+	}
+	
+	public function postCreate()
+	{
+		$input = Input::get();
+		$validator = xAmphur::validate($input);
+	
+		if($validator->fails())
+		{
+			
+		   return Redirect::to('database/amphur/create')->withErrors($validator);
+			
+		}
+		
+		unset($input['_token']);
+		try {
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">
+            create success.
+            </div>');
+			$id = DB::table('amphur')->insertGetId($input);
+			
+			return Redirect::to('database/amphur/'. $id.'/update');
+				
+				
+			
+		} catch (Exception $e) {
+			
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">
+            create fail.
+            </div>');
+			return Redirect::to('database/amphur/create');
+			
+		}
+		
+	
+		
+		
 	}
 //END CREATE
 	
