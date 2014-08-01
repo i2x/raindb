@@ -42,10 +42,12 @@
 		
 		
 		@yield('content')
+
+		
 	</div>
 
 	
-
+	
 
     
     
@@ -57,6 +59,8 @@
 	{{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
 	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
 	{{ HTML::script('packages/datatables/js/fnReloadAjax.js')}}
+	
+	
 	
 
 
@@ -70,12 +74,24 @@
 
  <script type="text/javascript">
 
+ 
+
+
+
  //Back to Table and Refresh Data
  $(document).ready(function(){
 
+
+
+
+
 	 $('.close_popup').click(function(){
 
-	 parent.oTable.fnReloadAjax();
+
+
+	
+
+	 parent.oTable.fnReloadAjax(null,null,true);
 	 parent.jQuery.fn.colorbox.close();
 	 return false;
 

@@ -69,10 +69,15 @@
 {{-- Scripts --}}
 @section('scripts')
 
+
+	{{ HTML::script('packages/jquery/jquery.min.js'); }}
+	{{ HTML::script('packages/bootstrap/js/bootstrap.min.js'); }}
     {{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
 	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
 	{{ HTML::script('packages/colorbox/js/jquery.colorbox.js')}}
 	{{ HTML::script('packages/datatables/js/fnReloadAjax.js')}}
+	{{ HTML::script('packages/bootbox/bootbox.min.js')}}
+	
 
 
 	<script type="text/javascript">
@@ -93,11 +98,61 @@
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
 	     		}
+
+
+
+					    
 		
 		    
 			});
 
 		});
+		function Delete(id) {
+
+
+			bootbox.confirm("Are you sure?", function(result) {
+
+				console.log(result);
+
+				if(result)
+				{
+
+
+					  $.ajax( 
+
+
+								{
+
+							    url: 'amphur/'+id+'/delete',
+							    type: 'POST',
+							    success: function(result) {
+					                console.log("Alert Callback");
+							   	 	parent.oTable.fnReloadAjax(null,null,true);
+							   	 	
+							    	
+								    
+							    }
+							  });
+
+
+
+
+				}
+				
+
+
+
+
+
+				}); 
+
+
+			
+	
+			}
+
+
+	
 	</script>
 @endsection
 
