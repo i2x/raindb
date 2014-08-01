@@ -110,7 +110,8 @@
 		function Delete(id) {
 
 
-			bootbox.confirm("Are you sure?", function(result) {
+
+			bootbox.confirm("The <code> AMPHUR ID "+id+" </code>will be deleted immediately. Are you sure you want to continue?", function(result) {
 
 				console.log(result);
 
