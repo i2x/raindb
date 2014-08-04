@@ -13713,7 +13713,7 @@ namespace {
 		/**
 		 * Create a new confide instance.
 		 *
-		 * @param Illuminate\Foundation\Application  $app
+		 * @param \Illuminate\Foundation\Application $app
 		 * @return void
 		 * @static 
 		 */
@@ -13726,8 +13726,7 @@ namespace {
 		 * Checks if the current user has a Role by its name
 		 *
 		 * @param string $name Role name.
-		 * @access public
-		 * @return boolean
+		 * @return bool
 		 * @static 
 		 */
 		 public static function hasRole($permission){
@@ -13739,8 +13738,7 @@ namespace {
 		 * Check if the current user has a permission by its name
 		 *
 		 * @param string $permission Permission string.
-		 * @access public
-		 * @return boolean
+		 * @return bool
 		 * @static 
 		 */
 		 public static function can($permission){
@@ -13751,7 +13749,6 @@ namespace {
 		/**
 		 * Get the currently authenticated user or null.
 		 *
-		 * @access public
 		 * @return Illuminate\Auth\UserInterface|null
 		 * @static 
 		 */
@@ -13761,49 +13758,52 @@ namespace {
 		 }
 
 		/**
-		 * Filters a route for the name Role. If the third parameter
-		 * is null then return 403. Overwise the $result is returned
+		 * Filters a route for the name Role.
+		 * 
+		 * If the third parameter is null then return 403.
+		 * Overwise the $result is returned.
 		 *
-		 * @param string $route  Route pattern. i.e: "admin/*"
-		 * @param array|string $roles   The role(s) needed.
-		 * @param mixed $result i.e: Redirect::to('/')
-		 * @param bool $cumulative Must have all roles.
-		 * @access public
-		 * @return void
+		 * @param string       $route      Route pattern. i.e: "admin/*"
+		 * @param array|string $roles      The role(s) needed.
+		 * @param mixed        $result     i.e: Redirect::to('/')
+		 * @param bool         $cumulative Must have all roles.
+		 * @return mixed
 		 * @static 
 		 */
 		 public static function routeNeedsRole($route, $roles, $result = null, $cumulative = true){
 			//Method inherited from \Zizaco\Entrust\Entrust
-			 \Zizaco\Entrust\Entrust::routeNeedsRole($route, $roles, $result, $cumulative);
+			return \Zizaco\Entrust\Entrust::routeNeedsRole($route, $roles, $result, $cumulative);
 		 }
 
 		/**
-		 * Filters a route for the permission. If the third parameter
-		 * is null then return 403. Overwise the $result is returned
+		 * Filters a route for the permission.
+		 * 
+		 * If the third parameter is null then return 403.
+		 * Overwise the $result is returned.
 		 *
-		 * @param string $route  Route pattern. i.e: "admin/*"
-		 * @param array|string $permissions   The permission needed.
-		 * @param mixed  $result i.e: Redirect::to('/')
-		 * @param bool $cumulative Must have all permissions
-		 * @access public
-		 * @return void
+		 * @param string       $route       Route pattern. i.e: "admin/*"
+		 * @param array|string $permissions The permission needed.
+		 * @param mixed        $result      i.e: Redirect::to('/')
+		 * @param bool         $cumulative  Must have all permissions
+		 * @return mixed
 		 * @static 
 		 */
 		 public static function routeNeedsPermission($route, $permissions, $result = null, $cumulative = true){
 			//Method inherited from \Zizaco\Entrust\Entrust
-			 \Zizaco\Entrust\Entrust::routeNeedsPermission($route, $permissions, $result, $cumulative);
+			return \Zizaco\Entrust\Entrust::routeNeedsPermission($route, $permissions, $result, $cumulative);
 		 }
 
 		/**
-		 * Filters a route for the permission. If the third parameter
-		 * is null then return 403. Overwise the $result is returned
+		 * Filters a route for the permission.
+		 * 
+		 * If the third parameter is null then return 403.
+		 * Overwise the $result is returned.
 		 *
-		 * @param string $route  Route pattern. i.e: "admin/*"
-		 * @param array|string $roles   The role(s) needed.
-		 * @param array|string $permissions   The permission needed.
-		 * @param mixed  $result i.e: Redirect::to('/')
-		 * @param bool $cumulative Must have all permissions
-		 * @access public
+		 * @param string       $route       Route pattern. i.e: "admin/*"
+		 * @param array|string $roles       The role(s) needed.
+		 * @param array|string $permissions The permission needed.
+		 * @param mixed        $result      i.e: Redirect::to('/')
+		 * @param bool         $cumulative  Must have all permissions
 		 * @return void
 		 * @static 
 		 */

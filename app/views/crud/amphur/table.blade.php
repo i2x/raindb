@@ -48,8 +48,8 @@
 							</thead>
 						</table>
 
-						
-
+		
+ 
 
 @endsection
 
@@ -98,63 +98,25 @@
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
 	     		}
-
-
-
-					    
-		
-		    
 			});
 
 		});
 		function Delete(id) {
-
-
-
-			bootbox.confirm("The <code> AMPHUR ID "+id+" </code>will be deleted immediately. Are you sure you want to continue?", function(result) {
-
-				console.log(result);
-
-				if(result)
-				{
-
-
-					  $.ajax( 
-
-
-								{
+			bootbox.confirm("The <code> AMPHUR ID "+id+" </code>will be deleted immediately. Are you sure you want to continue?", 
+			function(result) {
+				if(result){
+					 $.ajax( 
+							 {
 
 							    url: 'amphur/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
-					                console.log("Alert Callback");
 							   	 	parent.oTable.fnReloadAjax(null,null,true);
-							   	 	
-							    	
-								    
 							    }
 							  });
-
-
-
-
-				}
-				
-
-
-
-
-
-				}); 
-
-
-			
-	
-			}
-
-
-	
-	</script>
+					  }}); 
+			  }
+		  </script>
 @endsection
 
 

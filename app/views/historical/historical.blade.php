@@ -147,6 +147,7 @@
 		$(document).ready(function() {
 			
 			oTable = $('#gridview').dataTable( {
+
 				
 				"oLanguage": {
 					"sLengthMenu": "_MENU_"
@@ -155,6 +156,7 @@
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
 				"sAjaxSource": "{{ URL::to('historical/data') }}",
+			
 		    
 			});
 

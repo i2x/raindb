@@ -86,6 +86,13 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 	
 	Route::get('log','LogController@getLog');
 	Route::get('log/data','LogController@getData');
+	
+	
+	//Report
+	Route::get('report','ReportController@getIndex');
+	Route::post('report','ReportController@postIndex');
+	
+	
 
 	
 	

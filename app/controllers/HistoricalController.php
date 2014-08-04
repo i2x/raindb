@@ -68,7 +68,9 @@ class HistoricalController extends BaseController
 		if(isset($station))$data = $data->whereIn('station_id',array($station));
 		else 
 		{
-			$data = $data->limit(3000);
+			
+			$data->whereIn('station_id',array('99'));
+			
 		
 		
 		}
