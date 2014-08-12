@@ -46,8 +46,7 @@ class HistoricalController extends BaseController
 		
 		$data = HistoricData::leftJoin('tbl_rain_station',
 				'tbl_rain_measurement.station_id','=','tbl_rain_station.stationid')
-				->leftJoin('tbl_source',
-						'tbl_rain_measurement.source','=','tbl_source.source_id')
+		
 				->select(array(
 				'tbl_rain_measurement.meas_id',
 				'tbl_rain_measurement.meas_date',
@@ -59,7 +58,6 @@ class HistoricalController extends BaseController
 				'tbl_rain_measurement.avgrh',
 				'tbl_rain_measurement.evapor',
 				'tbl_rain_measurement.mean_temp',
-				'tbl_source.source_name',
 										
 
 		));
@@ -69,7 +67,7 @@ class HistoricalController extends BaseController
 		else 
 		{
 			
-			$data->whereIn('station_id',array('99'));
+			$data->whereIn('station_id',array('327301'));
 			
 		
 		

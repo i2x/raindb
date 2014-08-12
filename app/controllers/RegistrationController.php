@@ -69,9 +69,9 @@ class RegistrationController extends \BaseController {
 			
 			Mail::send('emails.auth.activate', $data, function($message) 
 			{
-				$message->from('us@example.com', 'Auth'); // example
+				$message->from('example@rain.com', 'Auth'); // example
 
-				$message->to('auee54@gmail.com', ' ')->subject('Rain - Confirmation of Registration!'); // exsample
+				$message->to( input::get('email'), ' ')->subject('Rain - Confirmation of Registration!'); // exsample
 			});
 			
 			

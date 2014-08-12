@@ -9,4 +9,5 @@ return array(
     'basicAuth\\' => array($baseDir . '/app/basicAuth'),
     'Zizaco\\Entrust\\' => array($vendorDir . '/zizaco/entrust/src/Entrust'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
+    'Barryvdh\\LaravelIdeHelper\\' => array($vendorDir . '/barryvdh/laravel-ide-helper/src'),
 );

@@ -15,15 +15,6 @@
         </div>
     </div>
 
-      <div class="zero-clipboard"><span class="btn-clipboard ">#1</span></div>
-      
-      <div class="bs-example">
-      
-           <p><span class="na"> Historical Data </span>เข้าไม่ได้ต้องแก้ชื่อคอลั่มจาก <code>`tbl_source.name` </code>  เป็น <code>`tbl_source.source_name` </code>  </p>
-
-           <code> ALTER TABLE  `tbl_source` CHANGE  `name`  `source_name` VARCHAR( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;  </code>
-
-   	</div>
-  	</div><!-- /.bs-example -->
+  
 
 @stop

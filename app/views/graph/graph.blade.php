@@ -108,6 +108,7 @@ $(function () {
     $('#container').highcharts({
         chart: {
             zoomType: 'x'
+                
         },
         title: {
             text: 'Rain'
@@ -141,7 +142,6 @@ $(function () {
 
             
             area: {
-                animation: false,
 				
                 fillColor: {
                     linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
@@ -181,6 +181,7 @@ $(function () {
     $('#container2').highcharts({
         chart: {
             zoomType: 'x'
+            
         },
 
         colors: ['#ff371c', '#0d233a', '#8bbc21', '#910000', '#1aadce', 

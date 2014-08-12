@@ -6,7 +6,7 @@
 {{ HTML::script('packages/chosen/chosen.jquery.min.js')}}
 {{ HTML::script('packages/highcharts/js/highcharts.js')}}
 {{ HTML::script('packages/highcharts/js/modules/exporting.js')}}
-
+{{ HTML::script('packages/highcharts/js/highcharts-more.js')}}
 
 
 <div class="container">
@@ -15,11 +15,11 @@
 
 <?php 
 
-$_week = '';
-$_weeksum = '';
-$_weekavg = '';
-$_weekmin = '';
-$_weekmax = '';
+$_month = $_week = '';
+$_monthsum = $_weeksum = '';
+$_monthavg = $_weekavg = '';
+$_monthmin =  $_weekmin = '';
+$_monthmax = $_weekmax = '';
 if (isset($weekly))
 {
 	
@@ -32,7 +32,19 @@ foreach ($weekly as $value)
 	$_weekmin = $_weekmin.','.$value->_weekmin;
 	$_weekmax = $_weekmax.','.$value->_weekmax;
 }
+
+
+
+foreach ($monthly as $value)
+{
+	$_month = $_month.','.$value->_month;
+	$_monthsum = $_monthsum.','.$value->_monthsum;
+	$_monthavg = $_monthavg.','.$value->_monthavg;
+	$_monthmin = $_monthmin.','.$value->_monthmin;
+	$_monthmax = $_monthmax.','.$value->_monthmax;
 }
+}
+
 
 
 ?>
@@ -74,6 +86,7 @@ foreach ($weekly as $value)
 			?>
 			
 
+			
 
 		{{ Form::open(array('url' => 'report', 'method' => 'POST')) }}
 	<div class="col-md-12 ">
@@ -109,20 +122,25 @@ foreach ($weekly as $value)
 
 @if (isset($weekly) )
 	
-
+			<!-- Render -->
+	
 	<ul class="nav nav-tabs" id="Tab_" >
 	  	<li class="active"><a href="#rain" data-toggle="tab">Weekly</a></li>
 	
-  		<li ><a href="#temp" data-toggle="tab">Temp</a></li>
+  		<li ><a href="#temp" data-toggle="tab">Monthly</a></li>
 
 		</ul>
 
 		<div class="tab-content">
   				<div class="tab-pane fade in active" id="rain" >
  				<div id="container" ></div>
+ 				<div id="boxplot1" ></div>
+ 				
 				</div>
 				<div class="tab-pane fade " id="temp">
   				<div id="container2"  "     style="width:84.5%;"></div>
+  				 <div id="boxplot2"  style="width:84.5%;"></div>
+  				
 				</div>
 		</div>
 @endif
@@ -136,17 +154,15 @@ $(function () {
                 
         },
         title: {
-            text: 'Monthly Average Rainfall'
+            text: 'Weekly '
         },
         subtitle: {
-            text: 'Source: WorldClimate.com'
+            text: ' '
         },
         xAxis: {
             categories: [<?php echo substr($_week,1) ?>]
         },
 
-   
-   
         series: [{
             name: 'Avg',
             data: [<?php echo substr($_weekavg,1) ?>]
@@ -154,9 +170,13 @@ $(function () {
         },{
             name: 'Min',
             data: [<?php echo substr($_weekmin,1) ?>]
-            
+       },
 
-        },
+
+       {
+           name: 'Max',
+           data: [<?php echo substr($_weekmax,1) ?>]
+       },
 
          {
             name: 'Sum',
@@ -164,17 +184,94 @@ $(function () {
 
         }, 
 
-        {
-            name: 'Max',
-            data: [<?php echo substr($_weekmax,1) ?>]
-            
-
-        },
 
 
         ]
     });
+
+
+    $('#boxplot1').highcharts({
+
+	    chart: {
+	        type: 'boxplot'
+	    },
+	    
+	    title: {
+	        text: ' Box Weekly'
+	    },
+	    
+	    legend: {
+	        enabled: false
+	    },
+	
+	    xAxis: {
+	        categories: ['1', '2', '3', '4', '5'],
+	        title: {
+	            text: 'Experiment No.'
+	        }
+	    },
+	    
+	    yAxis: {
+	        title: {
+	            text: 'Observations'
+	        },
+	        plotLines: [{
+	            value: 932,
+	            color: 'red',
+	            width: 1,
+	            label: {
+	                text: 'Theoretical mean: 932',
+	                align: 'center',
+	                style: {
+	                    color: 'gray'
+	                }
+	            }
+	        }]  
+	    },
+	
+	    series: [{
+	        name: 'Observations',
+	        data: [
+	            [760, 801, 848, 895, 965],
+	            [733, 853, 939, 980, 1080],
+	            [714, 762, 817, 870, 918],
+	            [724, 802, 806, 871, 950],
+	            [834, 836, 864, 882, 910]
+	        ],
+	        tooltip: {
+	            headerFormat: '<em>Experiment No {point.key}</em><br/>'
+	        }
+	    }, {
+	        name: 'Outlier',
+	        color: Highcharts.getOptions().colors[0],
+	        type: 'scatter',
+	        data: [ // x, y positions where 0 is the first category
+	            [0, 644],
+	            [4, 718],
+	            [4, 951],
+	            [4, 969]
+	        ],
+	        marker: {
+	            fillColor: 'white',
+	            lineWidth: 1,
+	            lineColor: Highcharts.getOptions().colors[0]
+	        },
+	        tooltip: {
+	            pointFormat: 'Observation: {point.y}'
+	        }
+	    }]
+	
+	});
+
+
+
+    
 });
+
+
+
+
+
 
 
 
@@ -183,71 +280,119 @@ $(function () {
 	
     $('#container2').highcharts({
         chart: {
+            type: 'column',
             zoomType: 'x'
+                
         },
-
-        colors: ['#ff371c', '#0d233a', '#8bbc21', '#910000', '#1aadce', 
-                 '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'],
         title: {
-            text: 'อุณหภูมิ (°C)'
+            text: 'Monthly '
         },
         subtitle: {
-            text: document.ontouchstart === undefined ?
-                'Click and drag in the plot area to zoom in' :
-                'Pinch the chart to zoom in'
+            text: ' '
         },
-
-        tooltip: {
-            valueSuffix: '(°C)'
-        },
-
-        plotOptions: {
-
-            animation: false,
-        	line: {
-        	        marker: {
-        	            enabled: false,
-        	            
-        	        },
-
-        	        lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-
-        	    }
-
-
-	    
-        },
-
-       
         xAxis: {
-     
-
-        	categories: [<?php echo $data_list?>],
-        	minTickInterval: <?php echo $i/8?>                     
-        	                    
-    	
-        
+            categories: [<?php echo substr($_month,1) ?>]
         },
-        yAxis: {
-            title: {
-                text: 'อุณหภูมิ (°C)'
-            }
-        },
-        
-
         series: [{
-            type: 'line',
-            name: 'mean',
-            
-       
-            data: [<?php echo $mean_temp?>]
-        }]
+            name: 'Avg',
+            data: [<?php echo substr($_monthavg,1) ?>]
+
+        },{
+            name: 'Min',
+            data: [<?php echo substr($_monthmin,1) ?>]
+        },
+
+  
+
+        {
+            name: 'Max',
+            data: [<?php echo substr($_monthmax,1) ?>]
+        },
+
+        {
+            name: 'Sum',
+            data: [<?php echo substr($_monthsum,1) ?>]
+
+        }, 
+
+
+        ]
     });
+
+
+    $('#boxplot2').highcharts({
+
+	    chart: {
+	        type: 'boxplot'
+	    },
+	    
+	    title: {
+	        text: 'Box Plot Monthly'
+	    },
+	    
+	    legend: {
+	        enabled: false
+	    },
+	
+	    xAxis: {
+	        categories: ['1', '2', '3', '4', '5'],
+	        title: {
+	            text: 'Experiment No.'
+	        }
+	    },
+	    
+	    yAxis: {
+	        title: {
+	            text: 'Observations'
+	        },
+	        plotLines: [{
+	            value: 932,
+	            color: 'red',
+	            width: 1,
+	            label: {
+	                text: 'Theoretical mean: 932',
+	                align: 'center',
+	                style: {
+	                    color: 'gray'
+	                }
+	            }
+	        }]  
+	    },
+	
+	    series: [{
+	        name: 'Observations',
+	        data: [
+	            [760, 801, 848, 895, 965],
+	            [733, 853, 939, 980, 1080],
+	            [714, 762, 817, 870, 918],
+	            [724, 802, 806, 871, 950],
+	            [834, 836, 864, 882, 910]
+	        ],
+	        tooltip: {
+	            headerFormat: '<em>Experiment No {point.key}</em><br/>'
+	        }
+	    }, {
+	        name: 'Outlier',
+	        color: Highcharts.getOptions().colors[0],
+	        type: 'scatter',
+	        data: [ // x, y positions where 0 is the first category
+	            [0, 644],
+	            [4, 718],
+	            [4, 951],
+	            [4, 969]
+	        ],
+	        marker: {
+	            fillColor: 'white',
+	            lineWidth: 1,
+	            lineColor: Highcharts.getOptions().colors[0]
+	        },
+	        tooltip: {
+	            pointFormat: 'Observation: {point.y}'
+	        }
+	    }]
+	
+	});
+    
 });
 
 
@@ -295,6 +440,10 @@ $(document).ready(function(){
 	});
 
 });
+
+
+
+
 
 		</script>
 	

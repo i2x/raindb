@@ -10,7 +10,7 @@
 <span style="line-height: 12px; font-family: 'Lucida Sans Unicode', Verdana, Arial, sans-serif; color: rgb(0, 0, 0); font-size: 12px; font-weight: bold;">Password :&nbsp;</span><span style="line-height: 12px; font-family: 'Lucida Sans Unicode', Verdana, Arial, sans-serif; color: rgb(0, 0, 0); font-size: 12px;"><?php echo $password?></span><br style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; line-height: 12px;" />
 <span style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; line-height: 12px;">&nbsp;</span></p>
 
-<p><span style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; line-height: 12px;"><a href="http://rain/login"><img alt="" src="https://lh3.googleusercontent.com/-rSbM0Plo4Fo/U9HnJCO1HfI/AAAAAAAAAXs/qqGI37GSV-s/w292-h53-no/register.png" /></a></span></p>
+<p><span style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: 14px; line-height: 12px;"><a href="http://raindb.dev/login"><img alt="" src="https://lh3.googleusercontent.com/-rSbM0Plo4Fo/U9HnJCO1HfI/AAAAAAAAAXs/qqGI37GSV-s/w292-h53-no/register.png" /></a></span></p>
 
 <p>&nbsp;</p>
 

@@ -37,6 +37,8 @@
 				<div class="row">
 				<div class="col-md-2 column">
 		        <label >จังหวัด</label>
+		        
+		       
 				{{ Form::select('province',array(''=>'') + Province::lists('PROVINCE_NAME','PROVINCE_ID'),null,
 				array('class'=>'chosen-select','data-placeholder'=>'เลือกจังหวัด','id'=>'province','style'=>"width: 160px;"))}}
 				</div>
@@ -103,7 +105,6 @@
 				<th class="col-md-1">avgrh</th>
 				<th class="col-md-1">evapor</th>
 				<th class="col-md-1">mean_temp</th>
-				<th class="col-md-1">source</th>
 				
 				
 				
