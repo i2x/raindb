@@ -19,7 +19,13 @@
 <div class="container">
 
 
+
+
 <?php 
+$var = '20/04/2012';
+$date = str_replace('/', '-', $var);
+echo date('Y-m-d', strtotime($date));
+
 
 $_month = $_week = '';
 $_monthsum = $_weeksum = '';
@@ -132,11 +138,6 @@ foreach ($monthly as $value)
 			?>
 	<?php 
 	
-	$var = '20/04/2012';
-	$date = str_replace('/', '-', $var);
-	echo date('Y-m-d', strtotime($date));
-	
-	
 	if(isset($oldInput))print_r($oldInput);
 	?>
 		{{ Form::open(array('url' => 'report', 'method' => 'POST')) }}
@@ -146,7 +147,7 @@ foreach ($monthly as $value)
 				<div class="col-md-2 column">
 				{{ Form::select('province',array(''=>'') + Province::lists('PROVINCE_NAME','PROVINCE_ID'),
 				isset($oldInput['province']) ? $oldInput['province'] : null ,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกจังหวัด','id'=>'province','style'=>"width: 160px;"))}}
+				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
 				</div>
 	
 				
@@ -156,7 +157,7 @@ foreach ($monthly as $value)
 				'ampher',array(''=>'')+Ampher::lists('name','ampher_id'),
 				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
 				array('class'=>'chosen-select','data-placeholder'=>
-				'เลือกอำเภอ'
+				'Select Amphur'
 				
 				,'id'=>'ampher','style'=>"width: 160px;"))}}
 				</div>
@@ -166,51 +167,82 @@ foreach ($monthly as $value)
 				{{ Form::select('station',array(''=>'')+Station::lists('name','stationid'),
 				isset($oldInput['station']) ? $oldInput['station']  : null 
 				,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกสถานี','id'=>'station','style'=>"width: 160px;"))}}
+				array('class'=>'chosen-select',
+				'data-placeholder'=>'Select Station',
+				'id'=>'station','style'=>"width: 160px;"))}}
 				
 				</div>
 				
+		
 				
+				
+								
+			
+				</div>
+				
+				<div class ="row">
+				<br>
 				<div class="col-md-2 column">
-				{{Form::label('rainy_day', 'Only for Rainy Day')}}
-				{{ Form::checkbox('only_rainy_day', 'true',
-				isset($oldInput['only_rainy_day']) ? true : false 
 				
-					
-				)}}
-				</div>
-				
-				
-				<div class="input-daterange input-group" id="datepicker">
-   				 <input type="text" class="input-sm form-control" name="start"
-   				 
-   				 <?php 
-   				 if(isset($oldInput['start']))
+				<div class="input-group date">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+  				<input type="text" class="form-control"
+  				name = "start"  placeholder = "Start Date"
+  				<?php 
+	 			if(isset($oldInput['start']))
    				 {
-   				 	echo " value = ". $oldInput['start'];
+   				 	if(!empty($oldInput['start']))echo " value = ". $oldInput['start'];
    				 }
    				 
    				 ?>
+  				
+  				>
+				</div>	
+				
+				
+				
+				</div>
+				
+					<div class="col-md-2 column">
+				
+				<div class="input-group date">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+  				<input type="text" class="form-control"
+  				name = "end"  placeholder = "End Date"
+  				<?php 
+	 			if(isset($oldInput['end']))
+   				 {
+   				 	if(!empty($oldInput['end']))echo " value = ". $oldInput['end'];
+   				 }
    				 
-   				  
-   				  
-   				  />
-   				 <span class="input-group-addon">to</span>
-    			<input type="text" class="input-sm form-control" name="end" />
-				</div>
+   				 ?>
+  				
+  				>
+				</div>	
 				
-			
 				
 				
 				</div>
 				
+				<div class="col-md-4 column">
+				{{ Form::checkbox('only_rainy_day', 'true',
+				isset($oldInput['only_rainy_day']) ? true : false 
+				)}}
+				{{Form::label('rainy_day', 'Only Rainy Day')}}
 				
+				</div>
+				
+				</div>
 				
 			
 				
 				<div class="row"> <br></div>
 			  {{Form::submit('submit', array('class' => 'btn btn-primary btn-sm'))}}
+			  
+			  
 			  <div class="row"> <br></div>
+			  
+			  
 			   
 			 {{ Form::close() }}
 						
@@ -502,11 +534,11 @@ $(function () {
 
 $(document).ready(function(){
 
+	$('.input-group.date').datepicker({
+	    format: "dd/mm/yyyy"
+	});
+	
 
-	$('#datepicker').datepicker({
-	    format: "dd-mm-yyyy",
-		
-			});
 
 	$('.chosen-select').chosen();
 	$('#province').change(function(){

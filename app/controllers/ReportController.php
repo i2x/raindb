@@ -72,7 +72,7 @@ class ReportController extends Controller
 	{
 		
 	$only_rainy_day = Input::get('only_rainy_day');
-	$weekly  = $this->getWeekly(NULL,NULL);
+	$weekly  = $this->getWeekly(Input::get('station'),NULL);
 	$monthly = $this->getMonthly(NULL,NULL);
 	return View::make('report.index')
 	->with('weekly',$weekly)
@@ -84,6 +84,7 @@ class ReportController extends Controller
 	}
 	public function getWeekly($station,$year)
 	{
+	
 		
 			$weekly = DB::select(DB::raw("SELECT WEEK(  `meas_date` ) AS _week,
 			ROUND( SUM(  `rain` ) , 3 ) AS _weeksum,
@@ -99,6 +100,7 @@ class ReportController extends Controller
 	}
 	public function getMonthly($station,$year)
 	{
+		if(!isset($station))$station = 327022;
 		
 		
 		$monthly = DB::select(DB::raw("	SELECT MONTH(  `meas_date` ) AS _month, 
@@ -107,7 +109,7 @@ class ReportController extends Controller
 		ROUND( MIN(  `rain` ) , 2 ) AS _monthmin,
 		ROUND( MAX(  `rain` ) , 2 ) AS _monthmax
 		FROM  `tbl_rain_measurement`
-		WHERE  `station_id` =327301
+		WHERE  `station_id` =".$station."
 		AND  `meas_year` =2006
 		GROUP BY MONTH(  `meas_date` ) "));
 		return $monthly;
