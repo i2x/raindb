@@ -54,7 +54,7 @@
 			
 
 
-		{{ Form::open(array('url' => 'graph', 'method' => 'POST')) }}
+		{{ Form::open(array('url' => 'forecast', 'method' => 'POST')) }}
 	<div class="col-md-12 ">
 		
 				<div class="row">

@@ -19,6 +19,14 @@ class ForecastController extends BaseController
 	    
 		return View::make('forecast.index');
 	}
+	
+	
+	public function postIndex()
+	{
+	
+		 
+		return View::make('forecast.index');
+	}
 
 
 	
