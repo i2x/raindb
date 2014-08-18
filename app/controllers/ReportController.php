@@ -71,23 +71,26 @@ class ReportController extends Controller
 	public function postIndex()
 	{
 		
-	
+	$only_rainy_day = Input::get('only_rainy_day');
 	$weekly  = $this->getWeekly(NULL,NULL);
 	$monthly = $this->getMonthly(NULL,NULL);
 	return View::make('report.index')
 	->with('weekly',$weekly)
-	->with('monthly',$monthly);
-	
+	->with('monthly',$monthly)
+	->with('only_rainy_day',$only_rainy_day)
+	->with('oldInput', Input::all());
 		
 		
 	}
 	public function getWeekly($station,$year)
 	{
+		
 			$weekly = DB::select(DB::raw("SELECT WEEK(  `meas_date` ) AS _week,
-			ROUND( SUM(  `rain` ) , 2 ) AS _weeksum,
-			ROUND( AVG(  `rain` ) , 2 ) AS _weekavg,
-			ROUND( MIN(  `rain` ) , 2 ) AS _weekmin,
-			ROUND( MAX(  `rain` ) , 2 ) AS _weekmax		
+			ROUND( SUM(  `rain` ) , 3 ) AS _weeksum,
+			ROUND( AVG(  `rain` ) , 3 ) AS _weekavg,
+			ROUND( MIN(  `rain` ) , 3 ) AS _weekmin,
+			ROUND( MIN( NULLIF(  `rain` , 0 ) ),3) AS _weekmin2,				
+			ROUND( MAX(  `rain` ) , 3 ) AS _weekmax		
 			FROM  `tbl_rain_measurement`
 			WHERE  `station_id` =327301
 			AND  `meas_year` =2006 

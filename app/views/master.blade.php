@@ -25,6 +25,8 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 	<!-- Stylesheets -->
 		{{ HTML::style('packages/bootstrap/css/bootstrap.min.css'); }}
 		{{ HTML::style('packages/bootstrap/css/bootstrap-theme.min.css'); }}
+		
+		
 		@yield('style')
 		
 
@@ -41,7 +43,7 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 
 	<header>
 
-		<nav class="navbar navbar-default" role="navigation">
+		<nav class="navbar navbar-default " role="navigation">
 		  <div class="container-fluid">
 		    <!-- Brand and toggle get grouped for better mobile display -->
 		    <div class="navbar-header">
@@ -86,31 +88,16 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 
 		      <ul class="nav navbar-nav navbar-right">
 		      
+		      
 		    
-		      	@if (!Sentry::check())
+	   @if (!Sentry::check())
 					<li class="{{ set_active('register') }}"><a href="{{URL::to('register') }}">Sing up</a></li>
-					<li class="{{ set_active('login') }}"><a href="{{URL::to('login') }}">
-			
-				
-					Login</a></li>
+					<li class="{{ set_active('login') }}"><a href="{{URL::to('login') }}">Login</a></li>
 		
 		
             
-          </ul>
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-				@else
+          </ul>			
+		@else
 				
 				
         <li class="dropdown">
@@ -127,8 +114,8 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
           
           <ul class="dropdown-menu" role="menu">
          
-            
-            	   @if($admin)
+             
+                   	   @if($admin)
             			
             			<li><a href="{{URL::to('admin')}}">
 						<span class="glyphicon glyphicon-cog"></span> 
@@ -179,6 +166,9 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
     
  	{{ HTML::script('packages/jquery/jquery.min.js'); }}
 	{{ HTML::script('packages/bootstrap/js/bootstrap.min.js'); }}
+
+	
+	
 	
 		
        
@@ -188,7 +178,6 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 
 </body>
 </html>
-
 
 
 

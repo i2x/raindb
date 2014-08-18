@@ -19,23 +19,21 @@
    <div class="form-group">
   {{ Form::label('AMPHUR_CODE')}}
   @if(isset($data['AMPHUR_CODE']))
-  {{
-  	 Form::text('AMPHUR_CODE', $data['AMPHUR_CODE'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
-  }}
-  @else
-  {{ 
   
-  	Form::text('AMPHUR_CODE','',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  ))
-  }}
+  {{ Form::text('AMPHUR_CODE', $data['AMPHUR_CODE'],array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  )) }}
+ 
+  @else
+ 
+  {{ Form::text('AMPHUR_CODE','',array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  )) }}
+ 
   @endif
+
   <p class="text-danger">{{$errors->first('AMPHUR_CODE')}}</p>
    
   </div>
   
   
-     <div class="form-group">
+  <div class="form-group">
   {{ Form::label('AMPHUR_NAME')}}
   @if(isset($data['AMPHUR_NAME']))
   {{
@@ -105,9 +103,7 @@
 				<!--  <element class="btn btn-default close_popup">Cancel</element>-->
 				
 				<button type="submit" class="btn btn-success">
-				{{
-				($mode == 'Create') ? 'Create' : 'Update'
-				}}
+				{{($mode == 'Create') ? 'Create' : 'Update'}}
 				</button>
 				
 				<button type="reset" class="btn btn-default">

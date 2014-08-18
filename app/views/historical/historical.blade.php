@@ -139,7 +139,7 @@
 	{{ HTML::script('packages/highcharts/js/highcharts.js')}}
 	{{ HTML::script('packages/highcharts/js/modules/exporting.js')}}
    	{{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
-	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
+	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}z
 	
 
 
