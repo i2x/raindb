@@ -82,7 +82,7 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 		        <li class="{{ set_active('import') }}"><a href="{{ URL::to('import') }}">Import</a></li>
 		        <li class="{{ set_active('log') }}"><a href="{{URL::to('log') }}">Log</a></li>
 		        <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>
-		        <li class="{{ set_active('#') }}"><a href="/userProtected">Forecast</a></li>
+		        <li class="{{ set_active('forecast') }}"><a href="{{ URL::to('forecast') }}">Forecast</a></li>
 		     
 		      </ul>
 

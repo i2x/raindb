@@ -93,6 +93,11 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 	Route::post('report','ReportController@postIndex');
 	
 	
+	//Forecast
+	
+	Route::get('forecast','ForecastController@getIndex');
+	
+	
 
 	
 	
