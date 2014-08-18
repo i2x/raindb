@@ -26,6 +26,46 @@ class SelectController extends Controller {
        return Response::make($dropdown);
 	
 	}
+	
+	
+	public function season()
+	{
+		
+		if(Input::get('id') == 7)
+		{
+			$season = array(
+					'MJJ'=>'MJJ',
+					'ASO'=>'ASO',
+					'NDJ'=>'NDJ',
+					'FMA'=>'FMA',);
+			 
+			 
+		}
+		else {
+			$season = array(
+					'JFM'=>'JFM',
+					'FMA'=>'FMA',
+					'MAM'=>'MAM',
+					'AMJ'=>'AMJ',
+					'MJJ'=>'MJJ',
+					'JJA'=>'JJA',
+					'JAS'=>'JAS',
+					'ASO'=>'ASO',
+					'SON'=>'SON',
+					'OND'=>'OND',
+					'NDJ'=>'NDJ',
+					'DJF'=>'DJF'
+			);
+		}
+	 
+		$dropdown = '<option value=""></option>';
+		foreach($season as $value):
+		$dropdown .= '<option value="'.$value.'">'.$value.'</option>';
+		endforeach;
+		return Response::make($dropdown);
+
+		
+	}
 
 
 }

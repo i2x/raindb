@@ -74,6 +74,8 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 	//Select DropDown
 	Route::post('ampher',  'SelectController@ampher');
 	Route::post('station', 'SelectController@station');
+	Route::post('season',  'SelectController@season');
+	
 	
 	
 	//Import

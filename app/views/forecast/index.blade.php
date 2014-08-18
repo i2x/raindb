@@ -59,20 +59,17 @@
 		
 				<div class="row">
 				<div class="col-md-2 column">
-				{{ Form::select('province',array(''=>'') + Province::lists('PROVINCE_NAME','PROVINCE_ID'),null,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกจังหวัด','id'=>'province','style'=>"width: 160px;"))}}
+				{{ Form::select('basin',array(''=>'') +  Riverbasin::lists('basin_name','basin_id'),null,
+				array('class'=>'chosen-select','data-placeholder'=>'Select Basin','id'=>'basin','style'=>"width: 160px;"))}}
 				</div>
 	
 				
 				<div class="col-md-2 column">
-				{{ Form::select('ampher',array(''=>''),null,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกอำเภอ','id'=>'ampher','style'=>"width: 160px;"))}}
+				{{ Form::select('season',array(''=>''),null,
+				array('class'=>'chosen-select','data-placeholder'=>'Select Season','id'=>'season','style'=>"width: 160px;"))}}
 				</div>
 				
-				<div class="col-md-2 column">
-				{{ Form::select('station',array(''=>''),null,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกสถานี','id'=>'station','style'=>"width: 160px;"))}}
-				</div>
+	
 				
 				</div>
 				
@@ -262,16 +259,16 @@ $(function () {
 $(document).ready(function(){
 
 	$('.chosen-select').chosen();
-	$('#province').change(function(){
-		var value = $("#province").val();
+	$('#basin').change(function(){
+		var value = $("#basin").val();
 		
 		$.ajax({
 			type:'POST',
-			url:"ampher",
+			url:"season",
 			data:{id:value},
 			success:function(data){
 				
-				$('#ampher').find('option')
+				$('#season').find('option')
 							  .remove()
 							  .end()
 							  .append(data)
@@ -281,24 +278,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$('#ampher').change(function(){
-		var value = $("#ampher").val();
-		
-		$.ajax({
-			type:'POST',
-			url:"station",
-			data:{id:value},
-			success:function(data){
-				
-				$('#station').find('option')
-							  .remove()
-							  .end()
-							  .append(data)
-							  .trigger('chosen:updated');
-				
-			}
-		});
-	});
+
 
 });
 
