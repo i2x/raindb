@@ -9,7 +9,6 @@
 {{ HTML::script('packages/highcharts/js/highcharts-more.js')}}
 
 
-{{ HTML::script('packages/highcharts/js/highcharts-more.js')}}
 {{ HTML::script('packages/datepicker/js/bootstrap-datepicker.js')}}
 {{ HTML::style('packages/datepicker/css/datepicker3.css')}}
 
