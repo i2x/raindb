@@ -84,9 +84,14 @@ class ReportController extends Controller
 	}
 	public function getWeekly($station,$year)
 	{
+		$range = '';
+		if(isset($start))    $condition."AND `meas_date` <=  '2000-08-06'";
+		if(isset($end)) 	 $condition."AND `meas_date` >=  '1998-08-06'";
+
 	
 		
-			$weekly = DB::select(DB::raw("SELECT WEEK(  `meas_date` ) AS _week,
+			$weekly = DB::select(DB::raw("SELECT 		YEAR(`meas_date`) AS _YEAR,
+		    WEEK(  `meas_date` ) AS _week,
 			ROUND( SUM(  `rain` ) , 3 ) AS _weeksum,
 			ROUND( AVG(  `rain` ) , 3 ) AS _weekavg,
 			ROUND( MIN(  `rain` ) , 3 ) AS _weekmin,
@@ -94,8 +99,20 @@ class ReportController extends Controller
 			ROUND( MAX(  `rain` ) , 3 ) AS _weekmax		
 			FROM  `tbl_rain_measurement`
 			WHERE  `station_id` =327301
-			AND  `meas_year` =2006 
-			GROUP BY WEEK(  `meas_date` ) "));
+			AND `meas_date` >=  '1996-08-06'
+			AND `meas_date` <=  '2000-08-06'
+					
+			GROUP BY YEAR(`meas_date`) ,WEEK(  `meas_date` )  "));
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			return $weekly;
 	}
 	public function getMonthly($station,$year)
@@ -103,15 +120,19 @@ class ReportController extends Controller
 		if(!isset($station))$station = 327022;
 		
 		
-		$monthly = DB::select(DB::raw("	SELECT MONTH(  `meas_date` ) AS _month, 
-		ROUND( SUM(  `rain` ) , 2 ) AS _monthsum,
-	    ROUND( AVG(  `rain` ) , 2 ) AS _monthavg, 
-		ROUND( MIN(  `rain` ) , 2 ) AS _monthmin,
-		ROUND( MAX(  `rain` ) , 2 ) AS _monthmax
-		FROM  `tbl_rain_measurement`
-		WHERE  `station_id` =".$station."
-		AND  `meas_year` =2006
-		GROUP BY MONTH(  `meas_date` ) "));
+		$monthly = DB::select(DB::raw("	
+			
+			SELECT 	YEAR(`meas_date`) AS _YEAR,
+			MONTH(  `meas_date` ) AS _month,
+			ROUND( SUM(  `rain` ) , 2 ) AS _monthsum,
+			ROUND( AVG(  `rain` ) , 2 ) AS _monthavg,
+			ROUND( MIN(  `rain` ) , 2 ) AS _monthmin,
+			ROUND( MAX(  `rain` ) , 2 ) AS _monthmax
+			FROM  `tbl_rain_measurement`
+			WHERE  `station_id` IN (327301,329201)
+			AND  `meas_year` > 2001
+			GROUP BY YEAR(`meas_date`) ,MONTH(  `meas_date` )
+			 "));
 		return $monthly;
 		
 	}

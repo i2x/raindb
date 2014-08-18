@@ -72,6 +72,7 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 	Route::post('graph', 'GraphController@getIndex');
 
 	//Select DropDown
+	Route::post('province',  'SelectController@province');
 	Route::post('ampher',  'SelectController@ampher');
 	Route::post('station', 'SelectController@station');
 	Route::post('season',  'SelectController@season');

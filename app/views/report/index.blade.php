@@ -58,7 +58,7 @@ else
 	
 		
 	
-			$_week = $_week.','.$value->_week;
+			$_week = $_week.',\''.$value->_week."\'".substr($value->_YEAR, 2).'\'';
 			$_weeksum = $_weeksum.','.$value->_weeksum;
 			$_weekavg = $_weekavg.','.$value->_weekavg;
 			$_weekmin = $_weekmin.','.$value->_weekmin;
@@ -78,7 +78,7 @@ foreach ($monthly as $value)
 {
 	$jd=gregoriantojd($value->_month,1,1);
 	
-	$_month = $_month.',\''.jdmonthname($jd,0).'\'';
+	$_month = $_month.',\''.jdmonthname($jd,0)." \'".substr($value->_YEAR, 2).'\'';
 	$_monthsum = $_monthsum.','.$value->_monthsum;
 	$_monthavg = $_monthavg.','.$value->_monthavg;
 	$_monthmin = $_monthmin.','.$value->_monthmin;
@@ -143,6 +143,15 @@ foreach ($monthly as $value)
 	<div class="col-md-12 ">
 		
 				<div class="row">
+
+		
+				<div class="col-md-2 column">
+				{{ Form::select('basin',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
+				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
+				array('class'=>'chosen-select','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 160px;"))}}
+				</div>
+				
+				
 				<div class="col-md-2 column">
 				{{ Form::select('province',array(''=>'') + Province::lists('PROVINCE_NAME','PROVINCE_ID'),
 				isset($oldInput['province']) ? $oldInput['province'] : null ,
@@ -247,7 +256,6 @@ foreach ($monthly as $value)
 						
 	</div>
 				
-				
 
 @if (isset($weekly) )
 	
@@ -289,7 +297,9 @@ $(function () {
             text: ' '
         },
         xAxis: {
-            categories: [<?php echo substr($_week,1) ?>]
+            categories: [<?php echo substr($_week,1) ?>],
+       		 minTickInterval: 10                      
+    	
         },
 
         series: [{
@@ -403,7 +413,6 @@ $(function () {
 
 
 
-
 $(function () {
 
 
@@ -424,7 +433,10 @@ $(function () {
             text: ' '
         },
         xAxis: {
-            categories: [<?php echo substr($_month,1) ?>]
+            categories: [<?php echo substr($_month,1) ?>],
+            minTickInterval: 4                      
+            
+        
         },
         series: [{
             name: 'Avg',
@@ -540,6 +552,32 @@ $(document).ready(function(){
 
 
 	$('.chosen-select').chosen();
+
+
+	$('#basin').change(function(){
+		var value = $("#basin").val();
+		
+		$.ajax({
+			type:'POST',
+			url:"province",
+			data:{id:value},
+			success:function(data){
+				
+				$('#province').find('option')
+							  .remove()
+							  .end()
+							  .append(data)
+							  .trigger('chosen:updated');
+				
+			}
+		});
+	});
+
+
+
+
+
+	
 	$('#province').change(function(){
 		var value = $("#province").val();
 		
@@ -558,7 +596,8 @@ $(document).ready(function(){
 			}
 		});
 	});
-
+	 <?php echo floor( sizeof($monthly)/12)?>			
+	
 	$('#ampher').change(function(){
 		var value = $("#ampher").val();
 		
