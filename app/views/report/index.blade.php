@@ -21,9 +21,8 @@
 
 
 <?php 
-$var = '20/04/2012';
-$date = str_replace('/', '-', $var);
-echo date('Y-m-d', strtotime($date));
+
+
 
 
 $_month = $_week = '';
@@ -72,6 +71,26 @@ else
 
 
 
+//print_r($boxplot_array);
+$i = 0;
+
+foreach ($boxplot_array as $year =>$array_month)
+{
+	
+	foreach($array_month as $month => $arr)
+	{
+		$boxplot[$i++] = array(
+				$boxplot_array[$year][$month]['min'], 
+				$boxplot_array[$year][$month]['lower'],
+				$boxplot_array[$year][$month]['median'],
+			    $boxplot_array[$year][$month]['upper'],
+				$boxplot_array[$year][$month]['max']);
+	}
+}
+
+$test =  json_encode($boxplot);
+$test = str_replace("\"", ' ', $test);
+echo $test;
 
 
 foreach ($monthly as $value)
@@ -302,6 +321,12 @@ $(function () {
     	
         },
 
+        yAxis: {
+            title: {
+                text: 'rainfall (mm)'
+            }
+        },
+
         series: [{
             name: 'Avg',
             data: [<?php echo substr($_weekavg,1) ?>]
@@ -332,7 +357,9 @@ $(function () {
     $('#boxplot1').highcharts({
 
 	    chart: {
-	        type: 'boxplot'
+	        type: 'boxplot',
+            zoomType: 'x'
+    	        
 	    },
 	    
 	    title: {
@@ -370,35 +397,11 @@ $(function () {
 	
 	    series: [{
 	        name: 'Observations',
-	        data: [
-	            [760, 801, 848, 895, 965],
-	            [733, 853, 939, 980, 1080],
-	            [714, 762, 817, 870, 918],
-	            [724, 802, 806, 871, 950],
-	            [834, 836, 864, 882, 910]
-	        ],
+	        data:<?php echo $test?>,
 	        tooltip: {
 	            headerFormat: '<em>Experiment No {point.key}</em><br/>'
 	        }
-	    }, {
-	        name: 'Outlier',
-	        color: Highcharts.getOptions().colors[0],
-	        type: 'scatter',
-	        data: [ // x, y positions where 0 is the first category
-	            [0, 644],
-	            [4, 718],
-	            [4, 951],
-	            [4, 969]
-	        ],
-	        marker: {
-	            fillColor: 'white',
-	            lineWidth: 1,
-	            lineColor: Highcharts.getOptions().colors[0]
-	        },
-	        tooltip: {
-	            pointFormat: 'Observation: {point.y}'
-	        }
-	    }]
+	    }, ]
 	
 	});
 
@@ -438,6 +441,15 @@ $(function () {
             
         
         },
+
+
+        yAxis: {
+            title: {
+                text: 'rainfall (mm) '
+            }
+        },
+
+        
         series: [{
             name: 'Avg',
             data: [<?php echo substr($_monthavg,1) ?>]
@@ -468,7 +480,9 @@ $(function () {
     $('#boxplot2').highcharts({
 
 	    chart: {
-	        type: 'boxplot'
+	        type: 'boxplot',
+	            zoomType: 'x'
+			        
 	    },
 	    
 	    title: {

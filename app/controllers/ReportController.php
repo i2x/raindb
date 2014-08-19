@@ -7,7 +7,28 @@ class ReportController extends Controller
 		
 		
 		
-		
+
+  $boxplot_array = $temp = array();
+  
+  foreach ( $this->boxplotMonth(NULL)as $key => $value)
+  {
+  	$temp[$value->meas_year][$value->meas_month][$key] = $value->rain;
+  }
+  
+   foreach ($temp as $year => $array_month)
+   {
+   	  foreach ($array_month as $month => $_array)
+   	  {
+   	  	$boxplot_array[$year][$month]['max'] = max($_array);
+   	  	$boxplot_array[$year][$month]['min'] = min($_array);
+   	  	$boxplot_array[$year][$month]['median'] = $this->array_median($_array);
+   	  	$boxplot_array[$year][$month]['upper'] = $this->stats_stat_percentile($_array, 75);
+   	  	$boxplot_array[$year][$month]['lower'] = $this->stats_stat_percentile($_array, 25);
+
+   	  }
+   }  
+   
+   
 
 	$weekly  = $this->getWeekly(NULL,NULL);
 	$monthly = $this->getMonthly(NULL,NULL);
@@ -60,13 +81,13 @@ class ReportController extends Controller
 	
 	
 	
-	
 
 	$box1avg = $this->stats_stat_percentile($box1avg, 75);
 	
 	 return View::make('report.index')
 	 ->with('weekly',$weekly)
-	 ->with('monthly',$monthly);
+	 ->with('monthly',$monthly)
+	 ->with('boxplot_array',$boxplot_array );
 	}
 	public function postIndex()
 	{
@@ -106,13 +127,6 @@ class ReportController extends Controller
 			
 			
 			
-			
-			
-			
-			
-			
-			
-			
 			return $weekly;
 	}
 	public function getMonthly($station,$year)
@@ -130,7 +144,7 @@ class ReportController extends Controller
 			ROUND( MAX(  `rain` ) , 2 ) AS _monthmax
 			FROM  `tbl_rain_measurement`
 			WHERE  `station_id` IN (327301,329201)
-			AND  `meas_year` > 2001
+			AND  `meas_year` > 2004
 			GROUP BY YEAR(`meas_date`) ,MONTH(  `meas_date` )
 			 "));
 		return $monthly;
@@ -187,6 +201,26 @@ class ReportController extends Controller
 		
 	}
 	
+	public function boxplotMonth($station)
+	{
+		
+		$station = 327301;
+		$monthly = DB::select(DB::raw("
+		
+		SELECT  `meas_year` ,  `meas_month` ,  `rain`
+		FROM  `tbl_rain_measurement`
+		WHERE  `meas_year` >= 2003
+		AND  `meas_year` <= 2008
+		AND  `station_id` =327301
+		AND `rain` > 0"));
+		return $monthly;
+		
+	}
+	
+
+	
+
+
 	
 	
 	

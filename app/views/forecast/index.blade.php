@@ -107,7 +107,9 @@ $(function () {
     $('#container').highcharts({
 
         chart: {
-            type: 'boxplot'
+            type: 'boxplot',
+            zoomType: 'x'
+                
         },
 
         title: {
