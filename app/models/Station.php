@@ -9,6 +9,8 @@ class Station extends Eloquent{
 	 * @var string
 	 */
 	protected $table = 'tbl_rain_station';
+	
+	
 
 
 

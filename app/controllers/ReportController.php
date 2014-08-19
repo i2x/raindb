@@ -8,7 +8,7 @@ class ReportController extends Controller
 		
 		
 	$weekly  = $this->getWeekly(NULL,NULL);
-	$monthly = $this->getMonthly(NULL,NULL,NULL);
+	$monthly = $this->getMonthly(NULL,NULL,NULL,NULL);
 	
 	$data = $this->boxplotMonth(NULL,NULL,NULL);
 	$test = $this->boxplot_encode($data['boxplot_array']);
@@ -42,7 +42,10 @@ class ReportController extends Controller
 	
 	$monthly = $this->getMonthly(Input::get('station'),
 			Input::get('start'),
-			Input::get('end'));
+			Input::get('end'),
+			Input::get('only_rainy_day'));
+	
+	
 	
 	
 	return View::make('report.index')
@@ -79,20 +82,33 @@ class ReportController extends Controller
 			
 			return $weekly;
 	}
-	public function getMonthly($station,$start,$end)
+	public function getMonthly($station,$start,$end,$only_rainy_day)
 	{
-		if(!isset($station))$station = 327022;
+		if($station == NULL)$station = 327022;
 		if($start != NULL) $start = "AND  `meas_date` >=  '".$start."' ";
 		if($end != NULL) $end = "AND  `meas_date` <=  '".$end."' ";
-		
-		
+		if($only_rainy_day != NULL)
+		{
+		$sql = "
+				ROUND( AVG( NULLIF(  `rain` , 0 ) ),3) AS _monthavg,				
+				ROUND( MIN( NULLIF(  `rain` , 0 ) ),3) AS _monthmin,
+				
+		";
+		}
+		else 
+		{
+			$sql = "
+					ROUND( AVG(  `rain` ) , 2 ) AS _monthavg,
+					ROUND( MIN(  `rain` ) , 2 ) AS _monthmin,
+					
+					";
+		}
 		$monthly = DB::select(DB::raw("	
 			
 			SELECT 	YEAR(`meas_date`) AS _YEAR,
 			MONTH(  `meas_date` ) AS _month,
 			ROUND( SUM(  `rain` ) , 2 ) AS _monthsum,
-			ROUND( AVG(  `rain` ) , 2 ) AS _monthavg,
-			ROUND( MIN(  `rain` ) , 2 ) AS _monthmin,
+			".$sql."
 			ROUND( MAX(  `rain` ) , 2 ) AS _monthmax
 			FROM  `tbl_rain_measurement`
 			WHERE  `station_id` IN(".$station.")
@@ -176,6 +192,8 @@ class ReportController extends Controller
 			$temp[$value->meas_year][$value->meas_month][$key] = $value->rain;
 		}
 		
+		
+	
 		foreach ($temp as $year => $array_month)
 		{
 			foreach ($array_month as $month => $_array)
@@ -186,7 +204,8 @@ class ReportController extends Controller
 				$boxplot_array[$year][$month]['upper'] = $this->stats_stat_percentile($_array, 75);
 				$boxplot_array[$year][$month]['lower'] = $this->stats_stat_percentile($_array, 25);
 				
-				$categories[$i++] = $month." '".substr($year,2);
+				$jd=gregoriantojd($month,1,1);
+				$categories[$i++] = jdmonthname($jd,0)." '".substr($year,2);
 		
 			}
 		}

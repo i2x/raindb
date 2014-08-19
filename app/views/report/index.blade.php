@@ -64,6 +64,9 @@ else
 
 foreach ($monthly as $value)
 {
+	
+	if(isset($value->_monthmin))
+	{
 	$jd=gregoriantojd($value->_month,1,1);
 	
 	$_month = $_month.',\''.jdmonthname($jd,0)." \'".substr($value->_YEAR, 2).'\'';
@@ -71,6 +74,7 @@ foreach ($monthly as $value)
 	$_monthavg = $_monthavg.','.$value->_monthavg;
 	$_monthmin = $_monthmin.','.$value->_monthmin;
 	$_monthmax = $_monthmax.','.$value->_monthmax;
+	}
 }
 }
 
@@ -379,12 +383,48 @@ $(function () {
                 
         },
         title: {
-            //text: 'Monthly '
-        	text: 'Report'
+             text: '<?php
+
+             	if (isset($oldInput['station'] ))
+             	{
+             	$stationName = Station::select('name')->where('stationid' ,$oldInput['station'] )->get();
+             	try {
+             		echo $stationName[0]->name;
+             	} catch (Exception $e) {
+
+             	}
+         
+             	}?> '
         },
         
         subtitle: {
-            text: 'ddsfddg '
+
+           
+
+            
+            text:  '<?php
+
+                
+                	if(isset($oldInput['start'])){
+
+						echo ' start: ';
+						echo '<code>'.$oldInput['start'].'</code>';
+						}
+                	
+                	
+                	if(isset($oldInput['end'])){
+                	
+                		echo ' end: ';
+                		echo '<code>'.$oldInput['end'].'</code>';
+                	}
+                	
+        		
+                	else 
+                	{
+                		echo '<code>example</code>';
+                	}
+                	
+                	?>'
         },
         xAxis: {
             categories: [<?php echo substr($_month,1) ?>],
@@ -462,10 +502,12 @@ $(function () {
 	    },
 	
 	    series: [{
-	        name: 'rainfaill',
+	        name: 'Rain',
 	        data:<?php echo $test?>,
 	        tooltip: {
-	            headerFormat: '<em>Weekly No {point.key}</em><br/>'
+
+	            valueSuffix: ' mm'
+			        
 	        }
 	    }]
 	
