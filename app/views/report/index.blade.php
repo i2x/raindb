@@ -17,7 +17,6 @@
 
 
 
-
 $_month = $_week = '';
 $_monthsum = $_weeksum = '';
 $_monthavg = $_weekavg = '';
@@ -99,7 +98,7 @@ foreach ($monthly as $value)
 		
 	<?php 
 	
-	if(isset($oldInput))print_r($oldInput);
+	//if(isset($oldInput))print_r($oldInput);
 	?>
 		{{ Form::open(array('url' => 'report', 'method' => 'POST')) }}
 	<div class="col-md-12 ">
@@ -380,10 +379,12 @@ $(function () {
                 
         },
         title: {
-            text: 'Monthly '
+            //text: 'Monthly '
+        	text: 'Report'
         },
+        
         subtitle: {
-            text: ' '
+            text: 'ddsfddg '
         },
         xAxis: {
             categories: [<?php echo substr($_month,1) ?>],
@@ -436,7 +437,8 @@ $(function () {
 	    },
 	    
 	    title: {
-	        text: 'Box Plot Monthly'
+	        //text: 'Box Plot Monthly'
+	    	text: ' '
 	    },
 	    
 	    legend: {
@@ -444,35 +446,26 @@ $(function () {
 	    },
 	
 	    xAxis: {
-	        categories: ['1', '2', '3', '4', '5'],
+	        categories: <?php echo $categories_boxplot1?>,
 	        title: {
 	            text: 'Experiment No.'
-	        }
+	        },
+        	minTickInterval: 4                    
+    	
 	    },
 	    
 	    yAxis: {
 	        title: {
-	            text: 'Observations'
+	            text: 'rainfall (mm)'
 	        },
-	        plotLines: [{
-	            value: 15,
-	            color: 'orange',
-	            width: 1,
-	            label: {
-	                text: 'Theoretical mean: 20',
-	                align: 'center',
-	                style: {
-	                    color: 'gray'
-	                }
-	            }
-	        }]  
+	   
 	    },
 	
 	    series: [{
-	        name: 'Observations',
+	        name: 'rainfaill',
 	        data:<?php echo $test?>,
 	        tooltip: {
-	            headerFormat: '<em>Experiment No {point.key}</em><br/>'
+	            headerFormat: '<em>Weekly No {point.key}</em><br/>'
 	        }
 	    }]
 	
@@ -486,7 +479,7 @@ $(function () {
 $(document).ready(function(){
 
 	$('.input-group.date').datepicker({
-	    format: "dd/mm/yyyy"
+	    format: "yyyy-mm-dd"
 	});
 	
 

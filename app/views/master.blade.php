@@ -133,7 +133,7 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
             <li class="divider"></li>
-            <li><a href="/logout">
+            <li><a href="{{URL::to('logout') }}">
             <span class="glyphicon glyphicon-log-out"></span>
             Logout</a></li>
             
