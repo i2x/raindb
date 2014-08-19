@@ -13,13 +13,6 @@
 {{ HTML::style('packages/datepicker/css/datepicker3.css')}}
 
 
-
-
-<div class="container">
-
-
-
-
 <?php 
 
 
@@ -70,29 +63,6 @@ else
 
 
 
-
-//print_r($boxplot_array);
-$i = 0;
-
-foreach ($boxplot_array as $year =>$array_month)
-{
-	
-	foreach($array_month as $month => $arr)
-	{
-		$boxplot[$i++] = array(
-				$boxplot_array[$year][$month]['min'], 
-				$boxplot_array[$year][$month]['lower'],
-				$boxplot_array[$year][$month]['median'],
-			    $boxplot_array[$year][$month]['upper'],
-				$boxplot_array[$year][$month]['max']);
-	}
-}
-
-$test =  json_encode($boxplot);
-$test = str_replace("\"", ' ', $test);
-echo $test;
-
-
 foreach ($monthly as $value)
 {
 	$jd=gregoriantojd($value->_month,1,1);
@@ -110,6 +80,15 @@ foreach ($monthly as $value)
 ?>
 
 
+
+	<div class="container">
+
+
+
+
+
+
+
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
   	<li class="active">Graph</li>
@@ -117,43 +96,7 @@ foreach ($monthly as $value)
 	
 	
 			
-			<?php 
 		
-			$data = HistoricData::select(array('mean_temp','meas_date','rain'))->limit(360)->get();
-			$graph = ' ';
-			$mean_temp = ' ';
-			$data_list = ' ';
-			for($i=0;$i < sizeof($data);$i++)
-			{
-				
-				$yrdata= strtotime(($data[$i]['meas_date']));
-				if($i == 0)
-				{
-					$graph = $graph.$data[$i]['rain'];
-					$mean_temp =  $mean_temp.$data[$i]['mean_temp'];
-					$data_list = $data_list.'"'.date('d M Y', $yrdata).'"';
-				}
-				else 
-				{
-				$graph = $graph.','.$data[$i]['rain'];
-				$mean_temp = $mean_temp.','.$data[$i]['mean_temp'];
-				$data_list = $data_list.',"'.date('d M Y', $yrdata).'"';
-				
-				}
-					
-			}
-			
-			?>
-			
-
-			<?php 
-			if(isset($input))
-			{
-				var_dump($input);
-				
-				echo $input['province'];
-			}
-			?>
 	<?php 
 	
 	if(isset($oldInput))print_r($oldInput);
@@ -281,21 +224,28 @@ foreach ($monthly as $value)
 			<!-- Render -->
 	
 	<ul class="nav nav-tabs" id="Tab_" >
-	  	<li class="active"><a href="#rain" data-toggle="tab">Weekly</a></li>
+	  	<li class="active"><a href="#rain" data-toggle="tab">Monthly</a></li>
 	
-  		<li ><a href="#temp" data-toggle="tab">Monthly</a></li>
+  		<li ><a href="#temp" data-toggle="tab">Weekly</a></li>
 
 		</ul>
 
 		<div class="tab-content">
   				<div class="tab-pane fade in active" id="rain" >
- 				<div id="container" ></div>
- 				<div id="boxplot1" ></div>
+  				
+  				 <div id="container2" ></div>
+  				 <div id="boxplot2" ></div>
+ 		
  				
 				</div>
 				<div class="tab-pane fade " id="temp">
-  				<div id="container2"  "     style="width:84.5%;"></div>
-  				 <div id="boxplot2"  style="width:84.5%;"></div>
+				
+				
+			    <div id="container"  style="width:84.5%" ></div>
+ 				<div id="boxplot1"  style="width:84.5%" ></div>
+				
+				
+
   				
 				</div>
 		</div>
@@ -505,11 +455,11 @@ $(function () {
 	            text: 'Observations'
 	        },
 	        plotLines: [{
-	            value: 932,
-	            color: 'red',
+	            value: 15,
+	            color: 'orange',
 	            width: 1,
 	            label: {
-	                text: 'Theoretical mean: 932',
+	                text: 'Theoretical mean: 20',
 	                align: 'center',
 	                style: {
 	                    color: 'gray'
@@ -520,33 +470,9 @@ $(function () {
 	
 	    series: [{
 	        name: 'Observations',
-	        data: [
-	            [760, 801, 848, 895, 965],
-	            [733, 853, 939, 980, 1080],
-	            [714, 762, 817, 870, 918],
-	            [724, 802, 806, 871, 950],
-	            [834, 836, 864, 882, 910]
-	        ],
+	        data:<?php echo $test?>,
 	        tooltip: {
 	            headerFormat: '<em>Experiment No {point.key}</em><br/>'
-	        }
-	    }, {
-	        name: 'Outlier',
-	        color: Highcharts.getOptions().colors[0],
-	        type: 'scatter',
-	        data: [ // x, y positions where 0 is the first category
-	            [0, 644],
-	            [4, 718],
-	            [4, 951],
-	            [4, 969]
-	        ],
-	        marker: {
-	            fillColor: 'white',
-	            lineWidth: 1,
-	            lineColor: Highcharts.getOptions().colors[0]
-	        },
-	        tooltip: {
-	            pointFormat: 'Observation: {point.y}'
 	        }
 	    }]
 	

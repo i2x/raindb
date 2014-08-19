@@ -7,90 +7,31 @@ class ReportController extends Controller
 		
 		
 		
-
-  $boxplot_array = $temp = array();
-  
-  foreach ( $this->boxplotMonth(NULL)as $key => $value)
-  {
-  	$temp[$value->meas_year][$value->meas_month][$key] = $value->rain;
-  }
-  
-   foreach ($temp as $year => $array_month)
-   {
-   	  foreach ($array_month as $month => $_array)
-   	  {
-   	  	$boxplot_array[$year][$month]['max'] = max($_array);
-   	  	$boxplot_array[$year][$month]['min'] = min($_array);
-   	  	$boxplot_array[$year][$month]['median'] = $this->array_median($_array);
-   	  	$boxplot_array[$year][$month]['upper'] = $this->stats_stat_percentile($_array, 75);
-   	  	$boxplot_array[$year][$month]['lower'] = $this->stats_stat_percentile($_array, 25);
-
-   	  }
-   }  
-   
-   
-
 	$weekly  = $this->getWeekly(NULL,NULL);
 	$monthly = $this->getMonthly(NULL,NULL);
 	
-	$box1avg = '';
-	
-	
-	foreach ($weekly as $key => $value)
-	{
-		//print_r($value->_weeksum);
-		$box1avg[$key] = $value->_weekavg;
+	$data = $this->boxplotMonth(NULL,NULL,NULL);
+	$test = $this->boxplot_encode($data);
 
-	}
-	
-	
-	$box1avg = $box1min = $box1max =  array();
-	
-	foreach ($weekly as $key => $value)
-	{
-		
-		$box1avg[$key] = $value->_weekavg;
-		$box1min[$key] = $value->_weekmin;
-		$box1max[$key] = $value->_weekmax;
-
-	}
-	
-	//// กราฟเดือน
-	
-	$data = $box1min;
-	
-	$min_boxplot =  array(min($data), $this->stats_stat_percentile ($data ,25   ),
-			$this->array_median($data), $this->stats_stat_percentile ($data ,75 ),
-			max($data));
-	
-	
-	$data = $box1avg;
-	
-	$avg_boxplot = array(min($data), $this->stats_stat_percentile ($data ,25   ),
-			$this->array_median($data), $this->stats_stat_percentile ($data ,75 ),
-			max($data));
-	
-	
-	$data = $box1max;
-	
-	
-	
-	$min_boxplot = array(min($data), $this->stats_stat_percentile ($data ,25   ),
-			$this->array_median($data), $this->stats_stat_percentile ($data ,75 ),
-			max($data));
-	
-	
 	
 
-	$box1avg = $this->stats_stat_percentile($box1avg, 75);
-	
 	 return View::make('report.index')
 	 ->with('weekly',$weekly)
 	 ->with('monthly',$monthly)
-	 ->with('boxplot_array',$boxplot_array );
+	 ->with('test',$test);	 
+	 
 	}
+	
+	
 	public function postIndex()
 	{
+		
+	$data = $this->boxplotMonth(Input::get('station'),
+			Input::get('start'),
+			Input::get('end')
+	);	
+	$test = $this->boxplot_encode($data);
+		
 		
 	$only_rainy_day = Input::get('only_rainy_day');
 	$weekly  = $this->getWeekly(Input::get('station'),NULL);
@@ -98,7 +39,7 @@ class ReportController extends Controller
 	return View::make('report.index')
 	->with('weekly',$weekly)
 	->with('monthly',$monthly)
-	->with('only_rainy_day',$only_rainy_day)
+	->with('test',$test)
 	->with('oldInput', Input::all());
 		
 		
@@ -121,8 +62,7 @@ class ReportController extends Controller
 			FROM  `tbl_rain_measurement`
 			WHERE  `station_id` =327301
 			AND `meas_date` >=  '1996-08-06'
-			AND `meas_date` <=  '2000-08-06'
-					
+			AND `meas_date` <=  '2000-08-06'		
 			GROUP BY YEAR(`meas_date`) ,WEEK(  `meas_date` )  "));
 			
 			
@@ -201,21 +141,85 @@ class ReportController extends Controller
 		
 	}
 	
-	public function boxplotMonth($station)
+	public function boxplotMonth($station,$start,$end)
 	{
+
 		
-		$station = 327301;
+		
+	
+	
+		
+		
+		if($station == NULL) $station = 327301;
+		if($start != NULL) $start = " AND  `meas_year` >= ". date('Y-m-d', strtotime(str_replace('/', '-', $start)));
+		if($end != NULL)   $end   = " AND  `meas_year` < ". date('Y-m-d', strtotime(str_replace('/', '-', $end)));
+		
+		
+		
 		$monthly = DB::select(DB::raw("
 		
 		SELECT  `meas_year` ,  `meas_month` ,  `rain`
 		FROM  `tbl_rain_measurement`
-		WHERE  `meas_year` >= 2003
-		AND  `meas_year` <= 2008
-		AND  `station_id` =327301
+		WHERE  `station_id` IN (".$station.")
+		".$start."
+		".$end."
+
 		AND `rain` > 0"));
-		return $monthly;
+		
+		
+
+		$boxplot_array = $temp = array();
+		
+		foreach ( $monthly as $key => $value)
+		{
+			$temp[$value->meas_year][$value->meas_month][$key] = $value->rain;
+		}
+		
+		foreach ($temp as $year => $array_month)
+		{
+			foreach ($array_month as $month => $_array)
+			{
+				$boxplot_array[$year][$month]['max'] = max($_array);
+				$boxplot_array[$year][$month]['min'] = min($_array);
+				$boxplot_array[$year][$month]['median'] = $this->array_median($_array);
+				$boxplot_array[$year][$month]['upper'] = $this->stats_stat_percentile($_array, 75);
+				$boxplot_array[$year][$month]['lower'] = $this->stats_stat_percentile($_array, 25);
+		
+			}
+		}
+		
+		
+		return $boxplot_array;
+		
 		
 	}
+	
+	
+	public function boxplot_encode($boxplotMonth)
+	{
+
+		$i = 0;
+		foreach ($boxplotMonth as $year =>$array_month)
+		{
+		
+			foreach($array_month as $month => $arr)
+			{
+				$boxplot[$i++] = array(
+						$boxplotMonth[$year][$month]['min'],
+						$boxplotMonth[$year][$month]['lower'],
+						$boxplotMonth[$year][$month]['median'],
+						$boxplotMonth[$year][$month]['upper'],
+						$boxplotMonth[$year][$month]['max']);
+			}
+		}
+		
+		$boxplot_json = str_replace("\"", ' ', json_encode($boxplot));
+		
+		return $boxplot_json;
+	}
+	
+	
+
 	
 
 	
