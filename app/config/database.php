@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => 'pgsql',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'rain',
 			'username'  => 'root',
-			'password'  => '9066',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
@@ -65,10 +65,10 @@ return array(
 
 		'pgsql' => array(
 			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'database',
-			'username' => 'root',
-			'password' => '',
+			'host'     => '192.168.159.128',
+			'database' => 'rain',
+			'username' => 'postgres',
+			'password' => 'phisan243',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',

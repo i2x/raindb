@@ -48,14 +48,14 @@ Route::group(['before' => 'guest'], function()
 	Route::post('reset_password/{token}', 'RemindersController@postReset');
 });
 
-
+//['before' => 'auth|(standardUser || admin)']
 # Standard User Routes
-Route::group(['before' => 'auth|(standardUser || admin)'], function()
+Route::group(['before' => 'guest'], function()
 {
 	// Profile 
 	
-	Route::get('userProtected', 'StandardUserController@getUserProtected');
-	Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
+	//Route::get('userProtected', 'StandardUserController@getUserProtected');
+	//Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
 	
 	
 	

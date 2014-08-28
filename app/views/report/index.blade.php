@@ -49,7 +49,7 @@ else
 	
 		
 	
-			$_week = $_week.',\''.$value->_week."\'".substr($value->_YEAR, 2).'\'';
+			$_week = $_week.',\''.$value->_week."\'".substr($value->_year, 2).'\'';
 			$_weeksum = $_weeksum.','.$value->_weeksum;
 			$_weekavg = $_weekavg.','.$value->_weekavg;
 			$_weekmin = $_weekmin.','.$value->_weekmin;
@@ -69,7 +69,7 @@ foreach ($monthly as $value)
 	{
 	$jd=gregoriantojd($value->_month,1,1);
 	
-	$_month = $_month.',\''.jdmonthname($jd,0)." \'".substr($value->_YEAR, 2).'\'';
+	$_month = $_month.',\''.jdmonthname($jd,0)." \'".substr($value->_year, 2).'\'';
 	$_monthsum = $_monthsum.','.$value->_monthsum;
 	$_monthavg = $_monthavg.','.$value->_monthavg;
 	$_monthmin = $_monthmin.','.$value->_monthmin;
@@ -118,7 +118,7 @@ foreach ($monthly as $value)
 				
 				
 				<div class="col-md-2 column">
-				{{ Form::select('province',array(''=>'') + Province::lists('PROVINCE_NAME','PROVINCE_ID'),
+				{{ Form::select('province',array(''=>'') + Province::lists('province_name','province_id'),
 				isset($oldInput['province']) ? $oldInput['province'] : null ,
 				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
 				</div>

@@ -57,8 +57,8 @@
 		
 				<div class="row">
 				<div class="col-md-2 column">
-				{{ Form::select('province',array(''=>'') + Province::lists('PROVINCE_NAME','PROVINCE_ID'),null,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกจังหวัด','id'=>'province','style'=>"width: 160px;"))}}
+				{{ Form::select('province',array(''=>'') + Province::lists('province_name','province_id'),null,
+				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
 				</div>
 	
 				

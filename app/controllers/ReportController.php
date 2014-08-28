@@ -60,23 +60,23 @@ class ReportController extends Controller
 	public function getWeekly($station,$year)
 	{
 		$range = '';
-		if(isset($start))    $condition."AND `meas_date` <=  '2000-08-06'";
-		if(isset($end)) 	 $condition."AND `meas_date` >=  '1998-08-06'";
+		if(isset($start))    $condition."AND meas_date <=  '2000-08-06'";
+		if(isset($end)) 	 $condition."AND meas_date >=  '1998-08-06'";
 
 	
 		
-			$weekly = DB::select(DB::raw("SELECT 		YEAR(`meas_date`) AS _YEAR,
-		    WEEK(  `meas_date` ) AS _week,
-			ROUND( SUM(  `rain` ) , 3 ) AS _weeksum,
-			ROUND( AVG(  `rain` ) , 3 ) AS _weekavg,
-			ROUND( MIN(  `rain` ) , 3 ) AS _weekmin,
-			ROUND( MIN( NULLIF(  `rain` , 0 ) ),3) AS _weekmin2,				
-			ROUND( MAX(  `rain` ) , 3 ) AS _weekmax		
-			FROM  `tbl_rain_measurement`
-			WHERE  `station_id` =327301
-			AND `meas_date` >=  '1996-08-06'
-			AND `meas_date` <=  '2000-08-06'		
-			GROUP BY YEAR(`meas_date`) ,WEEK(  `meas_date` )  "));
+			$weekly = DB::select(DB::raw("SELECT 		date_part('year',meas_date) AS _YEAR,
+		    date_part( 'week', meas_date ) AS _week,
+			ROUND( SUM(  rain )  ) AS _weeksum,
+			ROUND( AVG(  rain )  ) AS _weekavg,
+			ROUND( MIN(  rain )  ) AS _weekmin,
+			ROUND( MIN( NULLIF(  rain , 0 ) )) AS _weekmin2,				
+			ROUND( MAX(  rain )  ) AS _weekmax		
+			FROM  tbl_rain_measurement
+			WHERE  station_id =327301
+			AND meas_date >=  '1996-08-06'
+			AND meas_date <=  '2000-08-06'		
+			GROUP BY date_part('year',meas_date) ,date_part( 'week', meas_date )  "));
 			
 			
 			
@@ -85,35 +85,35 @@ class ReportController extends Controller
 	public function getMonthly($station,$start,$end,$only_rainy_day)
 	{
 		if($station == NULL)$station = 327022;
-		if($start != NULL) $start = "AND  `meas_date` >=  '".$start."' ";
-		if($end != NULL) $end = "AND  `meas_date` <=  '".$end."' ";
+		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
+		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
 		if($only_rainy_day != NULL)
 		{
 		$sql = "
-				ROUND( AVG( NULLIF(  `rain` , 0 ) ),3) AS _monthavg,				
-				ROUND( MIN( NULLIF(  `rain` , 0 ) ),3) AS _monthmin,
+				ROUND( AVG( NULLIF(  rain , 0 ) )) AS _monthavg,				
+				ROUND( MIN( NULLIF(  rain , 0 ) )) AS _monthmin,
 				
 		";
 		}
 		else 
 		{
 			$sql = "
-					ROUND( AVG(  `rain` ) , 2 ) AS _monthavg,
-					ROUND( MIN(  `rain` ) , 2 ) AS _monthmin,
+					ROUND( AVG(  rain )  ) AS _monthavg,
+					ROUND( MIN(  rain ) ) AS _monthmin,
 					
 					";
 		}
 		$monthly = DB::select(DB::raw("	
 			
-			SELECT 	YEAR(`meas_date`) AS _YEAR,
-			MONTH(  `meas_date` ) AS _month,
-			ROUND( SUM(  `rain` ) , 2 ) AS _monthsum,
+			SELECT 	date_part('year',meas_date) AS _YEAR,
+			date_part('month',  meas_date ) AS _month,
+			ROUND( SUM(  rain )  ) AS _monthsum,
 			".$sql."
-			ROUND( MAX(  `rain` ) , 2 ) AS _monthmax
-			FROM  `tbl_rain_measurement`
-			WHERE  `station_id` IN(".$station.")
+			ROUND( MAX(  rain )  ) AS _monthmax
+			FROM  tbl_rain_measurement
+			WHERE  station_id IN(".$station.")
 			".$start." ".$end."	
-			GROUP BY YEAR(`meas_date`) ,MONTH(  `meas_date` )
+			GROUP BY date_part('year',meas_date) ,date_part( 'month', meas_date )
 			 "));
 		return $monthly;
 		
@@ -170,16 +170,16 @@ class ReportController extends Controller
 	{
 
 		if($station == NULL) $station = 327016;
-		if($start != NULL) $start = "AND  `meas_date` >=  '".$start."' ";
-		if($end != NULL) $end = "AND  `meas_date` <=  '".$end."' ";
+		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
+		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
 				
 		$monthly = DB::select(DB::raw("
 		
-		SELECT  `meas_year` ,  `meas_month` ,  `rain`
-		FROM  `tbl_rain_measurement`
-		WHERE  `station_id` IN(".$station.")
+		SELECT  meas_year ,  meas_month ,  rain
+		FROM  tbl_rain_measurement
+		WHERE  station_id IN(".$station.")
 		".$start." ".$end."	
-		AND `rain` > 0"));
+		AND rain > 0"));
 		
 		
 
@@ -221,6 +221,7 @@ class ReportController extends Controller
 	{
 
 		$i = 0;
+                $boxplot= array();
 		foreach ($boxplotMonth as $year =>$array_month)
 		{
 		
