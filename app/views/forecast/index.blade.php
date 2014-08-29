@@ -51,12 +51,14 @@
 
         <div class="row">
             <div class="col-md-2 column">
+                Basin:
                 {{ Form::select('basin',array(''=>'') +  Riverbasin::lists('basin_name','basin_id'),null,
                 array('class'=>'chosen-select','data-placeholder'=>'Select Basin','id'=>'basin','style'=>"width: 160px;"))}}
             </div>
 
 
             <div class="col-md-2 column">
+                Season:
                 {{ Form::select('season',array(''=>''),null,
                 array('class'=>'chosen-select','data-placeholder'=>'Select Season','id'=>'season','style'=>"width: 160px;"))}}
             </div>
@@ -87,7 +89,7 @@
              
             ?>
             <div class="col-md-2 column">
-                Reference Year:
+                Reference Month:
                 {{ Form::select('basemonth',array(''=>'') + $mdata ,null,
                 array('class'=>'chosen-select','data-placeholder'=>'Month','id'=>'basemonth','style'=>"width: 160px;"))}}
             </div>

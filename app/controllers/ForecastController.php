@@ -32,10 +32,10 @@ class ForecastController extends BaseController
 
   
             
-	return View::make('forecast.index');
-//                ->with('RawData',$output['rawdata'])
-//                ->with('SPI',$output['spi'])
-//	->with('oldInput', Input::all());
+	return View::make('forecast.index')
+                ->with('rawdata',$output['rawdata'])
+                ->with('spi',$output['spi'])
+	->with('oldInput', Input::all());
 	}
 
 

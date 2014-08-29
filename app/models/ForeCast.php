@@ -10,11 +10,11 @@ class Forecast {
         foreach ($rows as $row){
            
         $cmd =
-                "update tbl_ref_data4forecast_".$basin.",tbl_ref_data set meas_value".$row["columnorder"]." = tbl_ref_data.meas_value " .
-                "where tbl_ref_data4forecast_".$basin.".season = '".$season."'  " .
+                "update tbl_ref_data4forecast_".$basin." set meas_value".$row->columnorder." = tbl_ref_data.meas_value " .
+                " from tbl_ref_data where tbl_ref_data4forecast_".$basin.".season = '".$season."'  " .
                 "and tbl_ref_data4forecast_".$basin.".meas_year = tbl_ref_data.meas_year " .
                 "and tbl_ref_data4forecast_".$basin.".meas_month = tbl_ref_data.meas_month " .
-                "and tbl_ref_data.refid = " .$row["ref_setting_id"];
+                "and tbl_ref_data.refid = " .$row->ref_setting_id;
             DB::select(DB::raw($cmd));
         }
     }
@@ -124,8 +124,7 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
     
     if (file_exists($outputfile)){unlink($outputfile);};
     //meas_year >= 1948 and meas_year <=2007 and
-    $sql = " select  c.yee, c.moo, ifnull(a.r1,'NA')
-    		 INTO OUTFILE '".$outputfile."' FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\r\n'
+    $cmd = " select  c.yee, c.moo, coalesce(a.r1,-9999) as rx   	
     		 from (select min(ye) as yee, min(mo) as moo from calendar_table where calendar_table.ye >= 1948 and calendar_table.ye <=2007 
              group by ye,mo ) c
     		 left join 
@@ -138,9 +137,19 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
               tbl_selected_stations.basin_id = ".$basin_id."
               group by tbl_rain_measurement.meas_year,tbl_rain_measurement.meas_month
              ) a
-             on (c.yee = a.meas_year and c.moo = a.meas_month)";
+             on (c.yee = a.meas_year and c.moo = a.meas_month) order by yee,moo ";
 
-             Yii::app()->db->createCommand($sql)->execute();
+     $results = DB::select(DB::raw($cmd));
+     $textoutput = "";
+
+       foreach($results as $result){
+           $textoutput = $textoutput. $result->yee . "\t" . $result->moo . "\t" .
+                   $result->rx . "\r\n" ; 
+       }           
+
+       $textoutput = str_replace('-9999','NA',$textoutput);
+       
+       file_put_contents($outputfile,$textoutput);       
     }
     
     
