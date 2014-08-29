@@ -57,6 +57,7 @@ class ReportController extends Controller
 		
 		
 	}
+        
 	public function getWeekly($station,$year)
 	{
 		$range = '';

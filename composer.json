@@ -30,7 +30,7 @@
 		"files": ["app/basicAuth/helpers.php"],
 		"psr-4": {
 			"basicAuth\\": "app/basicAuth"
-		}
+		}              
 	},
 	"scripts": {
 		"post-install-cmd": [

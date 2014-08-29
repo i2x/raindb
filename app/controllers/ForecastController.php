@@ -3,10 +3,6 @@
 class ForecastController extends BaseController 
 {
 
-	
-	
-
-
 
 	/**
 	 * Returns all the blog graph.
@@ -15,17 +11,31 @@ class ForecastController extends BaseController
 	 */
 	public function getIndex()
 	{
-	
-	    
 		return View::make('forecast.index');
 	}
 	
 	
 	public function postIndex()
 	{
-	
-		 
-		return View::make('forecast.index');
+            
+        	if (Input::get('basin') == 7) {
+        		$forcast = new ForecastPing();
+                        $output = $forcast->forecast(Input::all());
+        	} else if ($model->select_basin == 9) {
+        		$this->actionRainForecastChi($model);
+        	} else if ($model->select_basin == 10) {
+        
+        		$this->actionRainForecastMun($model);
+        	} else {
+        		$this->render('rainforecast', array('model' => $model));
+        	}
+
+  
+            
+	return View::make('forecast.index');
+//                ->with('RawData',$output['rawdata'])
+//                ->with('SPI',$output['spi'])
+//	->with('oldInput', Input::all());
 	}
 
 
