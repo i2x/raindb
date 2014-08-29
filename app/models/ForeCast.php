@@ -153,14 +153,14 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
     }
     
     
-   public function getlastestyear($basin_id)
+   public function getlatestyear($basin_id)
    {
-   	 $sql = "select year(max(meas_date)) as yy from tbl_rain_measurement inner join 
+   	 $sql = "select date_part('year',max(meas_date)) as yy from tbl_rain_measurement inner join 
 			tbl_selected_stations on tbl_selected_stations.station_id = tbl_rain_measurement.station_id 
 			where basin_id = ".$basin_id;
    	 
-   	         $_lastyear = Yii::app()->db->createCommand($sql)->queryAll();
-   	         return $_lastyear[0]['yy'];
+   	         $_lastyear = DB::select(DB::raw($sql));
+   	         return $_lastyear[0]->yy;
    	      
    }
 

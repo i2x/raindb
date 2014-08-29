@@ -76,6 +76,7 @@ Route::group(['before' => 'guest'], function()
 	Route::post('ampher',  'SelectController@ampher');
 	Route::post('station', 'SelectController@station');
 	Route::post('season',  'SelectController@season');
+        Route::post('basemonth',  'SelectController@basemonth');
 	
 	
 	

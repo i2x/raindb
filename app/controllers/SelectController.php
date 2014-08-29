@@ -91,6 +91,32 @@ class SelectController extends Controller {
 
 		
 	}
+        
+        public function baseMonth(){
+            $lmonth= array(1=>'JAN',2=>'FEB',3=>'MAR',4=>'APR',5=>'MAY',6=>'JUN',7=>'JUL',8=>'AUG',9=>'SEP',10=>'OCT',11=>'NOV',12=>'DEC');
+
+    		//echo Input::get('baseyear');
+    		if(Input::get('baseyear') ==  date("Y"))
+    		{
+
+    			$mto = date("m")-2;
+    			
+    		}
+    		else {
+                    $mto =12;
+    		}
+                                  $data = array();
+    			for($i=1;$i<=$mto ;$i++){
+                            $data[$i]= $lmonth[$i];
+                        }
+  		$dropdown = '<option value=""></option>';
+		foreach($data as $key=>$value):
+		$dropdown .= '<option value="'.$key.'">'.$value.'</option>';
+		endforeach;
+		return Response::make($dropdown);
+    	
+            
+        }
 
 
 }

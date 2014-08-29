@@ -1,4 +1,4 @@
-<title>Rain - Forecase</title>
+<title>Rain - Forecast</title>
 {{View::make('master')}}
 
 {{ HTML::script('packages/jquery/jquery.min.js'); }}
@@ -52,27 +52,50 @@
         <div class="row">
             <div class="col-md-2 column">
                 Basin:
+                @if (isset($oldInput))
+                {{ Form::select('basin',array(''=>'') +  Riverbasin::lists('basin_name','basin_id'),$oldInput['basin'],
+                array('class'=>'chosen-select','data-placeholder'=>'Select Basin','id'=>'basin','style'=>"width: 160px;"))}}
+                @else
                 {{ Form::select('basin',array(''=>'') +  Riverbasin::lists('basin_name','basin_id'),null,
                 array('class'=>'chosen-select','data-placeholder'=>'Select Basin','id'=>'basin','style'=>"width: 160px;"))}}
+                @endif
             </div>
 
 
             <div class="col-md-2 column">
                 Season:
-                {{ Form::select('season',array(''=>''),null,
+                 @if (isset($oldInput) )
+                 @if ($oldInput['basin']==7)
+                {{ Form::select('season',array(''=>'','FMA'=>'FMA','MJJ'=>'MJJ','ASO'=>'ASO','NDJ'=>'NDJ'),$oldInput['season'],
                 array('class'=>'chosen-select','data-placeholder'=>'Select Season','id'=>'season','style'=>"width: 160px;"))}}
+                @else
+                {{ Form::select('season',array(''=>'')+Season::lists('season','season'),$oldInput['season'],
+                array('class'=>'chosen-select','data-placeholder'=>'Select Season','id'=>'season','style'=>"width: 160px;"))}}
+                
+                @endif
+                @else
+                {{ Form::select('season',array(''=>'')+Season::lists('season','season'),null,
+                array('class'=>'chosen-select','data-placeholder'=>'Select Season','id'=>'season','style'=>"width: 160px;"))}}
+                @endif
             </div>
 
             <div class="col-md-2 column">
+                <?php
+                if (isset($oldInput))
+                    $selected_year = $oldInput['baseyear'];
+                else
+                    $selected_year = date("Y");                
+                ?>
                 Reference Year:
-                {{ Form::select('baseyear',array(''=>'') +  Year::lists('year','year'),null,
+                {{ Form::select('baseyear',array(''=>'') +  Year::lists('year','year'),$selected_year,
                 array('class'=>'chosen-select','data-placeholder'=>'Select Reference Year','id'=>'baseyear','style'=>"width: 160px;"))}}
             </div>
 
             <?php
    $lmonth= array(1=>'JAN',2=>'FEB',3=>'MAR',4=>'APR',5=>'MAY',6=>'JUN',7=>'JUL',8=>'AUG',9=>'SEP',10=>'OCT',11=>'NOV',12=>'DEC');
-                if(!isset($oldInput['baseyear'])){$oldInput['baseyear'] = date("Y");}
-                if( $oldInput['baseyear'] == date("Y")){
+                if(!isset($oldInput['baseyear'])){$baseyear = date("Y");}else
+                    $baseyear = $oldInput['baseyear'];
+                if( $baseyear == date("Y")){
                     $mto = date("m")-2;
                 } else {
     			$mto=12;
@@ -89,8 +112,14 @@
              
             ?>
             <div class="col-md-2 column">
+                <?php
+                if (isset($oldInput))
+                    $selected_month = $oldInput['basemonth'];
+                else
+                    $selected_month = $mto;                
+                ?>
                 Reference Month:
-                {{ Form::select('basemonth',array(''=>'') + $mdata ,null,
+                {{ Form::select('basemonth',array(''=>'') + $mdata ,$selected_month,
                 array('class'=>'chosen-select','data-placeholder'=>'Month','id'=>'basemonth','style'=>"width: 160px;"))}}
             </div>
             
@@ -104,8 +133,15 @@
         {{ Form::close() }}
 
     </div>
-
-
+@if (isset($oldInput))
+    <div>
+        Forecast Info:<br/>
+Basin: {{Riverbasin::where('basin_id', '=',$oldInput['basin'] )->firstOrFail()->basin_name}} <br/>
+Forecast for: Month {{$oldInput['basemonth']}} Year {{$oldInput['baseyear']}} <br/>
+Reference Date Range: 1980-{{$baseyear}} </br>
+Rain Data Date Range: 1980-{{$rainyear}} </br>
+    </div>
+@endif
 
 
 
@@ -286,6 +322,32 @@
 
 
         });
+        
+        $(document).ready(function() {
+
+            $('.chosen-select').chosen();
+            $('#baseyear').change(function() {
+                var value = $("#baseyear").val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "basemonth",
+                    data: {baseyear: value},
+                    success: function(data) {
+
+                        $('#basemonth').find('option')
+                                .remove()
+                                .end()
+                                .append(data)
+                                .trigger('chosen:updated');
+
+                    }
+                });
+            });
+
+
+
+        });        
 
     </script>
 

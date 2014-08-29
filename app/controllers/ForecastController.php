@@ -35,6 +35,7 @@ class ForecastController extends BaseController
 	return View::make('forecast.index')
                 ->with('rawdata',$output['rawdata'])
                 ->with('spi',$output['spi'])
+                ->with('rainyear',$forcast->getlatestyear(Input::get('basin')))
 	->with('oldInput', Input::all());
 	}
 
