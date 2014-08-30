@@ -88,11 +88,15 @@ class CRUDController extends AdminController {
 	
 	function getAttributes($table)
 	{
-		$results = DB::select( DB::raw("SHOW COLUMNS FROM  ".$table." ") );
+		$results = DB::select( DB::raw("
+				
+				
+				select column_name
+				from INFORMATION_SCHEMA.COLUMNS where table_name = '".$table."' ") );
 		$arr = ' ';
 		foreach ($results as $key => $value)
 		{
-			$temp =  '<code>'.$value->Field.'</code>';
+			$temp =  '<code>'.$value->column_name.'</code>';
 			$arr = $arr.$temp."  ".' ';
 		}
 	
