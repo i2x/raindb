@@ -65,10 +65,13 @@ return array(
 
 		'pgsql' => array(
 			'driver'   => 'pgsql',
-			'host'     => '192.168.159.128',
+			//'host'     => '192.168.159.128',
+			'host'     => 'localhost',
 			'database' => 'rain',
 			'username' => 'postgres',
-			'password' => 'phisan243',
+			//'password' => 'phisan243',
+			'password' => '9066',
+				
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',
