@@ -142,16 +142,6 @@ Reference Date Range: 1980-{{$baseyear}} </br>
 Rain Data Date Range: 1980-{{$rainyear}} </br>
     </div>
 <br/>
-Raw Data Output:
-<div>
-    {{$rawdata}}
-</div>
-SPI Output:
-<div>
-    {{$spi}}
-</div>
-
-
 
 
 
@@ -161,6 +151,7 @@ SPI Output:
         <li ><a href="#p33" data-toggle="tab">P33/66</a></li>
         <li ><a href="#p20" data-toggle="tab">P20/80</a></li>
         <li ><a href="#spi" data-toggle="tab">SPI</a></li>
+        <li ><a href="#rawdata" data-toggle="tab">Raw Data</a></li>
 
     </ul>
 
@@ -177,7 +168,16 @@ SPI Output:
                 <div class="tab-pane fade " id="spi">
             <div id="container4" ></div>
         </div>
-        
+                        <div class="tab-pane fade " id="rawdata">
+  Raw Data Output:
+<div>
+    {{$rawdata}}
+</div>
+SPI Output:
+<div>
+    {{$spi}}
+</div>           
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -209,7 +209,7 @@ SPI Output:
                 series: [{
                         name: 'Observations',
                         data: [
-                            [760, 801, 848, 895, 965]
+                            [{{ implode(',',$boxplotdata) }}]
                         ],
                         tooltip: {
                             headerFormat: '<em>Rain {point.key}</em><br/>'
@@ -226,13 +226,13 @@ SPI Output:
 
             $('#container2').highcharts({
                 chart: {
+                    type: 'bar',             
                     zoomType: 'x'
 
                 },
-                colors: ['#ff371c', '#0d233a', '#8bbc21', '#910000', '#1aadce',
-                    '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'],
+                colors: ['#febe58','#00a4fe','#fe00fe'],
                 title: {
-                    text: 'อุณหภูมิ (°C)'
+                    text: 'Probability of Rain Fall'
                 },
                 subtitle: {
                     text: document.ontouchstart === undefined ?
@@ -240,190 +240,197 @@ SPI Output:
                             'Pinch the chart to zoom in'
                 },
                 tooltip: {
-                    valueSuffix: '(°C)'
+                    valueSuffix: ''
                 },
                 plotOptions: {
                     animation: false,
-                    line: {
-                        marker: {
-                            enabled: false,
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                    }
-
-
-
                 },
                 xAxis: {
-                    categories: [<?php echo $data_list ?>],
-                    minTickInterval: <?php echo $i / 8 ?>
-
-
-
+                    type: 'category',
+                    categories: ['Rain Level']
                 },
                 yAxis: {
                     title: {
-                        text: 'Temp (°C)'
+                        text: 'Probability'
                     }
                 },
+                               legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            layout: 'vertical',
+            x: 0,
+            y: 0
+        }
+                 ,
                 series: [{
-                        type: 'line',
-                        name: 'mean',
-                        data: [<?php echo $mean_temp ?>]
-                    }]
+                        type: 'bar',
+                        name: 'Below-normal',
+                        data: [{{$p33['Below-normal']}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Normal',
+                        data: [{{$p33['Normal']}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Above-normal',
+                        data: [{{$p33['Above-normal']}}]
+                    }
+                ]
             });
         });
 
 
         $(function() {
+
+
             $('#container3').highcharts({
                 chart: {
-                    type: 'boxplot',
+                    type: 'bar',             
                     zoomType: 'x'
 
                 },
+                colors: ['#febe58','#00a4fe','#fe00fe'],
                 title: {
-                    text: 'Highcharts Box Plot Example'
+                    text: 'Probability of Rain Fall'
                 },
-                legend: {
-                    enabled: false
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                            'Click and drag in the plot area to zoom in' :
+                            'Pinch the chart to zoom in'
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                plotOptions: {
+                    animation: false,
                 },
                 xAxis: {
-                    categories: ['1', '2', '3', '4', '5'],
-                    title: {
-                        text: 'Experiment No.'
-                    }
+                    type: 'category',
+                    categories: ['Rain Level']
                 },
                 yAxis: {
                     title: {
-                        text: 'Observations'
-                    },
-                    plotLines: [{
-                            value: 932,
-                            color: 'red',
-                            width: 1,
-                            label: {
-                                text: 'Theoretical mean: 932',
-                                align: 'center',
-                                style: {
-                                    color: 'gray'
-                                }
-                            }
-                        }]
+                        text: 'Probability'
+                    }
                 },
+                               legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            layout: 'vertical',
+            x: 0,
+            y: 0
+        }
+                 ,
                 series: [{
-                        name: 'Observations',
-                        data: [
-                            [760, 801, 848, 895, 965],
-                            [733, 853, 939, 980, 1080],
-                            [714, 762, 817, 870, 918],
-                            [724, 802, 806, 871, 950],
-                            [834, 836, 864, 882, 910]
-                        ],
-                        tooltip: {
-                            headerFormat: '<em>Experiment No {point.key}</em><br/>'
-                        }
-                    }, {
-                        name: 'Outlier',
-                        color: Highcharts.getOptions().colors[0],
-                        type: 'scatter',
-                        data: [// x, y positions where 0 is the first category
-                            [0, 644],
-                            [4, 718],
-                            [4, 951],
-                            [4, 969]
-                        ],
-                        marker: {
-                            fillColor: 'white',
-                            lineWidth: 1,
-                            lineColor: Highcharts.getOptions().colors[0]
-                        },
-                        tooltip: {
-                            pointFormat: 'Observation: {point.y}'
-                        }
-                    }]
-
+                        type: 'bar',
+                        name: 'Below-normal',
+                        data: [{{$p20['Below-normal']}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Normal',
+                        data: [{{$p20['Normal']}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Above-normal',
+                        data: [{{$p20['Above-normal']}}]
+                    }
+                ]
             });
         });
 
 
-        $(function() {
+                $(function() {
+
+
             $('#container4').highcharts({
                 chart: {
-                    type: 'boxplot',
+                    type: 'bar',             
                     zoomType: 'x'
 
                 },
+                colors: ['#bbbbbb','#febe58','#feac00','#fefe00','#b2fe00',
+    		'#4cfe00','#00e499','#00a4fe','#3e3efe','#b200fe', '#fe00fe','#fe4c9b'],
                 title: {
-                    text: 'Highcharts Box Plot Example'
+                    text: 'SPI'
                 },
-                legend: {
-                    enabled: false
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                            'Click and drag in the plot area to zoom in' :
+                            'Pinch the chart to zoom in'
+                },
+                tooltip: {
+                    valueSuffix: ''
+                },
+                plotOptions: {
+                    animation: false,
                 },
                 xAxis: {
-                    categories: ['1', '2', '3', '4', '5'],
-                    title: {
-                        text: 'Experiment No.'
-                    }
+                    type: 'category',
+                    categories: ['Rain Level']
                 },
                 yAxis: {
                     title: {
-                        text: 'Observations'
-                    },
-                    plotLines: [{
-                            value: 932,
-                            color: 'red',
-                            width: 1,
-                            label: {
-                                text: 'Theoretical mean: 932',
-                                align: 'center',
-                                style: {
-                                    color: 'gray'
-                                }
-                            }
-                        }]
+                        text: 'Probability'
+                    }
                 },
+                               legend: {
+            align: 'right',
+            verticalAlign: 'top',
+              layout: 'vertical',
+            x:-20,
+            floating: true
+        }
+                 ,
                 series: [{
-                        name: 'Observations',
-                        data: [
-                            [760, 801, 848, 895, 965],
-                            [733, 853, 939, 980, 1080],
-                            [714, 762, 817, 870, 918],
-                            [724, 802, 806, 871, 950],
-                            [834, 836, 864, 882, 910]
-                        ],
-                        tooltip: {
-                            headerFormat: '<em>Experiment No {point.key}</em><br/>'
-                        }
-                    }, {
-                        name: 'Outlier',
-                        color: Highcharts.getOptions().colors[0],
-                        type: 'scatter',
-                        data: [// x, y positions where 0 is the first category
-                            [0, 644],
-                            [4, 718],
-                            [4, 951],
-                            [4, 969]
-                        ],
-                        marker: {
-                            fillColor: 'white',
-                            lineWidth: 1,
-                            lineColor: Highcharts.getOptions().colors[0]
-                        },
-                        tooltip: {
-                            pointFormat: 'Observation: {point.y}'
-                        }
-                    }]
-
+                        type: 'bar',
+                        name: 'Extremely Dry',
+                        data: [{{$dataISP[0]}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Very Dry',
+                        data: [{{$dataISP[1]}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Moderately Dry',
+                        data: [{{$dataISP[2]}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Near Normal',
+                        data: [{{$dataISP[3]}}]
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Moderately Wet',
+                        data: [{{$dataISP[4]}}]
+                    }
+                    ,
+                    {
+                        type: 'bar',
+                        name: 'Very Wet',
+                        data: [{{$dataISP[5]}}]
+                    }
+                    ,
+                    {
+                        type: 'bar',
+                        name: 'Extremely Wet',
+                        data: [{{$dataISP[6]}}]
+                    }
+                ]
             });
         });
 
+
  </script>
+ 
+
+
  @endif
  <script type="text/javascript">
 

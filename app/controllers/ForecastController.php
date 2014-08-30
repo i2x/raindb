@@ -58,6 +58,10 @@ class ForecastController extends BaseController
                 ->with('spi',$output['spi'])
                 ->with('rainyear',$forcast->getlatestyear(Input::get('basin')))
                 ->with('targetyear',$targetyear)
+                ->with('boxplotdata',$output['boxplotdata'])
+                ->with('p33',$output['p33'])
+                ->with('p20',$output['p20'])
+                ->with('dataISP',$output['dataISP'])
 	->with('oldInput', Input::all());
 	}
 
