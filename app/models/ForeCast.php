@@ -164,6 +164,25 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
    	      
    }
    
+   
+   function extract_raw_data($rawdata){
+   // extract raw data 300 values from text
+    $temp = preg_split("/[\s,]+/", rawdata);
+    $start = sizeof($temp)-300;
+    for($i=$start;$i<sizeof($temp)-1;$i++)
+    {
+    	    $data[$i] = (float)$temp[$i];
+    	
+    }
+    return $data;
+   }
+   
+   function gen_box_plot_data($data){
+       return array(min($data), $this->stats_stat_percentile ($data ,25   ),
+    		 $this->array_median($data), $this->stats_stat_percentile ($data ,75 ),
+              max($data));
+   }
+   
 function stats_stat_percentile($data,$percentile){ 
     if( 0 < $percentile && $percentile < 1 ) { 
         $p = $percentile; 
