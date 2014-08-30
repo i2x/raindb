@@ -163,6 +163,241 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
    	         return $_lastyear[0]->yy;
    	      
    }
+   
+function stats_stat_percentile($data,$percentile){ 
+    if( 0 < $percentile && $percentile < 1 ) { 
+        $p = $percentile; 
+    }else if( 1 < $percentile && $percentile <= 100 ) { 
+        $p = $percentile * .01; 
+    }else { 
+        return ""; 
+    } 
+    $count = count($data); 
+    $allindex = ($count-1)*$p; 
+    $intvalindex = intval($allindex); 
+    $floatval = $allindex - $intvalindex; 
+    sort($data); 
+    if(!is_float($floatval)){ 
+        $result = $data[$intvalindex]; 
+    }else { 
+        if($count > $intvalindex+1) 
+            $result = $floatval*($data[$intvalindex+1] - $data[$intvalindex]) + $data[$intvalindex];
+        else 
+            $result = $data[$intvalindex]; 
+    } 
+    return $result; 
+} 
+
+
+
+function array_median($array) {
+	// perhaps all non numeric  should filtered out of $array here?
+	$iCount = count($array);
+	if ($iCount == 0) {
+		throw new DomainException('Median of an empty array is undefined');
+	}
+	// if we're down here it must mean $array
+	// has at least 1 item in the array.
+	$middle_index = floor($iCount / 2);
+	sort($array, SORT_NUMERIC);
+	$median = $array[$middle_index]; // assume an odd # of items
+	// Handle the even case by averaging the middle 2 items
+	if ($iCount % 2 == 0) {
+		$median = ($median + $array[$middle_index - 1]) / 2;
+	}
+	return $median;
+}
+function classify($data,$step)
+{
+	$result = array(0,0,0,0,0,0,0,0,0,0,0,0);
+	
+	
+	foreach ($data as $value)
+	{
+	if($step[0] <= $value  && $step[1] > $value)
+	{
+		$result[0]++;
+	}
+	if($step[1] <= $value  && $step[2] > $value)
+	{
+		$result[1]++;
+	}
+	if($step[2] <= $value  && $step[3] > $value)
+	{
+		$result[2]++;
+	}
+	if($step[3] <= $value  && $step[4] > $value)
+	{
+		$result[3]++;
+	}
+	if($step[4] <= $value  && $step[5] > $value)
+	{
+		$result[4]++;
+	}
+	if($step[5] <= $value  && $step[6] > $value)
+	{
+		$result[5]++;
+	}
+	if($step[6] <= $value  && $step[7] > $value)
+	{
+		$result[6]++;
+	}
+	if($step[7] <= $value  && $step[8] > $value)
+	{
+		$result[7]++;
+	}
+	if($step[8] <= $value && $step[9] > $value)
+	{
+		$result[8]++;
+	}
+	if($step[9] <= $value  && $step[10] > $value)
+	{
+		$result[9]++;
+	}
+	if($step[10] <= $value && $step[11] > $value)
+	{
+		$result[10]++;
+	}
+		
+	}
+	
+	
+	return $result;
+	
+}
+
+ function probability33_67($data)
+{
+	$upper = stats_stat_percentile($data,67);
+	$lowwer = stats_stat_percentile($data,33);
+	$temp = array();
+	$temp['Above-normal'] = 0;
+	$temp['Normal'] = 0;
+	$temp['Below-normal'] = 0;
+	foreach ($data as $value)
+	{
+		if($upper < $value)
+		{
+			$temp['Above-normal']++;
+		}
+		else if($upper >= $value && $lowwer <= $value )
+		{
+			$temp['Normal']++;
+		}
+		elseif ($lowwer > $value )
+		{
+			$temp['Below-normal']++;
+		}
+	}
+
+	$temp['Above-normal'] = (float)number_format($temp['Above-normal']/3, 2, '.', '');
+	$temp['Normal']       = (float)number_format($temp['Normal']/3, 2, '.', '');
+	$temp['Below-normal'] = (float)number_format($temp['Below-normal']/3, 2, '.', '');
+	
+	
+	return $temp;
+	
+}
+
+
+function probability20_80($data)
+{
+	$upper = stats_stat_percentile($data,80);
+	$lowwer = stats_stat_percentile($data,20);
+	$temp = array();
+	$temp['Above-normal'] = 0;
+	$temp['Normal'] = 0;
+	$temp['Below-normal'] = 0;
+	foreach ($data as $value)
+	{
+		if($upper < $value)
+		{
+			$temp['Above-normal']++;
+		}
+		else if($upper >= $value && $lowwer <= $value )
+		{
+			$temp['Normal']++;
+		}
+		elseif ($lowwer > $value )
+		{
+			$temp['Below-normal']++;
+		}
+	}
+
+	$temp['Above-normal'] = (float)number_format($temp['Above-normal']/3, 2, '.', '');
+	$temp['Normal']       = (float)number_format($temp['Normal']/3, 2, '.', '');
+	$temp['Below-normal'] = (float)number_format($temp['Below-normal']/3, 2, '.', '');
+
+
+	return $temp;
+
+}
+
+function SPI($data)
+{
+	
+
+
+	
+	$temp = array(0,0,0,0,0,0,0);
+	
+	//$path = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'R' .DIRECTORY_SEPARATOR .'Chi'. DIRECTORY_SEPARATOR .'AMJ'. DIRECTORY_SEPARATOR .'outspi.txt';
+	//$text = file($path);
+        $text = $data;
+	foreach ($text as $value)
+	{
+		//echo $value."<br/>";
+		//$value = ($value % 8 ) - 4 ;//  Shifting and Scaling for fake data
+		
+	
+		if((float)$value <= (-2.0))
+		{
+			$temp[0]++;
+		}
+		else if((-2.0) > (float)$value && (float)$value <= (-1.5))
+		{
+			$temp[1]++;
+				
+		}
+		else if((-1.5) > (float)$value && (float)$value <= (-1.0))
+				{
+			$temp[2]++;
+				
+		}
+		else if((-1.0) > (float)$value && (float)$value <= (1.0))
+				{
+			$temp[3]++;
+				
+		}
+		else if((1.0) > (float)$value && (float)$value <= (1.5))
+				{
+			$temp[4]++;
+				
+		}
+		else if((1.5) > (float)$value && (float)$value <= (2.0))
+				{
+			$temp[5]++;
+				
+		}
+		else 
+		{
+			$temp[6]++;
+				
+		}
+		
+	
+		
+		
+	}
+	foreach ($temp as $key => $value)
+	{
+		$temp[$key] = (float)number_format($value/3, 2, '.', '');
+		
+	}
+	return $temp;//array_reverse($temp);
+	
+}
+   
 
 }
 

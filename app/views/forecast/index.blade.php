@@ -133,38 +133,155 @@
         {{ Form::close() }}
 
     </div>
-@if (isset($oldInput))
+@if (isset($oldInput) && isset($rawdata))
     <div>
         Forecast Info:<br/>
 Basin: {{Riverbasin::where('basin_id', '=',$oldInput['basin'] )->firstOrFail()->basin_name}} <br/>
-Forecast for: Month {{$oldInput['basemonth']}} Year {{$oldInput['baseyear']}} <br/>
+Forecast for: Month {{$oldInput['season']}} Year {{$targetyear}} <br/>
 Reference Date Range: 1980-{{$baseyear}} </br>
 Rain Data Date Range: 1980-{{$rainyear}} </br>
     </div>
-@endif
+<br/>
+Raw Data Output:
+<div>
+    {{$rawdata}}
+</div>
+SPI Output:
+<div>
+    {{$spi}}
+</div>
+
 
 
 
 
     <ul class="nav nav-tabs" id="Tab_" >
-        <li class="active"><a href="#rain" data-toggle="tab">Boxplot</a></li>
+        <li class="active"><a href="#boxp" data-toggle="tab">Boxplot</a></li>
 
-        <li ><a href="#temp" data-toggle="tab">Temp</a></li>
+        <li ><a href="#p33" data-toggle="tab">P33/66</a></li>
+        <li ><a href="#p20" data-toggle="tab">P20/80</a></li>
+        <li ><a href="#spi" data-toggle="tab">SPI</a></li>
 
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane fade in active" id="rain" >
+        <div class="tab-pane fade in active" id="boxp" >
             <div id="container" ></div>
         </div>
-        <div class="tab-pane fade " id="temp">
-            <div id="container2"  "     style="width:84.5%;"></div>
+        <div class="tab-pane fade " id="p33">
+            <div id="container2" ></div>
         </div>
+        <div class="tab-pane fade " id="p20">
+            <div id="container3" ></div>
+        </div>
+                <div class="tab-pane fade " id="spi">
+            <div id="container4" ></div>
+        </div>
+        
     </div>
 
     <script type="text/javascript">
         $(function() {
             $('#container').highcharts({
+                chart: {
+                    type: 'boxplot',
+                    zoomType: 'x',
+                    width: 200
+
+                },
+                title: {
+                    text: 'Rain'
+                },
+                legend: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: [''],
+                    title: {
+                        text: 'Rain'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'mm'
+                    }
+                },
+                series: [{
+                        name: 'Observations',
+                        data: [
+                            [760, 801, 848, 895, 965]
+                        ],
+                        tooltip: {
+                            headerFormat: '<em>Rain {point.key}</em><br/>'
+                        }
+                    }]
+
+            });
+        });
+
+
+
+        $(function() {
+
+
+            $('#container2').highcharts({
+                chart: {
+                    zoomType: 'x'
+
+                },
+                colors: ['#ff371c', '#0d233a', '#8bbc21', '#910000', '#1aadce',
+                    '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'],
+                title: {
+                    text: 'อุณหภูมิ (°C)'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                            'Click and drag in the plot area to zoom in' :
+                            'Pinch the chart to zoom in'
+                },
+                tooltip: {
+                    valueSuffix: '(°C)'
+                },
+                plotOptions: {
+                    animation: false,
+                    line: {
+                        marker: {
+                            enabled: false,
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                    }
+
+
+
+                },
+                xAxis: {
+                    categories: [<?php echo $data_list ?>],
+                    minTickInterval: <?php echo $i / 8 ?>
+
+
+
+                },
+                yAxis: {
+                    title: {
+                        text: 'Temp (°C)'
+                    }
+                },
+                series: [{
+                        type: 'line',
+                        name: 'mean',
+                        data: [<?php echo $mean_temp ?>]
+                    }]
+            });
+        });
+
+
+        $(function() {
+            $('#container3').highcharts({
                 chart: {
                     type: 'boxplot',
                     zoomType: 'x'
@@ -235,66 +352,80 @@ Rain Data Date Range: 1980-{{$rainyear}} </br>
         });
 
 
-
         $(function() {
-
-
-            $('#container2').highcharts({
+            $('#container4').highcharts({
                 chart: {
+                    type: 'boxplot',
                     zoomType: 'x'
 
                 },
-                colors: ['#ff371c', '#0d233a', '#8bbc21', '#910000', '#1aadce',
-                    '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'],
                 title: {
-                    text: 'อุณหภูมิ (°C)'
+                    text: 'Highcharts Box Plot Example'
                 },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                            'Click and drag in the plot area to zoom in' :
-                            'Pinch the chart to zoom in'
-                },
-                tooltip: {
-                    valueSuffix: '(°C)'
-                },
-                plotOptions: {
-                    animation: false,
-                    line: {
-                        marker: {
-                            enabled: false,
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                    }
-
-
-
+                legend: {
+                    enabled: false
                 },
                 xAxis: {
-                    categories: [<?php echo $data_list ?>],
-                    minTickInterval: <?php echo $i / 8 ?>
-
-
-
+                    categories: ['1', '2', '3', '4', '5'],
+                    title: {
+                        text: 'Experiment No.'
+                    }
                 },
                 yAxis: {
                     title: {
-                        text: 'Temp (°C)'
-                    }
+                        text: 'Observations'
+                    },
+                    plotLines: [{
+                            value: 932,
+                            color: 'red',
+                            width: 1,
+                            label: {
+                                text: 'Theoretical mean: 932',
+                                align: 'center',
+                                style: {
+                                    color: 'gray'
+                                }
+                            }
+                        }]
                 },
                 series: [{
-                        type: 'line',
-                        name: 'mean',
-                        data: [<?php echo $mean_temp ?>]
+                        name: 'Observations',
+                        data: [
+                            [760, 801, 848, 895, 965],
+                            [733, 853, 939, 980, 1080],
+                            [714, 762, 817, 870, 918],
+                            [724, 802, 806, 871, 950],
+                            [834, 836, 864, 882, 910]
+                        ],
+                        tooltip: {
+                            headerFormat: '<em>Experiment No {point.key}</em><br/>'
+                        }
+                    }, {
+                        name: 'Outlier',
+                        color: Highcharts.getOptions().colors[0],
+                        type: 'scatter',
+                        data: [// x, y positions where 0 is the first category
+                            [0, 644],
+                            [4, 718],
+                            [4, 951],
+                            [4, 969]
+                        ],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 1,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        tooltip: {
+                            pointFormat: 'Observation: {point.y}'
+                        }
                     }]
+
             });
         });
 
-
+ </script>
+ @endif
+ <script type="text/javascript">
 
 
         $(document).ready(function() {

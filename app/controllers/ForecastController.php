@@ -30,12 +30,34 @@ class ForecastController extends BaseController
         		$this->render('rainforecast', array('model' => $model));
         	}
 
-  
+  $nseason = array(
+    			'1'=>'JFM',
+    			'2'=>'FMA',
+    			'3'=>'MAM',
+    			'4'=>'AMJ',
+    			'5'=>'MJJ',
+    			'6'=>'JJA',
+    			'7'=>'JAS',
+    			'8'=>'ASO',
+    			'9'=>'SON',
+    			'10'=>'OND',
+    			'11'=>'NDJ',
+    			'12'=>'DJF'
+    	);                
+
+ $iseason = array_flip($nseason);
+ 
+ if(Input::get('basemonth') >= $iseason[Input::get('season')]){
+     $targetyear = Input::get('baseyear')+1;
+ }else {
+     $targetyear = Input::get('baseyear');
+ } 
             
 	return View::make('forecast.index')
                 ->with('rawdata',$output['rawdata'])
                 ->with('spi',$output['spi'])
                 ->with('rainyear',$forcast->getlatestyear(Input::get('basin')))
+                ->with('targetyear',$targetyear)
 	->with('oldInput', Input::all());
 	}
 
