@@ -123,7 +123,19 @@ class ForecastPing extends Forecast {
         $outputfile = $Input['season'].$lagtime.'-mSPI.out';
          $text = file_get_contents($outputfile);
         //file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata.txt', $text); // TODO better solution  
-        $Input['spi'] = $text;  
+        $Input['spi'] = $text;
+        
+        
+        // generate graph data 300 value
+        $data300 = $this->extract_raw_data( $Input['rawdata']);
+        // boxplot
+        $boxplotdata = $this->gen_box_plot_data($data300);
+        $Input
+        // p33
+        
+        //p20
+        
+        // spi
         
         return $Input;
     }
