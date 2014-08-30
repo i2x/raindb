@@ -138,6 +138,16 @@ Route::group(['before' => 'auth|admin'], function()
     
     Route::post('database/amphur/{id}/delete', 'xAmphurController@postDelete');
     
+    
+    //
+    
+    Route::get('refrefresh', 'RefRefreshController@getIndex');
+    Route::post('refrefresh', 'RefRefreshController@postIndex');
+    
+    
+    
+    
+    
         
     
     

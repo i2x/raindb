@@ -47,7 +47,7 @@
   		        <li class="{{ set_active('database*') }}"><a href="{{ URL::to('database') }}">Database</a></li>
   		        
   		        <li class="{{ set_active('#') }}"><a href="{{ URL::to('import') }}">Schedule</a></li>
-		        <li class="{{ set_active('#') }}"><a href="{{ URL::to('import') }}">Ref Refresh</a></li>
+		        <li class="{{ set_active('refrefresh') }}"><a href="{{ URL::to('refrefresh') }}">Ref Refresh</a></li>
 		        
 
 		      </ul>
