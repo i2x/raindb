@@ -32,6 +32,17 @@ Route::group(['before' => 'guest'], function()
 {
 	Route::get('/register', 'RegistrationController@create');
 	Route::post('/register', ['as' => 'registration.store', 'uses' => 'RegistrationController@store']);
+	
+	
+	
+	//Data
+	
+	Route::get('historical', 'HistoricalController@getIndex');
+	Route::post('historical', 'HistoricalController@postIndex');
+	Route::get('historical/data', 'HistoricalController@getData');
+	
+	
+	
 });
 
 # Authentication
@@ -46,6 +57,30 @@ Route::group(['before' => 'guest'], function()
 	Route::post('forgot_password','RemindersController@postRemind');
 	Route::get('reset_password/{token}', 'RemindersController@getReset');
 	Route::post('reset_password/{token}', 'RemindersController@postReset');
+	
+	
+
+	//Graph
+	Route::get('graph', 'GraphController@getIndex');
+	Route::post('graph', 'GraphController@getIndex');
+	
+	//Select DropDown
+	Route::post('province',  'SelectController@province');
+	Route::post('ampher',  'SelectController@ampher');
+	Route::post('station', 'SelectController@station');
+	Route::post('season',  'SelectController@season');
+	Route::post('basemonth',  'SelectController@basemonth');
+	
+	
+	
+	
+	//Report
+	Route::get('report','ReportController@getIndex');
+	Route::post('report','ReportController@postIndex');
+	
+	
+	
+	
 });
 
 Route::group(['before' => 'auth|(standardUser || admin)'], function()
@@ -58,24 +93,10 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 	
 	
 	
-	//Data
-	
-	Route::get('historical', 'HistoricalController@getIndex');
-	Route::post('historical', 'HistoricalController@postIndex');
-	Route::get('historical/data', 'HistoricalController@getData');
+
 	
 	
 
-	//Graph 
-	Route::get('graph', 'GraphController@getIndex');
-	Route::post('graph', 'GraphController@getIndex');
-
-	//Select DropDown
-	Route::post('province',  'SelectController@province');
-	Route::post('ampher',  'SelectController@ampher');
-	Route::post('station', 'SelectController@station');
-	Route::post('season',  'SelectController@season');
-        Route::post('basemonth',  'SelectController@basemonth');
 	
 	
 	
@@ -91,9 +112,7 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 	Route::get('log/data','LogController@getData');
 	
 	
-	//Report
-	Route::get('report','ReportController@getIndex');
-	Route::post('report','ReportController@postIndex');
+
 	
 	
 	//Forecast

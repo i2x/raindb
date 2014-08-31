@@ -66,18 +66,22 @@ class ReportController extends Controller
 
 	
 		
-			$weekly = DB::select(DB::raw("SELECT 		date_part('year',meas_date) AS _YEAR,
+			$weekly = DB::select(DB::raw("
+			
+			SELECT 		date_part('year',meas_date) AS _YEAR,
 		    date_part( 'week', meas_date ) AS _week,
-			ROUND( SUM(  rain )  ) AS _weeksum,
-			ROUND( AVG(  rain )  ) AS _weekavg,
-			ROUND( MIN(  rain )  ) AS _weekmin,
-			ROUND( MIN( NULLIF(  rain , 0 ) )) AS _weekmin2,				
-			ROUND( MAX(  rain )  ) AS _weekmax		
+			SUM(  rain ) AS _weeksum,
+			ROUND( AVG(  rain )::numeric ,2 ) AS _weekavg,
+			MIN(  rain )   AS _weekmin,
+			MIN( NULLIF(  rain , 0 ) ) AS _weekmin2,				
+			MAX(  rain )   AS _weekmax		
 			FROM  tbl_rain_measurement
-			WHERE  station_id =327301
+			WHERE  station_id in (327301,327007)
 			AND meas_date >=  '1996-08-06'
 			AND meas_date <=  '2000-08-06'		
-			GROUP BY date_part('year',meas_date) ,date_part( 'week', meas_date )  "));
+			GROUP BY date_part('year',meas_date) ,date_part( 'week', meas_date) 
+			
+			"));
 			
 			
 			
@@ -85,22 +89,27 @@ class ReportController extends Controller
 	}
 	public function getMonthly($station,$start,$end,$only_rainy_day)
 	{
+		
+		
+		
+		
+		
 		if($station == NULL)$station = 327022;
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
 		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
 		if($only_rainy_day != NULL)
 		{
 		$sql = "
-				ROUND( AVG( NULLIF(  rain , 0 ) )) AS _monthavg,				
-				ROUND( MIN( NULLIF(  rain , 0 ) )) AS _monthmin,
+				ROUND( AVG(  rain )::numeric ,2 ) AS _monthavg,				
+				MIN( NULLIF(  rain , 0 ) ) AS _monthmin,
 				
 		";
 		}
 		else 
 		{
 			$sql = "
-					ROUND( AVG(  rain )  ) AS _monthavg,
-					ROUND( MIN(  rain ) ) AS _monthmin,
+					ROUND( AVG(  rain )::numeric ,2 ) AS _monthavg,
+					MIN(  rain )  AS _monthmin,
 					
 					";
 		}
@@ -108,9 +117,9 @@ class ReportController extends Controller
 			
 			SELECT 	date_part('year',meas_date) AS _YEAR,
 			date_part('month',  meas_date ) AS _month,
-			ROUND( SUM(  rain )  ) AS _monthsum,
+			SUM(  rain )   AS _monthsum,
 			".$sql."
-			ROUND( MAX(  rain )  ) AS _monthmax
+			MAX(  rain )   AS _monthmax
 			FROM  tbl_rain_measurement
 			WHERE  station_id IN(".$station.")
 			".$start." ".$end."	

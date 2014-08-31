@@ -73,7 +73,30 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		      <ul class="nav navbar-nav">
-		        <li class="{{ set_active('/') }}"><a href="{{ URL::to('/') }}">Home</a></li>
+
+		     
+		    
+		      
+		      
+		      
+		@if (!Sentry::check())
+		
+		
+		
+		
+				<li class="{{ set_active('/') }}"><a href="{{ URL::to('/') }}">Home</a></li>
+		        <li class="{{ set_active('historical') }}"><a href="{{ URL::to('historical') }}">Historical Data</a></li>
+		        
+<!--		        <li class="{{ set_active('about') }}"><a href="/about">About</a></li>
+		        <li class="{{ set_active('contact') }}"><a href="/contact">Contact</a></li> --> 
+		        <li class="{{ set_active('graph') }}"><a href="{{ URL::to('graph') }}">Graph</a></li>
+		        <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>
+		
+		
+		
+		@else
+		
+				<li class="{{ set_active('/') }}"><a href="{{ URL::to('/') }}">Home</a></li>
 		        <li class="{{ set_active('historical') }}"><a href="{{ URL::to('historical') }}">Historical Data</a></li>
 		        
 <!--		        <li class="{{ set_active('about') }}"><a href="/about">About</a></li>
@@ -83,8 +106,21 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 		        <li class="{{ set_active('log') }}"><a href="{{URL::to('log') }}">Log</a></li>
 		        <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>
 		        <li class="{{ set_active('forecast') }}"><a href="{{ URL::to('forecast') }}">Forecast</a></li>
-		     
-		      </ul>
+		
+		
+		
+		
+		
+		@endif
+		
+		
+		  </ul>
+		
+		      
+		      
+		      
+		      
+		      
 
 		      <ul class="nav navbar-nav navbar-right">
 		      
