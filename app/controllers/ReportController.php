@@ -28,14 +28,17 @@ class ReportController extends Controller
 	$data_month = $this->boxplotMonth(
 			Input::get('station'),
 			Input::get('start'),
-			Input::get('end')
+			Input::get('end'),
+			Input::get('only_rainy_day')
 	);
 
 	
 	$data_week = $this->boxplotWeek(
 			Input::get('station'),
 			Input::get('start'),
-			Input::get('end')
+			Input::get('end'),
+			Input::get('only_rainy_day')
+				
 	);
 	
 			
@@ -196,19 +199,26 @@ class ReportController extends Controller
 	
 
 	
-	public function boxplotMonth($station,$start,$end)
+	public function boxplotMonth($station,$start,$end,$only_rainy_day)
 	{
-
+		
+		
+		$rain = " ";
 		if($station == NULL) $station = 327016;
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
 		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+		if($only_rainy_day != NULL)
+		{
+			$rain = "and rain > 0";
+		}
+		
 				
 		$monthly = DB::select(DB::raw("
 		
 		SELECT  meas_year ,  meas_month ,  rain
 		FROM  tbl_rain_measurement
 		WHERE  station_id IN(".$station.")
-		".$start." ".$end."	
+		".$start." ".$end." ".$rain."
 		ORDER by meas_year,meas_month ASC
 		"));
 		
@@ -250,12 +260,18 @@ class ReportController extends Controller
 	
 	
 	
-	public function boxplotWeek($station,$start,$end)
+	public function boxplotWeek($station,$start,$end,$only_rainy_day)
 	{
 	
+		$rain = " ";
 		if($station == NULL) $station = 327016;
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
 		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+		
+		if($only_rainy_day != NULL)
+		{
+			$rain = "and rain > 0";
+		}
 	
 		$monthly = DB::select(DB::raw("
 	
@@ -263,7 +279,7 @@ class ReportController extends Controller
 		date_part( 'week', meas_date ) AS _week,  rain
 		FROM  tbl_rain_measurement
 		WHERE  station_id IN(".$station.")
-		".$start." ".$end."
+		".$start." ".$end." ".$rain."		
 		ORDER by meas_year,meas_month ASC
 		"));
 	

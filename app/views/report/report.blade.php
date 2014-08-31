@@ -92,7 +92,7 @@ foreach ($monthly as $value)
 
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
-  	<li class="active">Graph</li>
+  	<li class="active">Report</li>
 	</ol>
 	
 	
