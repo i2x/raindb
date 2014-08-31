@@ -6,20 +6,16 @@ class ReportController extends Controller
 	{
 		
 		
-		
-	$weekly  = $this->getWeekly(NULL,NULL);
-	$monthly = $this->getMonthly(NULL,NULL,NULL,NULL);
+
 	
-	$data = $this->boxplotMonth(NULL,NULL,NULL);
-	$test = $this->boxplot_encode($data['boxplot_array']);
+	
+	
 
 	
 
-	 return View::make('report.index')
-	 ->with('categories_boxplot1',$data['categories'])
-	 ->with('weekly',$weekly)
-	 ->with('monthly',$monthly)
-	 ->with('test',$test);	 
+	 return View::make('report.index');
+
+	 
 	 
 	}
 	
@@ -29,16 +25,24 @@ class ReportController extends Controller
 	public function postIndex()
 	{
 		
-	$data = $this->boxplotMonth(Input::get('station'),
+	$data_month = $this->boxplotMonth(
+			Input::get('station'),
 			Input::get('start'),
 			Input::get('end')
-	);	
-	$test = $this->boxplot_encode($data['boxplot_array']);
-		
+	);
+
+	
+	$data_week = $this->boxplotWeek(
+			Input::get('station'),
+			Input::get('start'),
+			Input::get('end')
+	);
+	
+			
 		
 	$only_rainy_day = Input::get('only_rainy_day');
 	
-	$weekly  = $this->getWeekly(Input::get('station'),NULL);
+	$weekly  = $this->getWeekly(Input::get('station'),Input::get('start'),Input::get('end'));
 	
 	$monthly = $this->getMonthly(Input::get('station'),
 			Input::get('start'),
@@ -48,21 +52,35 @@ class ReportController extends Controller
 	
 	
 	
-	return View::make('report.index')
-	->with('categories_boxplot1',$data['categories'])
+	
+	
+	$boxplot_month = $this->boxplot_encode($data_month['boxplot_array'],'month');
+	$boxplot_week = $this->boxplot_encode($data_week['boxplot_array'],'week');
+	
+	
+	
+	
+	
+	
+	
+	
+	return View::make('report.report')
+	->with('categories_boxplot_month',$data_month['categories'])
+    ->with('categories_boxplot_week',$data_week['categories'])
 	->with('weekly',$weekly)
 	->with('monthly',$monthly)
-	->with('test',$test)
+	->with('boxplot_month',$boxplot_month)
+	->with('boxplot_week',$boxplot_week)
 	->with('oldInput', Input::all());
 		
 		
 	}
         
-	public function getWeekly($station,$year)
+	public function getWeekly($station,$start,$end)
 	{
-		$range = '';
-		if(isset($start))    $condition."AND meas_date <=  '2000-08-06'";
-		if(isset($end)) 	 $condition."AND meas_date >=  '1998-08-06'";
+		if($station == NULL)$station = 327022;
+		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
+		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
 
 	
 		
@@ -76,10 +94,11 @@ class ReportController extends Controller
 			MIN( NULLIF(  rain , 0 ) ) AS _weekmin2,				
 			MAX(  rain )   AS _weekmax		
 			FROM  tbl_rain_measurement
-			WHERE  station_id in (327301,327007)
-			AND meas_date >=  '1996-08-06'
-			AND meas_date <=  '2000-08-06'		
+			WHERE  station_id in (".$station.")
+			".$start." ".$end."			
 			GROUP BY date_part('year',meas_date) ,date_part( 'week', meas_date) 
+			ORDER by _YEAR,_week ASC
+					
 			
 			"));
 			
@@ -191,11 +210,7 @@ class ReportController extends Controller
 		WHERE  station_id IN(".$station.")
 		".$start." ".$end."	
 		ORDER by meas_year,meas_month ASC
-				
-				
-				
-				
-				"));
+		"));
 		
 		
 
@@ -233,22 +248,78 @@ class ReportController extends Controller
 	}
 	
 	
-	public function boxplot_encode($boxplotMonth)
+	
+	
+	public function boxplotWeek($station,$start,$end)
+	{
+	
+		if($station == NULL) $station = 327016;
+		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
+		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+	
+		$monthly = DB::select(DB::raw("
+	
+		SELECT 		meas_year,
+		date_part( 'week', meas_date ) AS _week,  rain
+		FROM  tbl_rain_measurement
+		WHERE  station_id IN(".$station.")
+		".$start." ".$end."
+		ORDER by meas_year,meas_month ASC
+		"));
+	
+	
+	
+		$boxplot_array = $temp = array();
+		$categories =array();
+		$i = 0;
+	
+		foreach ( $monthly as $key => $value)
+		{
+			$temp[$value->meas_year][$value->_week][$key] = $value->rain;
+		}
+	
+	
+	
+		foreach ($temp as $year => $array_week)
+		{
+			foreach ($array_week as $week => $_array)
+			{
+				$boxplot_array[$year][$week]['max'] = max($_array);
+				$boxplot_array[$year][$week]['min'] = min($_array);
+				$boxplot_array[$year][$week]['median'] = $this->array_median($_array);
+				$boxplot_array[$year][$week]['upper'] = $this->stats_stat_percentile($_array, 75);
+				$boxplot_array[$year][$week]['lower'] = $this->stats_stat_percentile($_array, 25);
+
+				$categories[$i++] = $year." (".$week.")";
+	
+			}
+		}
+	
+	
+		return array('boxplot_array' =>$boxplot_array,'categories' => json_encode($categories));
+	
+	
+	}
+	
+	
+	public function boxplot_encode($boxplotMonth,$mode)
 	{
 
 		$i = 0;
-                $boxplot= array();
+       	$boxplot= array();
+       	
+       	
 		foreach ($boxplotMonth as $year =>$array_month)
 		{
 		
-			foreach($array_month as $month => $arr)
+			foreach($array_month as ${$mode} => $arr)
 			{
 				$boxplot[$i++] = array(
-						$boxplotMonth[$year][$month]['min'],
-						$boxplotMonth[$year][$month]['lower'],
-						$boxplotMonth[$year][$month]['median'],
-						$boxplotMonth[$year][$month]['upper'],
-						$boxplotMonth[$year][$month]['max']);
+						$boxplotMonth[$year][${$mode}]['min'],
+						$boxplotMonth[$year][${$mode}]['lower'],
+						$boxplotMonth[$year][${$mode}]['median'],
+						$boxplotMonth[$year][${$mode}]['upper'],
+						$boxplotMonth[$year][${$mode}]['max']);
 			}
 		}
 		
@@ -256,6 +327,8 @@ class ReportController extends Controller
 		
 		return $boxplot_json;
 	}
+	
+
 	
 	
 
