@@ -51,11 +51,10 @@ class HistoricalController extends BaseController
 		
 		
 		
-		$input = Session::get('input');
-		
-		$data = HistoricData::leftJoin('tbl_rain_station',
+	$data = HistoricData::leftJoin('tbl_rain_station',
 				'tbl_rain_measurement.station_id','=','tbl_rain_station.stationid')
-		
+				->leftJoin('tbl_source',
+						'tbl_rain_measurement.source','=','tbl_source.source_id')
 				->select(array(
 				'tbl_rain_measurement.meas_id',
 				'tbl_rain_measurement.meas_date',
@@ -67,18 +66,21 @@ class HistoricalController extends BaseController
 				'tbl_rain_measurement.avgrh',
 				'tbl_rain_measurement.evapor',
 				'tbl_rain_measurement.mean_temp',
+				'tbl_source.source_name'
 										
 
 		));
-				
-		$data->where('tbl_rain_station.ampher',$input['amphur']);
-				
-
+		$station = Session::get('station_input');
+		
+		if(isset($station))$data = $data->whereIn('station_id',array($station));
+		else 
+		{
 			
-				
-				
-		//$data->where('station_id',$input['station']);
-
+			$data->whereIn('stationid',array('327301'));
+			
+		
+		
+		}
 		
 	
 

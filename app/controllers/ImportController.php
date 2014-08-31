@@ -142,6 +142,7 @@ class ImportController extends BaseController
 				->leftJoin('tbl_source',
 						'tbl_temp_measurement.source','=','tbl_source.source_id')
 				->select(array(
+						
 				'tbl_temp_measurement.meas_id',
 				'tbl_temp_measurement.meas_date',
 				'tbl_temp_measurement.station_id',
@@ -152,7 +153,6 @@ class ImportController extends BaseController
 				'tbl_temp_measurement.avgrh',
 				'tbl_temp_measurement.evapor',
 				'tbl_temp_measurement.mean_temp',
-				'tbl_source.source_name',
 										
 
 		));
