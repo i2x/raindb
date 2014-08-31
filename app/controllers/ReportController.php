@@ -124,6 +124,7 @@ class ReportController extends Controller
 			WHERE  station_id IN(".$station.")
 			".$start." ".$end."	
 			GROUP BY date_part('year',meas_date) ,date_part( 'month', meas_date )
+			ORDER by _YEAR,_month ASC
 			 "));
 		return $monthly;
 		
