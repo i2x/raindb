@@ -14,33 +14,17 @@ class HistoricalController extends BaseController
 	public function getIndex()
 	{
 	
-
-		
-		/*$this->Clear();
-
-		$validator = HistoricData::validate(Input::all());*/
-		
+		$this->Clear();		
 		return View::make('historical.index');
-		
-
-    
 	}
 	
 	
 	public function postIndex()
 	{
 		
-		/*$validator = HistoricData::validate(Input::all());
-		$this->Passing(Input::get('province'), Input::get('ampher'), Input::get('station'));*/
-		
-		
-		Session::put('input', Input::all());
-		
-		
 
-		
-		
-		
+			
+		Session::put('input', Input::all());
 		return View::make('historical.historical')
 		->with('oldInput',Input::all());
 				
@@ -87,23 +71,10 @@ class HistoricalController extends BaseController
 	}
 	
 
-	public function Passing($province,$ampher,$station)
-	{
-		if(!empty($province))Session::put('province_input', $province);
-		if(!empty($ampher))Session::put('ampher_input', $ampher);
-		if(!empty($station))Session::put('station_input', $station);
-		
-			
-		
-		
-	
-	}
-	
 	public function Clear()
 	{
-		Session::forget('province_input'); //clear all session
-		Session::forget('ampher_input'); //clear all session
-		Session::forget('station_input'); //clear all session
+		Session::forget('input'); //clear all session
+
 	}
 
 

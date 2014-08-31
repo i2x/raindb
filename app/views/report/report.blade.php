@@ -87,10 +87,7 @@ foreach ($monthly as $value)
 	
 			
 		
-	<?php 
-	
-	//if(isset($oldInput))print_r($oldInput);
-	?>
+
 		{{ Form::open(array('url' => 'report', 'method' => 'POST')) }}
 	<div class="col-md-12 ">
 		

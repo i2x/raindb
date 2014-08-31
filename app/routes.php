@@ -65,7 +65,7 @@ Route::group(['before' => 'guest'], function()
 
 	//Graph
 	Route::get('graph', 'GraphController@getIndex');
-	Route::post('graph', 'GraphController@getIndex');
+	Route::post('graph', 'GraphController@postIndex');
 	
 	//Select DropDown
 	Route::post('province',  'SelectController@province');

@@ -228,9 +228,9 @@
 			
 			
 				<th class="col-md-1">meas_id</th>
-				<th class="col-md-2">meas_date</th>
+				<th class="col-md-3">meas_date</th>
 				<th class="col-md-1">station_id</th>
-				<th class="col-md-2">Name</th>
+				<th class="col-md-4">Name</th>
 				<th class="col-md-1">max_temp</th>
 				<th class="col-md-1">min_temp</th>
 				<th class="col-md-1">rain</th>
