@@ -488,7 +488,6 @@ $(function () {
 	    xAxis: {
 	        categories: <?php echo $categories_boxplot1?>,
 	        title: {
-	            text: 'Experiment No.'
 	        },
         	minTickInterval: 4                    
     	

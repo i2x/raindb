@@ -100,7 +100,7 @@ class ReportController extends Controller
 		if($only_rainy_day != NULL)
 		{
 		$sql = "
-				ROUND( AVG(  rain )::numeric ,2 ) AS _monthavg,				
+				ROUND( AVG(  NULLIF(  rain , 0 ) )::numeric ,2 ) AS _monthavg,				
 				MIN( NULLIF(  rain , 0 ) ) AS _monthmin,
 				
 		";
@@ -190,7 +190,12 @@ class ReportController extends Controller
 		FROM  tbl_rain_measurement
 		WHERE  station_id IN(".$station.")
 		".$start." ".$end."	
-		AND rain > 0"));
+		ORDER by meas_year,meas_month ASC
+				
+				
+				
+				
+				"));
 		
 		
 
