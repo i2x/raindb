@@ -41,7 +41,8 @@ class HistoricalController extends BaseController
 		
 		
 		
-		return View::make('historical.historical');
+		return View::make('historical.historical')
+		->with('oldInput',Input::all());
 				
 	}
 
@@ -70,21 +71,17 @@ class HistoricalController extends BaseController
 										
 
 		));
-		$station = Session::get('station_input');
+		$Input = Session::get('input');
 		
-		if(isset($station))$data = $data->whereIn('station_id',array($station));
-		else 
-		{
-			
-			$data->whereIn('stationid',array('327301'));
-			
-		
-		
-		}
-		
-	
 
-		return  Datatables::of($data)->make();
+			if($Input['station'] != NULL)$data->where('stationid',$Input['station']);
+			if($Input['province'] != NULL)$data->where('province',$Input['province']);
+			if($Input['ampher'] != NULL)$data->where('ampher',$Input['ampher']);
+			if($Input['start'] != NULL)$data->where('meas_date','>=',$Input['start']);
+			if($Input['end'] != NULL)$data->where('meas_date','<=',$Input['end']);
+
+			
+		 	return  Datatables::of($data)->make();
 		
 		
 	}

@@ -108,8 +108,7 @@
 				<th class="col-md-1">avgrh</th>
 				<th class="col-md-1">evapor</th>
 				<th class="col-md-1">mean_temp</th>
-			    <th class="col-md-1">source</th>
-				
+				<th class="col-md-1">source</th>
 				
 				
 				
