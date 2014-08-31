@@ -30,6 +30,9 @@ Route::group(['before' => 'redirectAdmin'], function()
 # Registration
 Route::group(['before' => 'guest'], function()
 {
+	
+	
+	
 	Route::get('/register', 'RegistrationController@create');
 	Route::post('/register', ['as' => 'registration.store', 'uses' => 'RegistrationController@store']);
 	
@@ -77,6 +80,11 @@ Route::group(['before' => 'guest'], function()
 	//Report
 	Route::get('report','ReportController@getIndex');
 	Route::post('report','ReportController@postIndex');
+	
+	//
+	
+	Route::get('schedule','ScheduleController@getIndex');
+	Route::post('schedule','ScheduleController@postIndex');
 	
 	
 	

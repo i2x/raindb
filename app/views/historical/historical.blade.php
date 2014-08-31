@@ -5,7 +5,10 @@
 @section('content')
 
 
-
+	<?php 
+	
+	print_r(Input::all());
+	?>
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
   	<li class="active">Historical Data</li>

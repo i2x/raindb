@@ -16,11 +16,11 @@ class HistoricalController extends BaseController
 	
 
 		
-		$this->Clear();
+		/*$this->Clear();
 
-		$validator = HistoricData::validate(Input::all());
+		$validator = HistoricData::validate(Input::all());*/
 		
-		return View::make('historical.historical');
+		return View::make('historical.index');
 		
 
     
@@ -30,9 +30,18 @@ class HistoricalController extends BaseController
 	public function postIndex()
 	{
 		
-		$validator = HistoricData::validate(Input::all());
-		$this->Passing(Input::get('province'), Input::get('ampher'), Input::get('station'));
-		return View::make('historical.historical')->withErrors($validator);
+		/*$validator = HistoricData::validate(Input::all());
+		$this->Passing(Input::get('province'), Input::get('ampher'), Input::get('station'));*/
+		
+		
+		Session::put('input', Input::all());
+		
+		
+
+		
+		
+		
+		return View::make('historical.historical');
 				
 	}
 
@@ -42,7 +51,7 @@ class HistoricalController extends BaseController
 		
 		
 		
-	  
+		$input = Session::get('input');
 		
 		$data = HistoricData::leftJoin('tbl_rain_station',
 				'tbl_rain_measurement.station_id','=','tbl_rain_station.stationid')
@@ -61,17 +70,15 @@ class HistoricalController extends BaseController
 										
 
 		));
-		$station = Session::get('station_input');
-		
-		if(isset($station))$data = $data->whereIn('station_id',array($station));
-		else 
-		{
+				
+		$data->where('tbl_rain_station.ampher',$input['amphur']);
+				
+
 			
-			$data->whereIn('station_id',array('327301'));
-			
-		
-		
-		}
+				
+				
+		//$data->where('station_id',$input['station']);
+
 		
 	
 

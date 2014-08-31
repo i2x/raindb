@@ -46,7 +46,7 @@
   		        <li class="{{ set_active_admin('admin/profiles') }}"><a href="{{URL::to('/admin/profiles')}}">List Users</a></li>
   		        <li class="{{ set_active('database*') }}"><a href="{{ URL::to('database') }}">Database</a></li>
   		        
-  		        <li class="{{ set_active('#') }}"><a href="{{ URL::to('import') }}">Schedule</a></li>
+  		        <li class="{{ set_active('schedule') }}"><a href="{{ URL::to('schedule') }}">Schedule</a></li>
 		        <li class="{{ set_active('refrefresh') }}"><a href="{{ URL::to('refrefresh') }}">Ref Refresh</a></li>
 		        
 
