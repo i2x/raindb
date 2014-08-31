@@ -21,6 +21,9 @@ class SelectController extends Controller {
 		endforeach;
 		return Response::make($dropdown);
 	}
+	
+	
+	
 
 
 	public function ampher(){
@@ -51,6 +54,66 @@ class SelectController extends Controller {
        return Response::make($dropdown);
 	
 	}
+	
+	
+	static public function  save_province($input)
+	{
+	
+		$province = DB::select(DB::raw("select tbl_province.province_id,tbl_province.province_name from tbl_province
+		where tbl_province.province_id in (
+		select distinct(tbl_province.province_id) from tbl_province inner join tbl_rain_station on
+		tbl_rain_station.province = tbl_province.province_id
+		inner join riverbasin on riverbasin.basin_id = tbl_rain_station.basin_id
+		where riverbasin.basin_id IN(".$input."))"));
+		foreach ($province as $key => $value)
+		{
+			$province_list[$value->province_id] = $value->province_name;
+	
+		}
+		return $province_list;
+	
+	}
+	
+	static public function  save_amphur($input)
+	{
+	
+		$ampher = DB::select(DB::raw("select tbl_ampher.ampher_id,tbl_ampher.name from tbl_ampher
+		where tbl_ampher.ampher_id in (
+		select distinct(tbl_ampher.ampher_id) from tbl_ampher inner join tbl_rain_station on
+		tbl_rain_station.ampher = tbl_ampher.ampher_id
+		inner join tbl_province on tbl_province.province_id = tbl_rain_station.province
+		where tbl_province.province_id IN(' ".$input."  '))"));
+		foreach ($ampher as $key => $value)
+		{
+			$amphur_list[$value->ampher_id] = $value->name;
+	
+		}
+		return $amphur_list;
+	
+	}
+	
+	
+	static public function  save_station($input)
+	{
+	
+		$station = $station = Station::where('ampher',$input)->select('stationid','name')->get();
+		foreach ($station as $key => $value)
+		{
+			$station_list[$value->stationid] = $value->name;
+	
+		}
+		return $station_list;
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public function season()

@@ -66,6 +66,7 @@ foreach ($monthly as $value)
 
 
 
+
 ?>
 
 
@@ -97,21 +98,54 @@ foreach ($monthly as $value)
 
 		
 				<div class="col-md-2 column">
+				
+				
 				{{ Form::select('basin',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
 				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
 				array('class'=>'chosen-select','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 160px;"))}}
+				
+				
+				
+				
+				
 				</div>
 				
 				
 				<div class="col-md-2 column">
+				
+				@if(isset($oldInput['province']))
+				
+				{{ Form::select('province',array(''=>'')+SelectController::save_province(7),
+				isset($oldInput['province']) ? $oldInput['province'] : null 
+				,
+				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
+				@else
+				
 				{{ Form::select('province',array(''=>'') + Province::lists('province_name','province_id'),
 				isset($oldInput['province']) ? $oldInput['province'] : null ,
 				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
+				
+				@endif
+				
+				
 				</div>
-	
+
 				
 				<div class="col-md-2 column">
 			
+				@if(isset($oldInput['province']))
+				
+				{{ Form::select(
+				'ampher',array(''=>'')+SelectController::save_amphur($oldInput['province']),
+				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
+				array('class'=>'chosen-select','data-placeholder'=>
+				'Select Amphur'
+				
+				,'id'=>'ampher','style'=>"width: 160px;"))}}
+				
+				@else
+				
+				
 				{{ Form::select(
 				'ampher',array(''=>'')+Ampher::lists('name','ampher_id'),
 				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
@@ -119,16 +153,38 @@ foreach ($monthly as $value)
 				'Select Amphur'
 				
 				,'id'=>'ampher','style'=>"width: 160px;"))}}
+				
+				@endif
+			
+				
 				</div>
 				
 				<div class="col-md-2 column">
+				
+				@if(isset($oldInput['station']))
 			
-				{{ Form::select('station',array(''=>'')+Station::lists('name','stationid'),
+				
+				{{ Form::select('station',array(''=>'')+SelectController::save_station($oldInput['ampher']),
 				isset($oldInput['station']) ? $oldInput['station']  : null 
 				,
 				array('class'=>'chosen-select',
 				'data-placeholder'=>'Select Station',
 				'id'=>'station','style'=>"width: 160px;"))}}
+				
+				
+				@else
+				
+				
+				{{ Form::select('station',array(''=>''),
+				isset($oldInput['station']) ? $oldInput['station']  : null 
+				,
+				array('class'=>'chosen-select',
+				'data-placeholder'=>'Select Station',
+				'id'=>'station','style'=>"width: 160px;"))}}
+				
+				@endif
+			
+		
 				
 				</div>
 				
