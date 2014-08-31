@@ -115,7 +115,7 @@ foreach ($monthly as $value)
 				
 				@if(isset($oldInput['province']))
 				
-				{{ Form::select('province',array(''=>'')+SelectController::save_province(7),
+				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin']),
 				isset($oldInput['province']) ? $oldInput['province'] : null 
 				,
 				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}

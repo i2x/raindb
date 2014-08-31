@@ -32,40 +32,173 @@
 	
 			
 		<!-- DropDown Form start -->			
-	{{ Form::open(array('url' => 'historical')) }}
+				{{ Form::open(array('url' => 'historical', 'method' => 'POST')) }}
 	<div class="col-md-12 ">
-	
-	
 		
 				<div class="row">
+
+		
 				<div class="col-md-2 column">
-		        <label >Province</label>
-		        
-		       
-				{{ Form::select('province',array(''=>'') + Province::lists('province_name','province_id'),null,
+				
+				
+				{{ Form::select('basin',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
+				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
+				array('class'=>'chosen-select','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 160px;"))}}
+				
+				
+				
+				
+				
+				</div>
+				
+				
+				<div class="col-md-2 column">
+				
+				@if(isset($oldInput['province']))
+				
+				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin']),
+				isset($oldInput['province']) ? $oldInput['province'] : null 
+				,
 				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
+				@else
+				
+				{{ Form::select('province',array(''=>'') + Province::lists('province_name','province_id'),
+				isset($oldInput['province']) ? $oldInput['province'] : null ,
+				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
+				
+				@endif
+				
+				
 				</div>
-	
+
 				
 				<div class="col-md-2 column">
-				<label >Ampher</label>
-				{{ Form::select('ampher',array(''=>''),null,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกอำเภอ','id'=>'ampher','style'=>"width: 160px;"))}}
+			
+				@if(isset($oldInput['province']))
+				
+				{{ Form::select(
+				'ampher',array(''=>'')+SelectController::save_amphur($oldInput['province']),
+				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
+				array('class'=>'chosen-select','data-placeholder'=>
+				'Select Amphur'
+				
+				,'id'=>'ampher','style'=>"width: 160px;"))}}
+				
+				@else
+				
+				
+				{{ Form::select(
+				'ampher',array(''=>'')+Ampher::lists('name','ampher_id'),
+				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
+				array('class'=>'chosen-select','data-placeholder'=>
+				'Select Amphur'
+				
+				,'id'=>'ampher','style'=>"width: 160px;"))}}
+				
+				@endif
+			
+				
 				</div>
 				
 				<div class="col-md-2 column">
 				
-				<label id="test"><font color="red">*</font></label><label >สถานี</label>
+				@if(isset($oldInput['station']))
+			
 				
-				{{ Form::select('station',array(''=>''),null,
-				array('class'=>'chosen-select','data-placeholder'=>'เลือกสถานี','id'=>'station','style'=>"width: 160px;"))}}
+				{{ Form::select('station',array(''=>'')+SelectController::save_station($oldInput['ampher']),
+				isset($oldInput['station']) ? $oldInput['station']  : null 
+				,
+				array('class'=>'chosen-select',
+				'data-placeholder'=>'Select Station',
+				'id'=>'station','style'=>"width: 160px;"))}}
+				
+				
+				@else
+				
+				
+				{{ Form::select('station',array(''=>''),
+				isset($oldInput['station']) ? $oldInput['station']  : null 
+				,
+				array('class'=>'chosen-select',
+				'data-placeholder'=>'Select Station',
+				'id'=>'station','style'=>"width: 160px;"))}}
+				
+				@endif
+			
+		
+				
+				</div>
+				
+		
+				
+				
+								
+			
+				</div>
+				
+				<div class ="row">
+				<br>
+				<div class="col-md-2 column">
+				
+				<div class="input-group date">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+  				<input type="text" class="form-control"
+  				name = "start"  placeholder = "Start Date"
+  				<?php 
+	 			if(isset($oldInput['start']))
+   				 {
+   				 	if(!empty($oldInput['start']))echo " value = ". $oldInput['start'];
+   				 }
+   				 
+   				 ?>
+  				
+  				>
+				</div>	
+				
+				
+				
+				</div>
+				
+					<div class="col-md-2 column">
+				
+				<div class="input-group date">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+  				<input type="text" class="form-control"
+  				name = "end"  placeholder = "End Date"
+  				<?php 
+	 			if(isset($oldInput['end']))
+   				 {
+   				 	if(!empty($oldInput['end']))echo " value = ". $oldInput['end'];
+   				 }
+   				 
+   				 ?>
+  				
+  				>
+				</div>	
+				
+				
+				
+				</div>
+				
+				<div class="col-md-4 column">
+				{{ Form::checkbox('only_rainy_day', 'true',
+				isset($oldInput['only_rainy_day']) ? true : false 
+				)}}
+				{{Form::label('rainy_day', 'Only Rainy Day')}}
+				
 				</div>
 				
 				</div>
+				
+			
 				
 				<div class="row"> <br></div>
 			  {{Form::submit('submit', array('class' => 'btn btn-primary btn-sm'))}}
+			  
+			  
 			  <div class="row"> <br></div>
+			  
+			  
 			   
 			 {{ Form::close() }}
 						
@@ -139,13 +272,15 @@
 {{-- Scripts --}}
 @section('scripts')
 
+	
+	
 
 	{{ HTML::script('packages/jquery/jquery.min.js'); }}
 	{{ HTML::script('packages/chosen/chosen.jquery.min.js')}}
 	{{ HTML::script('packages/highcharts/js/highcharts.js')}}
 	{{ HTML::script('packages/highcharts/js/modules/exporting.js')}}
    	{{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
-	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}z
+	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
 	
 
 
@@ -177,6 +312,25 @@
 $(document).ready(function(){
 
 	$('.chosen-select').chosen();
+
+	$('#basin').change(function(){
+		var value = $("#basin").val();
+		
+		$.ajax({
+			type:'POST',
+			url:"province",
+			data:{id:value},
+			success:function(data){
+				
+				$('#province').find('option')
+							  .remove()
+							  .end()
+							  .append(data)
+							  .trigger('chosen:updated');
+				
+			}
+		});
+	});
 	$('#province').change(function(){
 		var value = $("#province").val();
 		
