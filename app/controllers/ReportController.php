@@ -280,7 +280,7 @@ class ReportController extends Controller
 		FROM  tbl_rain_measurement
 		WHERE  station_id IN(".$station.")
 		".$start." ".$end." ".$rain."		
-		ORDER by meas_year,meas_month ASC
+		ORDER by meas_year,_week ASC
 		"));
 	
 	
