@@ -282,12 +282,18 @@
    	{{ HTML::script('packages/datatables/js/jquery.dataTables.min.js')}}
 	{{ HTML::script('packages/datatables/js/dataTables.bootstrap.js')}}
 	
+	
+	{{ HTML::script('packages/datepicker/js/bootstrap-datepicker.js')}}
+	{{ HTML::style('packages/datepicker/css/datepicker3.css')}}		
+	
 
 
 	<script type="text/javascript">
 		var oTable;
 		$(document).ready(function() {
-			
+			$('.input-group.date').datepicker({
+			    format: "yyyy-mm-dd"
+			});
 			oTable = $('#gridview').dataTable( {
 
 				
