@@ -44,7 +44,6 @@ if (isset($weekly))
 	
 		
 	}
-	print_r($_weekavg);
 	
 
 
