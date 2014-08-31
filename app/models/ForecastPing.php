@@ -7,7 +7,7 @@ class ForecastPing extends Forecast {
         return false;
     }
     private function genNDJ($b){
-        if($this->isNDJ($b)==true) return " coalesce((meas_value2,-9999), as val2";
+        if($this->isNDJ($b)==true) return " coalesce(meas_value2,-9999) as val2,";
         return "";
     }
 
@@ -130,12 +130,37 @@ class ForecastPing extends Forecast {
         $data300 = $this->extract_raw_data( $Input['rawdata']);
         // boxplot
         $boxplotdata = $this->gen_box_plot_data($data300);
-        $Input
-        // p33
+        $Input['boxplotdata'] = $boxplotdata;
         
-        //p20
+   
+ 
+    // p33
+    $data63 = $this->probability33_67($data300);
+    
+    $Input['p33'] = $data63;
+    
+    //p20
+    $data82 = $this->probability20_80($data300);
+$Input['p20'] = $data82;
+     // spi
+    $tempspi = preg_split("/[\s,]+/",  $Input['spi'] );
+    $startspi = sizeof($tempspi)-300;
+    for($i=$startspi;$i<sizeof($tempspi)-1;$i++)
+    {
+    	    $dataspi[$i] = (float)$tempspi[$i];
+    	
+    }
+    
+    
+    
+    $dataISP = $this->SPI($dataspi);
+
+
         
-        // spi
+        
+        
+        
+        $Input['dataISP']=$dataISP;
         
         return $Input;
     }

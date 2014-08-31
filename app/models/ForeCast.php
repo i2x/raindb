@@ -167,7 +167,7 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
    
    function extract_raw_data($rawdata){
    // extract raw data 300 values from text
-    $temp = preg_split("/[\s,]+/", rawdata);
+    $temp = preg_split("/[\s,]+/", $rawdata);
     $start = sizeof($temp)-300;
     for($i=$start;$i<sizeof($temp)-1;$i++)
     {
@@ -287,8 +287,8 @@ function classify($data,$step)
 
  function probability33_67($data)
 {
-	$upper = stats_stat_percentile($data,67);
-	$lowwer = stats_stat_percentile($data,33);
+	$upper = $this->stats_stat_percentile($data,67);
+	$lowwer = $this->stats_stat_percentile($data,33);
 	$temp = array();
 	$temp['Above-normal'] = 0;
 	$temp['Normal'] = 0;
@@ -321,8 +321,8 @@ function classify($data,$step)
 
 function probability20_80($data)
 {
-	$upper = stats_stat_percentile($data,80);
-	$lowwer = stats_stat_percentile($data,20);
+	$upper = $this->stats_stat_percentile($data,80);
+	$lowwer = $this->stats_stat_percentile($data,20);
 	$temp = array();
 	$temp['Above-normal'] = 0;
 	$temp['Normal'] = 0;
