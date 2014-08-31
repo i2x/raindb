@@ -18,45 +18,34 @@
 $_month = $_week = '';
 $_monthsum = $_weeksum = '';
 $_monthavg = $_weekavg = '';
-$_monthmin =  $_weekmin = $_weekmin2 = '';
+$_monthmin =  $_weekmin = '';
 $_monthmax = $_weekmax = '';
 if (isset($weekly))
 {
 	
-	
-if(isset($only_rainy_day)){
-foreach ($weekly as $value)
-{
 
-	if($value->_weekmin2 !=NULL)
-	{
 
-		$_week = $_week.','.$value->_week;
-		$_weeksum = $_weeksum.','.$value->_weeksum;
-		$_weekavg = $_weekavg.','.$value->_weekavg;
-		$_weekmin = $_weekmin.','.$value->_weekmin2;
-		$_weekmax = $_weekmax.','.$value->_weekmax;
-	}
-}
-	
-}
-else 
-{
 	foreach ($weekly as $value)
 	{
-	
-		
-	
+		if($value->_weekavg == NULL || $value->_weekmin == NULL)
+		{
+			
+		}
+		else 
+		{
+			
 			$_week = $_week.',\''.$value->_year."\ (".$value->_week.")".'\'';
 			$_weeksum = $_weeksum.','.$value->_weeksum;
-			$_weekavg = $_weekavg.','.$value->_weekavg;
-			$_weekmin = $_weekmin.','.$value->_weekmin;
 			$_weekmax = $_weekmax.','.$value->_weekmax;
+			$_weekmin = $_weekmin.','.$value->_weekmin;
+			$_weekavg = $_weekavg.','.$value->_weekavg;
+			
+		}
+	
 		
 	}
+	print_r($_weekavg);
 	
-}
-
 
 
 
@@ -384,7 +373,7 @@ $(function () {
         title: {
              text: '<?php
 
-             	if (isset($oldInput['station'] ))
+             	if ($oldInput['station'] != NULL )
              	{
              	$stationName = Station::select('name')->where('stationid' ,$oldInput['station'] )->get();
              	try {

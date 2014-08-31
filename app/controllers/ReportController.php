@@ -45,9 +45,9 @@ class ReportController extends Controller
 		
 	$only_rainy_day = Input::get('only_rainy_day');
 	
-	$weekly  = $this->getWeekly(Input::get('station'),Input::get('start'),Input::get('end'));
+	$weekly  = $this->getWeekly(Input::all(),Input::get('start'),Input::get('end'),Input::get('only_rainy_day'));
 	
-	$monthly = $this->getMonthly(Input::get('station'),
+	$monthly = $this->getMonthly(Input::all(),
 			Input::get('start'),
 			Input::get('end'),
 			Input::get('only_rainy_day'));
@@ -59,7 +59,6 @@ class ReportController extends Controller
 	
 	$boxplot_month = $this->boxplot_encode($data_month['boxplot_array'],'month');
 	$boxplot_week = $this->boxplot_encode($data_week['boxplot_array'],'week');
-	
 	
 	
 	
@@ -79,25 +78,52 @@ class ReportController extends Controller
 		
 	}
         
-	public function getWeekly($station,$start,$end)
+	public function getWeekly($input,$start,$end,$only_rainy_day)
 	{
-		if($station == NULL)$station = 327022;
+		
+		$province = $ampher = $station = " ";
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
 		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
-
-	
 		
+		if($input['province'] != NULL)$province = "and province  = ".$input['province'];
+		if($input['ampher']   != NULL)$ampher = "and ampher    = ".$input['ampher'];
+		if($input['station']  != NULL)$station = "and stationid = ".$input['station'];
+		
+		
+		    $condition = "	
+			select tbl_rain_station.stationid as station_id
+			from tbl_rain_station
+			where basin_id =  ".$input['basin']." ".$province." ".$ampher." ".$station;
+		    
+		    
+		    
+		    if($only_rainy_day != NULL)
+		    {
+		    	$sql = "
+				ROUND( AVG(  NULLIF(  rain , 0 ) )::numeric ,2 ) AS _weekavg,
+				MIN( NULLIF(  rain , 0 ) ) AS _weekmin,
+		    
+		";
+		    }
+		    else
+		    {
+		    	$sql = "
+					ROUND( AVG(  rain )::numeric ,2 ) AS _weekavg,
+					MIN(  rain )  AS _weekmin,
+			
+					";
+		    }
+		
+
 			$weekly = DB::select(DB::raw("
 			
 			SELECT 		date_part('year',meas_date) AS _YEAR,
 		    date_part( 'week', meas_date ) AS _week,
 			SUM(  rain ) AS _weeksum,
-			ROUND( AVG(  rain )::numeric ,2 ) AS _weekavg,
-			MIN(  rain )   AS _weekmin,
-			MIN( NULLIF(  rain , 0 ) ) AS _weekmin2,				
+			".$sql."
 			MAX(  rain )   AS _weekmax		
 			FROM  tbl_rain_measurement
-			WHERE  station_id in (".$station.")
+			WHERE  station_id in (".$condition.")
 			".$start." ".$end."			
 			GROUP BY date_part('year',meas_date) ,date_part( 'week', meas_date) 
 			ORDER by _YEAR,_week ASC
@@ -109,16 +135,28 @@ class ReportController extends Controller
 			
 			return $weekly;
 	}
-	public function getMonthly($station,$start,$end,$only_rainy_day)
+	public function getMonthly($input,$start,$end,$only_rainy_day)
 	{
 		
 		
 		
 		
+		$province = $ampher = $station = " ";
 		
-		if($station == NULL)$station = 327022;
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
 		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+		
+		if($input['province'] != NULL)$province = "and province  = ".$input['province'];
+		if($input['ampher']   != NULL)$ampher = "and ampher    = ".$input['ampher'];
+		if($input['station'] != NULL )$station = "and stationid = ".$input['station'];
+		
+		
+		 $condition = "	
+		select tbl_rain_station.stationid as station_id
+		from tbl_rain_station
+		where basin_id =  ".$input['basin']." ".$province." ".$ampher." ".$station;
+		    
+		    
 		if($only_rainy_day != NULL)
 		{
 		$sql = "
@@ -143,7 +181,7 @@ class ReportController extends Controller
 			".$sql."
 			MAX(  rain )   AS _monthmax
 			FROM  tbl_rain_measurement
-			WHERE  station_id IN(".$station.")
+			WHERE  station_id IN(".$condition.")
 			".$start." ".$end."	
 			GROUP BY date_part('year',meas_date) ,date_part( 'month', meas_date )
 			ORDER by _YEAR,_month ASC
