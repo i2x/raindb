@@ -16,14 +16,14 @@ class xPasswordRemindersController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
-		return Datatables::of($groups)
+		$password_reminders = DB::table('password_reminders')->select(array('password_reminders.email',
+				 'password_reminders.token', 'password_reminders.created_at'));
+		return Datatables::of($password_reminders)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/amphur/\' . $email . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
-				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
+				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $email  }}})"
 				 href="javascript:void(0)">Delete</a>
 				
 				
@@ -45,7 +45,7 @@ class xPasswordRemindersController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.password_reminders.table');
 	}
 	
 	

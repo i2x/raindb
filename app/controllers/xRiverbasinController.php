@@ -16,14 +16,13 @@ class xRiverbasinController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
+		$groups = DB::table('riverbasin')->select(array('basin_id','basin_name'));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/amphur/\' . $basin_id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
-				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
+				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $basin_id }}})"
 				 href="javascript:void(0)">Delete</a>
 				
 				
@@ -45,7 +44,7 @@ class xRiverbasinController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.riverbasin.table');
 	}
 	
 	

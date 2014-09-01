@@ -11,7 +11,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">Ampur</li>
+  	<li class="active">permission_role</li>
 	</ol>
 	
 	
@@ -36,11 +36,11 @@
 						
 								<tr>
 									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
-									<th class="col-md-1"> </th>
+									<th class="col-md-1">permission_id</th>
+									<th class="col-md-1">role_id</th>
+									<th class="col-md-1"></th>
+									
+								
 
 								
 								</tr>
@@ -92,7 +92,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/permission_role/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});

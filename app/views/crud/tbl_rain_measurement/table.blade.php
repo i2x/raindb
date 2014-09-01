@@ -34,13 +34,23 @@
 						<table id="gridview" class="table table-striped table-hover table-condensed " >
 						<thead>
 						
+					
+						
 								<tr>
-									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
-									<th class="col-md-1"> </th>
+									<th class="col-md-1">meas_id</th>
+									<th class="col-md-1">meas_date</th>
+									<th class="col-md-1">station_id</th>
+									<th class="col-md-1">max_temp</th>
+									<th class="col-md-1">min_temp</th>
+									<th class="col-md-1">rain</th>
+									<th class="col-md-1">avgrh</th>
+									<th class="col-md-1">evapor</th>
+									<th class="col-md-1">mean_temp</th>
+									<th class="col-md-1">source</th>
+									<th class="col-md-1">meas_year</th>
+									<th class="col-md-1">meas_month</th>
+									<th class="col-md-1">meas_day</th>
+									<th class="col-md-4"> </th>
 
 								
 								</tr>
@@ -92,7 +102,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_rain_measurement/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});

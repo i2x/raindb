@@ -16,8 +16,7 @@ class xRolesController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
+		$groups = DB::table('roles')->select(array('id','name','created_at','updated_at'));
 		return Datatables::of($groups)
 		->add_column('actions',
 				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
@@ -45,7 +44,7 @@ class xRolesController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.roles.table');
 	}
 	
 	

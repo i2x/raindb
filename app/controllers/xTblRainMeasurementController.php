@@ -16,14 +16,21 @@ class xTblRainMeasurementController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
+		$groups = DB::table('tbl_rain_measurement')->select(array(
+				'meas_id', 'meas_date', 'station_id' ,'max_temp', 
+				'min_temp' ,'rain' ,'avgrh' ,'evapor' ,'mean_temp' ,'source', 
+				'meas_year', 'meas_month' ,'meas_day'
+				
+				
+				
+				
+		));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/amphur/\' . $meas_id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
-				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
+				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $meas_id  }}})"
 				 href="javascript:void(0)">Delete</a>
 				
 				
@@ -45,7 +52,7 @@ class xTblRainMeasurementController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.tbl_rain_measurement.table');
 	}
 	
 	

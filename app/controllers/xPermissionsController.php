@@ -16,8 +16,8 @@ class xPermissionsController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
+		$groups = DB::table('permissions')->select(array('permissions.id',
+				 'permissions.name', 'permissions.display_name'));
 		return Datatables::of($groups)
 		->add_column('actions',
 				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
@@ -45,7 +45,7 @@ class xPermissionsController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.permissions.table');
 	}
 	
 	

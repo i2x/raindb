@@ -35,11 +35,13 @@
 						<thead>
 						
 								<tr>
-									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
+									<th class="col-md-1">logid</th>
+									<th class="col-md-1">importdate</th>
+									<th class="col-md-1">filename</th>
+									<th class="col-md-1">url</th>
+									<th class="col-md-1">message</th>
+									<th class="col-md-1">level</th>
+									<th class="col-md-1">detail</th>
 									<th class="col-md-1"> </th>
 
 								
@@ -92,7 +94,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_import_log/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
