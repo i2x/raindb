@@ -57,13 +57,16 @@ class HistoricalController extends BaseController
 		));
 		$Input = Session::get('input');
 		
-
+		
+		
+		
+			if($Input['basin'] != NULL)$data->where('basin_id',$Input['basin']);
 			if($Input['station'] != NULL)$data->where('stationid',$Input['station']);
 			if($Input['province'] != NULL)$data->where('province',$Input['province']);
 			if($Input['ampher'] != NULL)$data->where('ampher',$Input['ampher']);
 			if($Input['start'] != NULL)$data->where('meas_date','>=',$Input['start']);
 			if($Input['end'] != NULL)$data->where('meas_date','<=',$Input['end']);
-
+		
 			
 		 	return  Datatables::of($data)->make();
 		

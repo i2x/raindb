@@ -83,6 +83,7 @@ class SelectController extends Controller {
 		tbl_rain_station.ampher = tbl_ampher.ampher_id
 		inner join tbl_province on tbl_province.province_id = tbl_rain_station.province
 		where tbl_province.province_id IN(' ".$input."  '))"));
+		$amphur_list =array();
 		foreach ($ampher as $key => $value)
 		{
 			$amphur_list[$value->ampher_id] = $value->name;

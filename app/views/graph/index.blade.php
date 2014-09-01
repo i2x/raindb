@@ -15,14 +15,14 @@
 	<div class="container">
 
 
-
+ 
 
 
 
 
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
-  	<li class="active">Report</li>
+  	<li class="active">Graph</li>
 	</ol>
 	
 	
@@ -32,7 +32,7 @@
 	
 	//if(isset($oldInput))print_r($oldInput);
 	?>
-		{{ Form::open(array('url' => 'report', 'method' => 'POST')) }}
+		{{ Form::open(array('url' => 'graph', 'method' => 'POST')) }}
 	<div class="col-md-12 ">
 		
 				<div class="row">
@@ -41,7 +41,7 @@
 				<div class="col-md-2 column">
 				{{ Form::select('basin',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
 				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
-				array('class'=>'chosen-select','data-placeholder'=>'* Select basin','id'=>'basin','style'=>"width: 160px;"))}}
+				array('class'=>'chosen-select','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 160px;"))}}
 				</div>
 				
 				
@@ -69,7 +69,7 @@
 				isset($oldInput['station']) ? $oldInput['station']  : null 
 				,
 				array('class'=>'chosen-select',
-				'data-placeholder'=>'Select Station',
+				'data-placeholder'=>' * Select Station',
 				'id'=>'station','style'=>"width: 160px;"))}}
 				
 				</div>
@@ -88,7 +88,7 @@
 				<div class="input-group date">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
   				<input type="text" class="form-control"
-  				name = "start"  placeholder = "* Start Date"
+  				name = "start"  placeholder = " * Start Date"
   				<?php 
 	 			if(isset($oldInput['start']))
    				 {
@@ -109,7 +109,7 @@
 				<div class="input-group date">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
   				<input type="text" class="form-control"
-  				name = "end"  placeholder = "* End Date"
+  				name = "end"  placeholder = " * End Date"
   				<?php 
 	 			if(isset($oldInput['end']))
    				 {
@@ -149,11 +149,10 @@
 			 
 			 
 			 
-			 			 
  <?php  
- if($errors->first('basin') != NULL)
+ if($errors->first('station') != NULL)
  {
- 	echo '<p class="text-danger">*The Select basin field is required.</p>';
+ 	echo '<p class="text-danger">*The Select Station field is required.</p>';
  }
  
  if($errors->first('start') != NULL)

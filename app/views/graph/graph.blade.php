@@ -25,7 +25,7 @@
 			
 		
 
-		{{ Form::open(array('url' => 'graph', 'method' => 'POST')) }}
+	{{ Form::open(array('url' => 'graph', 'method' => 'POST')) }}
 	<div class="col-md-12 ">
 		
 				<div class="row">
@@ -43,13 +43,16 @@
 				
 				
 				</div>
+				<?php 
 				
+				?>
 				
 				<div class="col-md-2 column">
 				
-				@if(isset($oldInput['province']))
+				@if(isset($oldInput['basin']))
 				
-				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin']),
+				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin'])
+				,
 				isset($oldInput['province']) ? $oldInput['province'] : null 
 				,
 				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
@@ -67,7 +70,7 @@
 				
 				<div class="col-md-2 column">
 			
-				@if(isset($oldInput['province']))
+				@if($oldInput['province'] != NULL)
 				
 				{{ Form::select(
 				'ampher',array(''=>'')+SelectController::save_amphur($oldInput['province']),
@@ -81,7 +84,7 @@
 				
 				
 				{{ Form::select(
-				'ampher',array(''=>'')+Ampher::lists('name','ampher_id'),
+				'ampher',array(''=>''),
 				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
 				array('class'=>'chosen-select','data-placeholder'=>
 				'Select Amphur'
@@ -95,7 +98,7 @@
 				
 				<div class="col-md-2 column">
 				
-				@if(isset($oldInput['station']))
+				@if($oldInput['ampher'] != NULL)
 			
 				
 				{{ Form::select('station',array(''=>'')+SelectController::save_station($oldInput['ampher']),

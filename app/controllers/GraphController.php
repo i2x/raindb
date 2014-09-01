@@ -15,6 +15,8 @@ class GraphController extends BaseController
 	 */
 	public function getIndex()
 	{
+		
+		
 	
 	    
 		return View::make('graph.index');
@@ -23,8 +25,26 @@ class GraphController extends BaseController
 	public function postIndex()
 	{
 	
-		$data = $this->graph(Input::all());
+		
+		
+		$rules = array(
+			
+				'station' =>  'required',
+				'start' =>  'required',
+				'end' =>  'required',
+				
+		);
+		
+		$validator = Validator::make(Input::all(), $rules);
+		
+		if ($validator->fails())
+		{
+			return Redirect::to('graph')->withErrors($validator);
+		}
 		 
+		
+		$data = $this->graph(Input::all());
+		
 		return View::make('graph.graph')
 		->with('data' , $data)
 		->with('oldInput',Input::all());

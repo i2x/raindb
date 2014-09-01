@@ -25,6 +25,26 @@ class ReportController extends Controller
 	public function postIndex()
 	{
 		
+		
+		
+		$rules = array(
+		
+				'basin' =>  'required',
+				'start' =>  'required',
+				'end' =>  'required',
+		
+		);
+		
+		$validator = Validator::make(Input::all(), $rules);
+		
+		if ($validator->fails())
+		{
+			return Redirect::to('report')->withErrors($validator);
+		}
+		
+		
+		
+		
 	$data_month = $this->boxplotMonth(
 			Input::get('station'),
 			Input::get('start'),
@@ -62,6 +82,13 @@ class ReportController extends Controller
 	
 	
 	
+
+
+	
+	
+	
+	
+	
 	
 	
 	
@@ -85,9 +112,9 @@ class ReportController extends Controller
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
 		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
 		
-		if($input['province'] != NULL)$province = "and province  = ".$input['province'];
-		if($input['ampher']   != NULL)$ampher = "and ampher    = ".$input['ampher'];
-		if($input['station']  != NULL)$station = "and stationid = ".$input['station'];
+		if($input['province'] != NULL && strlen($input['province']) > 1)$province = "and province  = ".$input['province'];
+		if($input['ampher']   != NULL && strlen($input['ampher']) > 1)$ampher = "and ampher    = ".$input['ampher'];
+		if($input['station']  != NULL && strlen($input['station']) > 1)$station = "and stationid = ".$input['station'];
 		
 		
 		    $condition = "	

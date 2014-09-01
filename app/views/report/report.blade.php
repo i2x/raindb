@@ -13,8 +13,9 @@
 {{ HTML::style('packages/datepicker/css/datepicker3.css')}}
 
 
-<?php 
 
+
+<?php 
 $_month = $_week = '';
 $_monthsum = $_weeksum = '';
 $_monthavg = $_weekavg = '';
@@ -106,13 +107,16 @@ foreach ($monthly as $value)
 				
 				
 				</div>
+				<?php 
 				
+				?>
 				
 				<div class="col-md-2 column">
 				
-				@if(isset($oldInput['province']))
+				@if(isset($oldInput['basin']))
 				
-				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin']),
+				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin'])
+				,
 				isset($oldInput['province']) ? $oldInput['province'] : null 
 				,
 				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
@@ -130,7 +134,7 @@ foreach ($monthly as $value)
 				
 				<div class="col-md-2 column">
 			
-				@if(isset($oldInput['province']))
+				@if($oldInput['province'] != NULL)
 				
 				{{ Form::select(
 				'ampher',array(''=>'')+SelectController::save_amphur($oldInput['province']),
@@ -144,7 +148,7 @@ foreach ($monthly as $value)
 				
 				
 				{{ Form::select(
-				'ampher',array(''=>'')+Ampher::lists('name','ampher_id'),
+				'ampher',array(''=>''),
 				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
 				array('class'=>'chosen-select','data-placeholder'=>
 				'Select Amphur'
@@ -158,7 +162,7 @@ foreach ($monthly as $value)
 				
 				<div class="col-md-2 column">
 				
-				@if(isset($oldInput['station']))
+				@if($oldInput['ampher'] != NULL)
 			
 				
 				{{ Form::select('station',array(''=>'')+SelectController::save_station($oldInput['ampher']),
@@ -637,7 +641,3 @@ $(document).ready(function(){
 
 
 		</script>
-	
-
-
-
