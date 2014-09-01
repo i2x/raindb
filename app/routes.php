@@ -167,6 +167,22 @@ Route::group(['before' => 'auth|admin'], function()
     
     
     //
+    Route::get('database/groups', 'xGroupsController@index');
+    Route::get('database/groups/data', 'xGroupsController@getData');
+    
+    Route::get('database/groups/{id}/update', 'xGroupsController@getUpdate');
+    Route::post('database/groups/{id}/update', 'xGroupsController@postUpdate');
+    
+    Route::get('database/groups/create', 'xGroupsController@getCreate');
+    Route::post('database/groups/create', 'xGroupsController@postCreate');
+    
+    
+    Route::post('database/groups/{id}/delete', 'xGroupsController@postDelete');
+    
+    
+    
+    
+    //
     
     Route::get('refrefresh', 'RefRefreshController@getIndex');
     Route::post('refrefresh', 'RefRefreshController@postIndex');

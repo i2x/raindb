@@ -39,7 +39,9 @@ class CRUDController extends AdminController {
 		/*27*/	'tbl_ref_data',
 		/*28*/	'tbl_ref_data4forecast_ping',
 		/*29*/	'tbl_ref_settings',
-		/*30*/	'tbl_selected_stations');
+		/*30*/	'tbl_selected_stations',
+		/*31*/	'tbl_season',
+		/*32*/	'tbl_source');
 		
 		//  '#' mean Distable Table from old version
 		$contents['link'] =
@@ -73,7 +75,9 @@ class CRUDController extends AdminController {
 		/*27*/	'tbl_ref_data',
 		/*28*/	'tbl_ref_data4forecast_ping',
 		/*29*/	'tbl_ref_settings',
-		/*30*/	'tbl_selected_stations');
+		/*30*/	'tbl_selected_stations',
+		/*31*/	'tbl_season',
+		/*32*/	'tbl_source');
 
 		foreach ($contents['name'] as $key => $name)
 		{
