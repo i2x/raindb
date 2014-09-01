@@ -113,7 +113,7 @@ foreach ($monthly as $value)
 				
 				<div class="col-md-2 column">
 				
-				@if(isset($oldInput['basin']))
+				@if($oldInput['basin'] != NULL)
 				
 				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin'])
 				,
