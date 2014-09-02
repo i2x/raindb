@@ -1,6 +1,6 @@
 <?php 
 
-class xTblRefDataController extends AdminController {
+class xTblRefData4forecastPingController extends AdminController {
 
 
 
