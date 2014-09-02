@@ -3,6 +3,10 @@
 {{-- Content --}}
 @section('content')
 
+
+
+
+
 @if($ampher_message != NULL){{$ampher_message}}
 @endif
 
@@ -17,82 +21,41 @@
 
 	
    <div class="form-group">
-  {{ Form::label('AMPHUR_CODE')}}
-  @if(isset($data['AMPHUR_CODE']))
+  {{ Form::label('basin_id')}}
+  @if(isset($data['basin_id']))
   
-  {{ Form::text('AMPHUR_CODE', $data['AMPHUR_CODE'],array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  )) }}
+  {{ Form::text('basin_id', $data['basin_id'],array( 'class' => 'form-control', 'placeholder' => 'Enter basin_id'  )) }}
  
   @else
  
-  {{ Form::text('AMPHUR_CODE','',array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  )) }}
+  {{ Form::text('basin_id','',array( 'class' => 'form-control', 'placeholder' => 'Enter basin_id'  )) }}
  
   @endif
 
-  <p class="text-danger">{{$errors->first('AMPHUR_CODE')}}</p>
+  <p class="text-danger">{{$errors->first('basin_id')}}</p>
    
   </div>
   
   
   <div class="form-group">
-  {{ Form::label('AMPHUR_NAME')}}
-  @if(isset($data['AMPHUR_NAME']))
+  {{ Form::label('basin_name')}}
+  @if(isset($data['basin_name']))
   {{
-  	 Form::text('AMPHUR_NAME', $data['AMPHUR_NAME'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
+  	 Form::text('basin_name', $data['basin_name'],
+ 	 array( 'class' => 'form-control', 'placeholder' => 'Enter basin_name'  ))
   }}
   @else
   {{ 
   
-  	Form::text('AMPHUR_NAME', '',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
+  	Form::text('basin_name', '',
+ 	array( 'class' => 'form-control', 'placeholder' => 'Enter basin_name'  ))
   }}
   @endif
-  <p class="text-danger">{{$errors->first('AMPHUR_NAME')}}</p>
+  <p class="text-danger">{{$errors->first('basin_name')}}</p>
     </div>
 
   
   
-  
-  
-     <div class="form-group">
-  {{ Form::label('GEO_ID')}}
-  @if(isset($data['GEO_ID']))
-  {{
-  	 Form::text('GEO_ID', $data['GEO_ID'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
-  }}
-  @else
-  {{ 
-  
-  	Form::text('GEO_ID', '',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
-  }}
-  @endif
-  <p class="text-danger">{{$errors->first('GEO_ID')}}</p>
-    
-  </div>
-  
-  
-  
-  
-     <div class="form-group">
-  {{ Form::label('PROVINCE_ID')}}
-  @if(isset($data['PROVINCE_ID']))
-  {{
-  	 Form::text('PROVINCE_ID', $data['PROVINCE_ID'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
-  }}
-  @else
-  {{ 
-  
-  	Form::text('PROVINCE_ID', '',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
-  }}
-  @endif
-  <p class="text-danger">{{$errors->first('PROVINCE_ID')}}</p>
-  
-  
-  </div>
   
   
   

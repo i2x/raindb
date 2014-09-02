@@ -43,6 +43,7 @@
 									<th class="col-md-1">level</th>
 									<th class="col-md-1">detail</th>
 									<th class="col-md-1"> </th>
+									
 
 								
 								</tr>

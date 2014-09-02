@@ -16,14 +16,13 @@ class xTblSourceController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
+		$groups = DB::table('tbl_source')->select(array('source_id','source_name'));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/tbl_source/\' . $source_id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
-				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
+				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $source_id  }}})"
 				 href="javascript:void(0)">Delete</a>
 				
 				
@@ -45,7 +44,7 @@ class xTblSourceController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.tbl_source.table');
 	}
 	
 	
@@ -63,10 +62,10 @@ class xTblSourceController extends AdminController {
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xTblSource::where('source_id',$post)->first()->toArray();
+		return View::make('crud.tbl_source.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> tbl_source')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		

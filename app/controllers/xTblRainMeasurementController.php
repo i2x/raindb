@@ -27,7 +27,7 @@ class xTblRainMeasurementController extends AdminController {
 		));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $meas_id . \'/update
+				 '<a href="{{{ URL::to(\'database/tbl_rain_measurement/\' . $meas_id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
 				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $meas_id  }}})"
@@ -70,10 +70,10 @@ class xTblRainMeasurementController extends AdminController {
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xTblRainMeasurement::where('meas_id',$post)->first()->toArray();
+		return View::make('crud.tbl_rain_measurement.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'tbl_rain_measurement')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		

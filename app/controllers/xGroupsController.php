@@ -20,7 +20,7 @@ class xGroupsController extends AdminController {
 				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/groups/\' . $id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
 				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
@@ -82,7 +82,7 @@ class xGroupsController extends AdminController {
 		if($validator->fails())
 				{
 				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
+			return Redirect::to('database/groups/'.$id.'/update')->withErrors($validator);
 			
 		
 				
@@ -90,7 +90,7 @@ class xGroupsController extends AdminController {
 
 		try {
 	
-			DB::table('amphur')
+			DB::table('groups')
             ->where('AMPHUR_ID', $id)
             ->update(
             array(
@@ -106,7 +106,7 @@ class xGroupsController extends AdminController {
 			Session::put('amphur_message','<div class="alert alert-success" role="alert">
             update success.
             </div>');
-			return Redirect::to('database/amphur/'. $id.'/update');
+			return Redirect::to('database/groups/'. $id.'/update');
 
 		} catch (Exception $e) {
 			
@@ -114,7 +114,7 @@ class xGroupsController extends AdminController {
 			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
             update fail.
             </div>');
-		    return Redirect::to('database/amphur/'.$id.'/update');
+		    return Redirect::to('database/groups/'.$id.'/update');
 
 		}
 			
@@ -145,7 +145,7 @@ class xGroupsController extends AdminController {
 		if($validator->fails())
 		{
 			
-		   return Redirect::to('database/amphur/create')->withErrors($validator);
+		   return Redirect::to('database/groups/create')->withErrors($validator);
 			
 		}
 		
@@ -156,7 +156,7 @@ class xGroupsController extends AdminController {
             </div>');
 			$id = DB::table('amphur')->insertGetId($input);
 			
-			return Redirect::to('database/amphur/'. $id.'/update');
+			return Redirect::to('database/groups/'. $id.'/update');
 				
 				
 			

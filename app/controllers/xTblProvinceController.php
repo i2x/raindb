@@ -19,7 +19,7 @@ class xTblProvinceController extends AdminController {
 		$groups = DB::table('tbl_province')->select(array('province_id', 'province_name' ,'region_id'));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $province_id . \'/update
+				 '<a href="{{{ URL::to(\'database/tbl_province/\' . $province_id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
 				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $province_id  }}})"
@@ -62,10 +62,10 @@ class xTblProvinceController extends AdminController {
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xTblProvince::where('province_id',$post)->first()->toArray();
+		return View::make('crud.tbl_province.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'tbl_province')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		

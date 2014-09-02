@@ -35,11 +35,8 @@
 						<thead>
 						
 								<tr>
-									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
+									<th class="col-md-1">source_id</th>
+									<th class="col-md-1">source_name</th>
 									<th class="col-md-1"> </th>
 
 								
@@ -92,7 +89,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_source/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});

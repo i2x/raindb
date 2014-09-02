@@ -1,6 +1,6 @@
 @extends('protected.admin.master')
 
-@section('title', 'CRUD - Ampur')
+@section('title', 'CRUD - tbl_rain_station')
 
 @section('content')
 
@@ -11,7 +11,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">Ampur</li>
+  	<li class="active">tbl_rain_station</li>
 	</ol>
 	
 	
@@ -34,13 +34,22 @@
 						<table id="gridview" class="table table-striped table-hover table-condensed " >
 						<thead>
 						
+						
+						
 								<tr>
-									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
-									<th class="col-md-1"> </th>
+									<th class="col-md-1">stationid</th>
+									<th class="col-md-2">name</th>
+									<th class="col-md-1">latitude</th>
+									<th class="col-md-1">longtitude</th>
+									<th class="col-md-1">msl</th>
+									<th class="col-md-1">ampher</th>
+									<th class="col-md-1">province</th>
+									<th class="col-md-1">description</th>
+									<th class="col-md-1">source</th>
+									<th class="col-md-1">basin_id</th>
+									
+									
+									<th class="col-md-2"> </th>
 
 								
 								</tr>
@@ -92,7 +101,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_rain_station/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});

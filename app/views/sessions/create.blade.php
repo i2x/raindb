@@ -54,7 +54,7 @@
 				    </div>
 				</div>
 				<div style="text-align:center">
-					<p><a href="/forgot_password">Forgot Password?</a></p>
+					<p><a href="{{ URL::to('forgot_password')}}">Forgot Password?</a></p>
 
 					<p><strong>User:</strong> user@user.com<br>
 					<strong> User Password:</strong> 123456</p>

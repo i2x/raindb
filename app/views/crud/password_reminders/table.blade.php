@@ -35,6 +35,7 @@
 						<thead>
 						
 								<tr>
+									<th class="col-md-1">id</th>
 									<th class="col-md-1">email</th>
 									<th class="col-md-1">token</th>
 									<th class="col-md-1">created_at</th>

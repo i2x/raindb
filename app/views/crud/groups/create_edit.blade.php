@@ -7,47 +7,46 @@
 @endif
 
 
-				
 
 @if(isset($data['AMPHUR_ID']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['AMPHUR_ID'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/groups/'.$data['id'].'/update') )) }}
 @else
 {{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
 @endif
 
 	
    <div class="form-group">
-  {{ Form::label('AMPHUR_CODE')}}
-  @if(isset($data['AMPHUR_CODE']))
+  {{ Form::label('id')}}
+  @if(isset($data['id']))
   
-  {{ Form::text('AMPHUR_CODE', $data['AMPHUR_CODE'],array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  )) }}
+  {{ Form::text('id', $data['id'],array( 'class' => 'form-control', 'placeholder' => 'Enter id'  )) }}
  
   @else
  
-  {{ Form::text('AMPHUR_CODE','',array( 'class' => 'form-control', 'placeholder' => 'Enter Code'  )) }}
+  {{ Form::text('id','',array( 'class' => 'form-control', 'placeholder' => 'Enter id'  )) }}
  
   @endif
 
-  <p class="text-danger">{{$errors->first('AMPHUR_CODE')}}</p>
+  <p class="text-danger">{{$errors->first('id')}}</p>
    
   </div>
   
   
   <div class="form-group">
-  {{ Form::label('AMPHUR_NAME')}}
-  @if(isset($data['AMPHUR_NAME']))
+  {{ Form::label('name')}}
+  @if(isset($data['name']))
   {{
-  	 Form::text('AMPHUR_NAME', $data['AMPHUR_NAME'],
+  	 Form::text('name', $data['name'],
  	 array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
   }}
   @else
   {{ 
   
-  	Form::text('AMPHUR_NAME', '',
+  	Form::text('name', '',
  	array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
   }}
   @endif
-  <p class="text-danger">{{$errors->first('AMPHUR_NAME')}}</p>
+  <p class="text-danger">{{$errors->first('name')}}</p>
     </div>
 
   
@@ -55,20 +54,20 @@
   
   
      <div class="form-group">
-  {{ Form::label('GEO_ID')}}
-  @if(isset($data['GEO_ID']))
+  {{ Form::label('permissions')}}
+  @if(isset($data['permissions']))
   {{
-  	 Form::text('GEO_ID', $data['GEO_ID'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
+  	 Form::text('permissions', $data['permissions'],
+ 	 array( 'class' => 'form-control', 'placeholder' => 'Enter permissions'  ))
   }}
   @else
   {{ 
   
-  	Form::text('GEO_ID', '',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
+  	Form::text('permissions', '',
+ 	array( 'class' => 'form-control', 'placeholder' => 'Enter permissions'  ))
   }}
   @endif
-  <p class="text-danger">{{$errors->first('GEO_ID')}}</p>
+  <p class="text-danger">{{$errors->first('permissions')}}</p>
     
   </div>
   
@@ -76,20 +75,41 @@
   
   
      <div class="form-group">
-  {{ Form::label('PROVINCE_ID')}}
-  @if(isset($data['PROVINCE_ID']))
+  {{ Form::label('created_at')}}
+  @if(isset($data['created_at']))
   {{
-  	 Form::text('PROVINCE_ID', $data['PROVINCE_ID'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
+  	 Form::text('created_at', $data['created_at'],
+ 	 array( 'class' => 'form-control', 'placeholder' => 'Enter created_at'  ))
   }}
   @else
   {{ 
   
-  	Form::text('PROVINCE_ID', '',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter ID'  ))
+  	Form::text('created_at', '',
+ 	array( 'class' => 'form-control', 'placeholder' => 'Enter created_at'  ))
   }}
   @endif
-  <p class="text-danger">{{$errors->first('PROVINCE_ID')}}</p>
+  <p class="text-danger">{{$errors->first('created_at')}}</p>
+  
+  
+  </div>
+  
+  
+  
+       <div class="form-group">
+  {{ Form::label('updated_at')}}
+  @if(isset($data['updated_at']))
+  {{
+  	 Form::text('updated_at', $data['updated_at'],
+ 	 array( 'class' => 'form-control', 'placeholder' => 'Enter updated_at'  ))
+  }}
+  @else
+  {{ 
+  
+  	Form::text('updated_at', '',
+ 	array( 'class' => 'form-control', 'placeholder' => 'Enter updated_at'  ))
+  }}
+  @endif
+  <p class="text-danger">{{$errors->first('updated_at')}}</p>
   
   
   </div>

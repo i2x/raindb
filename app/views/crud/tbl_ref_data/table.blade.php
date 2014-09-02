@@ -11,7 +11,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">Ampur</li>
+  	<li class="active">tbl_ref_data</li>
 	</ol>
 	
 	
@@ -33,13 +33,13 @@
 			
 						<table id="gridview" class="table table-striped table-hover table-condensed " >
 						<thead>
-						
+					
 								<tr>
 									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
+									<th class="col-md-1">meas_year</th>
+									<th class="col-md-1">meas_month</th>
+									<th class="col-md-1">meas_value</th>
+									<th class="col-md-1">refid</th>
 									<th class="col-md-1"> </th>
 
 								
@@ -92,7 +92,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_ref_data/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});

@@ -62,10 +62,10 @@ class xTblImportLogController extends AdminController {
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xTblImportLog::where('logid',$post)->first()->toArray();
+		return View::make('crud.tbl_import_log.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'tbl_import_log ID: '.$post)
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		

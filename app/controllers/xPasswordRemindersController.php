@@ -16,14 +16,14 @@ class xPasswordRemindersController extends AdminController {
 	public function getData()
 	{
 		
-		$password_reminders = DB::table('password_reminders')->select(array('password_reminders.email',
+		$password_reminders = DB::table('password_reminders')->select(array('id','password_reminders.email',
 				 'password_reminders.token', 'password_reminders.created_at'));
 		return Datatables::of($password_reminders)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $email . \'/update
+				 '<a href="{{{ URL::to(\'database/password_reminders/\' . $id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
-				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $email  }}})"
+				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
 				 href="javascript:void(0)">Delete</a>
 				
 				
@@ -63,8 +63,8 @@ class xPasswordRemindersController extends AdminController {
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xPasswordReminders::where('id',$post)->first()->toArray();
+		return View::make('crud.password_reminders.create_edit')
 		->with('data',$ampher)
 		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
 		->with('ampher_message',$ampher_message)
@@ -82,7 +82,7 @@ class xPasswordRemindersController extends AdminController {
 		if($validator->fails())
 				{
 				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
+			return Redirect::to('database/password_reminders/'.$id.'/update')->withErrors($validator);
 			
 		
 				

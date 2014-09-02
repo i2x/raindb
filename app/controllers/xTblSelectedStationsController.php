@@ -16,11 +16,11 @@ class xTblSelectedStationsController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
+		$groups = DB::table('tbl_selected_stations')->select(array(
+				'id' ,'basin_id', 'station_id', 'source'));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/tbl_selected_stations/\' . $id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
 				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
@@ -45,7 +45,7 @@ class xTblSelectedStationsController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.tbl_selected_stations.table');
 	}
 	
 	
@@ -63,8 +63,8 @@ class xTblSelectedStationsController extends AdminController {
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xTblSelectedStations::where('id',$post)->first()->toArray();
+		return View::make('crud.tbl_selected_stations.create_edit')
 		->with('data',$ampher)
 		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
 		->with('ampher_message',$ampher_message)

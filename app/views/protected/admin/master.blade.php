@@ -86,7 +86,7 @@
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
             <li class="divider"></li>
-            <li><a href="/logout">
+            <li><a href="{{ URL::to('logout') }}">
             <span class="glyphicon glyphicon-log-out"></span>
             Logout</a></li>
             

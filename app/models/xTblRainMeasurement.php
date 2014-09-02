@@ -8,7 +8,7 @@ class xTblRainMeasurement extends Eloquent{
 	 *
 	 * @var string
 	 */
-	protected $table = 'tbl_province';
+	protected $table = 'tbl_rain_measurement';
 	
 	
 	public static function  validate($data)

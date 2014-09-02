@@ -7,7 +7,10 @@
 @endif
 
 
-				
+<?php 
+print_r($data);
+
+?>	
 
 @if(isset($data['AMPHUR_ID']))
 {{ Form::open(array('url' => URL::to('database/amphur/'.$data['AMPHUR_ID'].'/update') )) }}
