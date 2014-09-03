@@ -13,9 +13,9 @@
 				
 
 @if(isset($data['province_id']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['province_id'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_province/'.$data['province_id'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_province/create') )) }}
 @endif
 
 	

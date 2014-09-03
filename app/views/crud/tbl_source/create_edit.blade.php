@@ -11,9 +11,9 @@
 			
 
 @if(isset($data['source_id']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['source_id'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_source/'.$data['source_id'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_source/create') )) }}
 @endif
 
 	

@@ -3,7 +3,6 @@
 @section('title', 'CRUD - Ampur')
 
 @section('content')
-
 @if (Session::has('flash_message'))
 			<p>{{ Session::get('flash_message') }}</p>
 	@endif
@@ -18,7 +17,7 @@
 	
 
 			<div class="pull-right">
-				<a href="{{{ URL::to('database/amphur/create') }}}" class="btn btn-small btn-info iframe">
+				<a href="{{{ URL::to('database/tbl_ref_data/create') }}}" class="btn btn-small btn-info iframe">
 				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
 			</div>
 			<br>
@@ -107,7 +106,7 @@
 					 $.ajax( 
 							 {
 
-							    url: 'amphur/'+id+'/delete',
+							    url: 'tbl_ref_data/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
 							   	 	parent.oTable.fnReloadAjax(null,null,true);

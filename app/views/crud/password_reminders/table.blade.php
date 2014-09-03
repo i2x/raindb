@@ -11,14 +11,14 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">password_reminders</li>
+  	<li class="active">Ampur</li>
 	</ol>
 	
 	
 	
 
 			<div class="pull-right">
-				<a href="{{{ URL::to('database/amphur/create') }}}" class="btn btn-small btn-info iframe">
+				<a href="{{{ URL::to('database/tbl_source/create') }}}" class="btn btn-small btn-info iframe">
 				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
 			</div>
 			<br>
@@ -35,13 +35,9 @@
 						<thead>
 						
 								<tr>
-									<th class="col-md-1">id</th>
-									<th class="col-md-1">email</th>
-									<th class="col-md-1">token</th>
-									<th class="col-md-1">created_at</th>
+									<th class="col-md-1">source_id</th>
+									<th class="col-md-1">source_name</th>
 									<th class="col-md-1"> </th>
-									
-						
 
 								
 								</tr>
@@ -93,7 +89,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/password_reminders/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_source/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
@@ -108,7 +104,7 @@
 					 $.ajax( 
 							 {
 
-							    url: 'amphur/'+id+'/delete',
+							    url: 'tbl_source/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
 							   	 	parent.oTable.fnReloadAjax(null,null,true);

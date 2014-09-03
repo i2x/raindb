@@ -54,11 +54,10 @@ class xTblRainStationController extends AdminController {
 
 	
 //EDIT
-	
 	public function getUpdate($post)
 	{
 		$ampher_message = NULL;
-		if(Session::get('amphur_message') != NULL) 
+		if(Session::get('amphur_message') != NULL)
 		{
 			$ampher_message = Session::get('amphur_message');
 			Session::forget('amphur_message');
@@ -70,109 +69,92 @@ class xTblRainStationController extends AdminController {
 		->with('title',' <span class="glyphicon glyphicon-edit"></span> tbl_rain_station')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
-		
+	
 		;
-		
-		
+	
+	
 	}
 	public function postUpdate($id)
 	{
+		
+		
+	
+		
+		
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
-		
-		if($validator->fails())
-				{
-				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
-			
-		
-				
-		}
-
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblRainStation::validate($input);
+		if($validator->fails())return Redirect::to('database/tbl_rain_station/'.$id.'/update')->withErrors($validator);
+	
 		try {
 	
-			DB::table('amphur')
-            ->where('AMPHUR_ID', $id)
-            ->update(
-            array(
-            'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
-            'AMPHUR_NAME' => Input::get('AMPHUR_NAME'),
-            'GEO_ID' => Input::get('GEO_ID'),
-            'PROVINCE_ID' => Input::get('PROVINCE_ID'),
-            ));
-		
-			// Redirect to the new ampher ..
-			
-          
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            update success.
-            </div>');
-			return Redirect::to('database/amphur/'. $id.'/update');
-
-		} catch (Exception $e) {
-			
-
-			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
-            update fail.
-            </div>');
-		    return Redirect::to('database/amphur/'.$id.'/update');
-
+			DB::table('tbl_rain_station') ->where('stationid', $id)->update($input);
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">update success. </div>');
+			if(isset($input['stationid']))$id = $input['stationid'];
+			return Redirect::to('database/tbl_rain_station/'. $id.'/update');
 		}
-			
+	
+		catch (Exception $e) {
+			Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+			return Redirect::to('database/tbl_rain_station/'.$id.'/update');
+		}
+	
 	}
 	
-//END EDIT
-
+	//END EDIT
 	
-// CREATE	
+	
+	// CREATE
 	
 	public function getCreate()
 	{
 	
-		
-		return View::make('crud.amphur.create_edit')
+	
+	
+		return View::make('crud.tbl_rain_station.create_edit')
 		->with('ampher_message','')
 		->with('title','Create Amphur')
 		->with('mode','Create')
 		;
-
+	
 	}
+	
+	
 	
 	public function postCreate()
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblRainStation::validate($input);
 	
 		if($validator->fails())
 		{
 			
-		   return Redirect::to('database/amphur/create')->withErrors($validator);
-			
+			return Redirect::to('database/tbl_rain_station/create')->withErrors($validator);
 		}
-		
-		unset($input['_token']);
-		try {
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create success.
-            </div>');
-			$id = DB::table('amphur')->insertGetId($input);
-			
-			return Redirect::to('database/amphur/'. $id.'/update');
-				
-				
-			
-		} catch (Exception $e) {
-			
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create fail.
-            </div>');
-			return Redirect::to('database/amphur/create');
-			
-		}
-		
 	
-		
-		
+		try {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert"> create success.</div>');
+			if(isset($input['stationid'])) $last = $input['stationid'];
+			else $input['stationid'] = xTblRainStation::max('stationid')+1;
+			xTblRainStation::insert($input);
+			return Redirect::to('database/tbl_rain_station/'.$input['stationid'].'/update');
+	
+		}
+	
+		catch (Exception $e) {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">create fail. </div>');
+			return Redirect::to('database/tbl_rain_station/create');
+	
+		}
+	
+	
+	
+	
 	}
 //END CREATE
 
@@ -183,8 +165,8 @@ class xTblRainStationController extends AdminController {
 	public function postDelete($id)
 	{
 		
-		DB::table('amphur')
-		->where('AMPHUR_ID', $id)
+		DB::table('tbl_rain_station')
+		->where('stationid', $id)
 		->delete();
 
 		

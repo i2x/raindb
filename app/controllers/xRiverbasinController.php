@@ -1,5 +1,6 @@
 <?php 
 
+use Illuminate\Support\Facades\Input;
 class xRiverbasinController extends AdminController {
 
 
@@ -65,7 +66,7 @@ class xRiverbasinController extends AdminController {
 		$ampher = xRiverbasin::where('basin_id',$post)->first()->toArray();
 		return View::make('crud.riverbasin.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'Riverbasin ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> riverbasin')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		
@@ -73,104 +74,81 @@ class xRiverbasinController extends AdminController {
 		
 		
 	}
-	public function postUpdate($id)
+public function postUpdate($id)
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xRiverbasin::validate($input);
+		if($validator->fails())return Redirect::to('database/riverbasin/'.$id.'/update')->withErrors($validator);
 		
-		if($validator->fails())
-				{
-				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
-			
-		
-				
-		}
-
 		try {
 	
-			DB::table('amphur')
-            ->where('AMPHUR_ID', $id)
-            ->update(
-            array(
-            'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
-            'AMPHUR_NAME' => Input::get('AMPHUR_NAME'),
-            'GEO_ID' => Input::get('GEO_ID'),
-            'PROVINCE_ID' => Input::get('PROVINCE_ID'),
-            ));
-		
-			// Redirect to the new ampher ..
-			
-          
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            update success.
-            </div>');
-			return Redirect::to('database/amphur/'. $id.'/update');
-
-		} catch (Exception $e) {
-			
-
-			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
-            update fail.
-            </div>');
-		    return Redirect::to('database/amphur/'.$id.'/update');
-
+			DB::table('riverbasin') ->where('basin_id', $id)->update($input);
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">update success. </div>');
+			if(isset($input['basin_id']))$id = $input['basin_id'];
+			return Redirect::to('database/riverbasin/'. $id.'/update');
 		}
-			
+	
+			catch (Exception $e) {
+				Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+				return Redirect::to('database/riverbasin/'.$id.'/update');
+			}
+	
 	}
 	
-//END EDIT
-
+	//END EDIT
 	
-// CREATE	
+	
+	// CREATE
 	
 	public function getCreate()
 	{
-	
 		
-		return View::make('crud.amphur.create_edit')
+		
+	
+		return View::make('crud.riverbasin.create_edit')
 		->with('ampher_message','')
 		->with('title','Create Amphur')
 		->with('mode','Create')
 		;
-
+	
 	}
+	
+	
 	
 	public function postCreate()
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xRiverbasin::validate($input);
+
+	   if($validator->fails())
+	   {
+	   		return Redirect::to('database/riverbasin/create')->withErrors($validator);
+	   }
 	
-		if($validator->fails())
-		{
-			
-		   return Redirect::to('database/amphur/create')->withErrors($validator);
-			
-		}
-		
-		unset($input['_token']);
 		try {
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create success.
-            </div>');
-			$id = DB::table('amphur')->insertGetId($input);
-			
-			return Redirect::to('database/amphur/'. $id.'/update');
-				
-				
-			
-		} catch (Exception $e) {
-			
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create fail.
-            </div>');
-			return Redirect::to('database/amphur/create');
-			
-		}
-		
 	
-		
-		
+			Session::put('amphur_message','<div class="alert alert-success" role="alert"> create success.</div>');
+			if(isset($input['basin_id'])) $last = $input['basin_id'];
+			else $input['basin_id'] = xRiverbasin::max('basin_id')+1;
+			xRiverbasin::insert($input);
+			return Redirect::to('database/riverbasin/'.$input['basin_id'].'/update');
+
+		}
+	
+		catch (Exception $e) {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">create fail. </div>');
+			return Redirect::to('database/riverbasin/create');
+	
+		}
+	
+	
+	
+	
 	}
 //END CREATE
 
@@ -181,8 +159,8 @@ class xRiverbasinController extends AdminController {
 	public function postDelete($id)
 	{
 		
-		DB::table('amphur')
-		->where('AMPHUR_ID', $id)
+		DB::table('riverbasin')
+		->where('basin_id', $id)
 		->delete();
 
 		

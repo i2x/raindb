@@ -13,10 +13,10 @@
 
 				
 
-@if(isset($data['AMPHUR_ID']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['AMPHUR_ID'].'/update') )) }}
+@if(isset($data['basin_id']))
+{{ Form::open(array('url' => URL::to('database/riverbasin/'.$data['basin_id'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/riverbasin/create') )) }}
 @endif
 
 	

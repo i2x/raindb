@@ -14,9 +14,9 @@
 				
 
 @if(isset($data['stationid']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['stationid'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_rain_station/'.$data['stationid'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_rain_station/create') )) }}
 @endif
 
 	

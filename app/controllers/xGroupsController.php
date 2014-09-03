@@ -56,6 +56,10 @@ class xGroupsController extends AdminController {
 	
 	public function getUpdate($post)
 	{
+		
+
+		
+	
 		$ampher_message = NULL;
 		if(Session::get('amphur_message') != NULL) 
 		{
@@ -74,104 +78,81 @@ class xGroupsController extends AdminController {
 		
 		
 	}
-	public function postUpdate($id)
+public function postUpdate($id)
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xGroups::validate($input);
+		if($validator->fails())return Redirect::to('database/groups/'.$id.'/update')->withErrors($validator);
 		
-		if($validator->fails())
-				{
-				
-			return Redirect::to('database/groups/'.$id.'/update')->withErrors($validator);
-			
-		
-				
-		}
-
 		try {
 	
-			DB::table('groups')
-            ->where('AMPHUR_ID', $id)
-            ->update(
-            array(
-            'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
-            'AMPHUR_NAME' => Input::get('AMPHUR_NAME'),
-            'GEO_ID' => Input::get('GEO_ID'),
-            'PROVINCE_ID' => Input::get('PROVINCE_ID'),
-            ));
-		
-			// Redirect to the new ampher ..
-			
-          
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            update success.
-            </div>');
+			DB::table('groups') ->where('id', $id)->update($input);
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">update success. </div>');
+			if(isset($input['id']))$id = $input['id'];
 			return Redirect::to('database/groups/'. $id.'/update');
-
-		} catch (Exception $e) {
-			
-
-			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
-            update fail.
-            </div>');
-		    return Redirect::to('database/groups/'.$id.'/update');
-
 		}
-			
+	
+			catch (Exception $e) {
+				Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+				return Redirect::to('database/groups/'.$id.'/update');
+			}
+	
 	}
 	
-//END EDIT
-
+	//END EDIT
 	
-// CREATE	
+	
+	// CREATE
 	
 	public function getCreate()
 	{
-	
 		
-		return View::make('crud.amphur.create_edit')
+		
+	
+		return View::make('crud.groups.create_edit')
 		->with('ampher_message','')
 		->with('title','Create Amphur')
 		->with('mode','Create')
 		;
-
+	
 	}
+	
+	
 	
 	public function postCreate()
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xGroups::validate($input);
+
+	   if($validator->fails())
+	   {
+	   		return Redirect::to('database/groups/create')->withErrors($validator);
+	   }
 	
-		if($validator->fails())
-		{
-			
-		   return Redirect::to('database/groups/create')->withErrors($validator);
-			
-		}
-		
-		unset($input['_token']);
 		try {
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create success.
-            </div>');
-			$id = DB::table('amphur')->insertGetId($input);
-			
-			return Redirect::to('database/groups/'. $id.'/update');
-				
-				
-			
-		} catch (Exception $e) {
-			
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create fail.
-            </div>');
-			return Redirect::to('database/amphur/create');
-			
-		}
-		
 	
-		
-		
+			Session::put('amphur_message','<div class="alert alert-success" role="alert"> create success.</div>');
+			if(isset($input['id'])) $last = $input['id'];
+			else $input['id'] = xGroups::max('id')+1;
+			xGroups::insert($input);
+			return Redirect::to('database/groups/'.$input['id'].'/update');
+
+		}
+	
+		catch (Exception $e) {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">create fail. </div>');
+			return Redirect::to('database/groups/create');
+	
+		}
+	
+	
+	
+	
 	}
 //END CREATE
 
@@ -182,8 +163,8 @@ class xGroupsController extends AdminController {
 	public function postDelete($id)
 	{
 		
-		DB::table('amphur')
-		->where('AMPHUR_ID', $id)
+		DB::table('groups')
+		->where('id', $id)
 		->delete();
 
 		

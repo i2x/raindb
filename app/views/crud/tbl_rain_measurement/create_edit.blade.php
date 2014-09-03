@@ -12,9 +12,9 @@
 				
 
 @if(isset($data['meas_id']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['meas_id'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_rain_measurement/'.$data['meas_id'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_rain_measurement/create') )) }}
 @endif
 
 	

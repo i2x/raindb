@@ -140,7 +140,7 @@ class xAmphurController extends AdminController {
 	public function postCreate()
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		$validator = xTblAmpher::validate($input);
 	
 		if($validator->fails())
 		{

@@ -7,12 +7,11 @@
 @endif
 
 
-				
 
 @if(isset($data['id']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['id'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_ref_data/'.$data['id'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_ref_data/create') )) }}
 @endif
 
 	

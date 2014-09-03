@@ -24,13 +24,7 @@ class xTblAmpherController extends AdminController {
 				
 				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $ampher_id  }}})"
 				 href="javascript:void(0)">Delete</a>
-				
-				
-				
-				
-				
-				
-				
+		
             ')
 		->make();
 
@@ -53,7 +47,7 @@ class xTblAmpherController extends AdminController {
 	
 //EDIT
 	
-	public function getUpdate($post)
+public function getUpdate($post)
 	{
 		$ampher_message = NULL;
 		if(Session::get('amphur_message') != NULL) 
@@ -65,7 +59,7 @@ class xTblAmpherController extends AdminController {
 		$ampher = xTblAmpher::where('ampher_id',$post)->first()->toArray();
 		return View::make('crud.tbl_ampher.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> tbl_ampher')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		
@@ -73,104 +67,84 @@ class xTblAmpherController extends AdminController {
 		
 		
 	}
-	public function postUpdate($id)
+public function postUpdate($id)
 	{
+		
+		//$groups = DB::table('tbl_ampher')->select(array('ampher_id', 'name' ,'province_id'));
+		
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblAmpher::validate($input);
+		if($validator->fails())return Redirect::to('database/tbl_ampher/'.$id.'/update')->withErrors($validator);
 		
-		if($validator->fails())
-				{
-				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
-			
-		
-				
-		}
-
 		try {
 	
-			DB::table('amphur')
-            ->where('AMPHUR_ID', $id)
-            ->update(
-            array(
-            'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
-            'AMPHUR_NAME' => Input::get('AMPHUR_NAME'),
-            'GEO_ID' => Input::get('GEO_ID'),
-            'PROVINCE_ID' => Input::get('PROVINCE_ID'),
-            ));
-		
-			// Redirect to the new ampher ..
-			
-          
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            update success.
-            </div>');
-			return Redirect::to('database/amphur/'. $id.'/update');
-
-		} catch (Exception $e) {
-			
-
-			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
-            update fail.
-            </div>');
-		    return Redirect::to('database/amphur/'.$id.'/update');
-
+			DB::table('tbl_ampher') ->where('ampher_id', $id)->update($input);
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">update success. </div>');
+			if(isset($input['ampher_id']))$id = $input['ampher_id'];
+			return Redirect::to('database/tbl_ampher/'. $id.'/update');
 		}
-			
+	
+			catch (Exception $e) {
+				Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+				return Redirect::to('database/tbl_ampher/'.$id.'/update');
+			}
+	
 	}
 	
-//END EDIT
-
+	//END EDIT
 	
-// CREATE	
+	
+	// CREATE
 	
 	public function getCreate()
 	{
-	
 		
-		return View::make('crud.amphur.create_edit')
+		
+	
+		return View::make('crud.tbl_ampher.create_edit')
 		->with('ampher_message','')
 		->with('title','Create Amphur')
 		->with('mode','Create')
 		;
-
+	
 	}
+	
+	
 	
 	public function postCreate()
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblAmpher::validate($input);
+
+	   if($validator->fails())
+	   {
+	   		return Redirect::to('database/tbl_ampher/create')->withErrors($validator);
+	   }
 	
-		if($validator->fails())
-		{
-			
-		   return Redirect::to('database/amphur/create')->withErrors($validator);
-			
-		}
-		
-		unset($input['_token']);
 		try {
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create success.
-            </div>');
-			$id = DB::table('amphur')->insertGetId($input);
-			
-			return Redirect::to('database/amphur/'. $id.'/update');
-				
-				
-			
-		} catch (Exception $e) {
-			
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create fail.
-            </div>');
-			return Redirect::to('database/amphur/create');
-			
-		}
-		
 	
-		
-		
+			Session::put('amphur_message','<div class="alert alert-success" role="alert"> create success.</div>');
+			if(isset($input['ampher_id'])) $last = $input['ampher_id'];
+			else $input['ampher_id'] = xTblAmpher::max('ampher_id')+1;
+			xTblAmpher::insert($input);
+			return Redirect::to('database/tbl_ampher/'.$input['ampher_id'].'/update');
+
+		}
+	
+		catch (Exception $e) {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">create fail. </div>');
+			return Redirect::to('database/tbl_ampher/create');
+	
+		}
+	
+	
+	
+	
 	}
 //END CREATE
 
@@ -181,8 +155,8 @@ class xTblAmpherController extends AdminController {
 	public function postDelete($id)
 	{
 		
-		DB::table('amphur')
-		->where('AMPHUR_ID', $id)
+		DB::table('tbl_ampher')
+		->where('ampher_id', $id)
 		->delete();
 
 		

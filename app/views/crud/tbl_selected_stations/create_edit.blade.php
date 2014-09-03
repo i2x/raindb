@@ -10,9 +10,9 @@
 				
 
 @if(isset($data['id']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['id'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_selected_stations/'.$data['id'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_selected_stations/create') )) }}
 @endif
 
 	
@@ -33,25 +33,9 @@
   </div>
   
   
-  <div class="form-group">
-  {{ Form::label('basin_id')}}
-  @if(isset($data['basin_id']))
-  {{
-  	 Form::text('basin_id', $data['basin_id'],
- 	 array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
-  }}
-  @else
-  {{ 
-  
-  	Form::text('basin_id', '',
- 	array( 'class' => 'form-control', 'placeholder' => 'Enter Name'  ))
-  }}
-  @endif
-  <p class="text-danger">{{$errors->first('basin_id')}}</p>
-    </div>
 
-  
-  
+
+   
   
   
      <div class="form-group">

@@ -1,6 +1,6 @@
 <?php
 
-class xTblRefData extends Eloquent{
+class xTblRefData4forecastPing extends Eloquent{
 
 
 	/**
@@ -17,12 +17,8 @@ class xTblRefData extends Eloquent{
 	
 	$validator = Validator::make($data,
 			array(
-					'season' => 'required',
-					'meas_value1' => 'required',
-					'meas_value2' => 'required',
-					'meas_value3' => 'required',
-					'meas_value4' => 'required',
-					'meas_value5' => 'required',
+					'season' => 'required|max:3'
+				
 					
 					
 			)

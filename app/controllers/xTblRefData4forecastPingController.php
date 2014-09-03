@@ -16,11 +16,11 @@ class xTblRefData4forecastPingController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
+		$groups = DB::table('tbl_ref_data4forecast_ping')->select(array( 'id','season', 'meas_year', 'meas_month' ,'meas_value1',
+		 'meas_value2' ,'meas_value3' ,'meas_value4', 'meas_value5'));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/tbl_ref_data4forecast_ping/\' . $id . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
 				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
@@ -45,7 +45,7 @@ class xTblRefData4forecastPingController extends AdminController {
 	public function index()
 	{
 	
-		return View::make('crud.groups.table');
+		return View::make('crud.tbl_ref_data4forecast_ping.table');
 	}
 	
 	
@@ -53,6 +53,7 @@ class xTblRefData4forecastPingController extends AdminController {
 
 	
 //EDIT
+	
 	
 	public function getUpdate($post)
 	{
@@ -63,10 +64,10 @@ class xTblRefData4forecastPingController extends AdminController {
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xTblRefData4forecastPing::where('id',$post)->first()->toArray();
+		return View::make('crud.tbl_ref_data4forecast_ping.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> tbl_ref_data4forecast_ping')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		
@@ -74,104 +75,84 @@ class xTblRefData4forecastPingController extends AdminController {
 		
 		
 	}
-	public function postUpdate($id)
+public function postUpdate($id)
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblRefData4forecastPing::validate($input);
+		if($validator->fails())return Redirect::to('database/tbl_ref_data4forecast_ping/'.$id.'/update')->withErrors($validator);
 		
-		if($validator->fails())
-				{
-				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
-			
-		
-				
-		}
-
 		try {
 	
-			DB::table('amphur')
-            ->where('AMPHUR_ID', $id)
-            ->update(
-            array(
-            'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
-            'AMPHUR_NAME' => Input::get('AMPHUR_NAME'),
-            'GEO_ID' => Input::get('GEO_ID'),
-            'PROVINCE_ID' => Input::get('PROVINCE_ID'),
-            ));
-		
-			// Redirect to the new ampher ..
-			
-          
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            update success.
-            </div>');
-			return Redirect::to('database/amphur/'. $id.'/update');
-
-		} catch (Exception $e) {
-			
-
-			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
-            update fail.
-            </div>');
-		    return Redirect::to('database/amphur/'.$id.'/update');
-
+			DB::table('tbl_ref_data4forecast_ping') ->where('id', $id)->update($input);
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">update success. </div>');
+			if(isset($input['id']))$id = $input['id'];
+			return Redirect::to('database/tbl_ref_data4forecast_ping/'. $id.'/update');
 		}
-			
+	
+			catch (Exception $e) {
+				Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+				return Redirect::to('database/tbl_ref_data4forecast_ping/'.$id.'/update');
+			}
+	
 	}
 	
-//END EDIT
-
+	//END EDIT
 	
-// CREATE	
+	
+	// CREATE
 	
 	public function getCreate()
 	{
-	
 		
-		return View::make('crud.amphur.create_edit')
+		
+	
+		return View::make('crud.tbl_ref_data4forecast_ping.create_edit')
 		->with('ampher_message','')
 		->with('title','Create Amphur')
 		->with('mode','Create')
 		;
-
+	
 	}
+	
+	
 	
 	public function postCreate()
 	{
+		
+		//$groups = DB::table('groups')->select(array('season', 'meas_year', 'meas_month' ,'meas_value1',
+		// 'meas_value2' ,'meas_value3' ,'meas_value4', 'meas_value5', 'id'));tbl_ref_data4forecast_ping
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblRefData4forecastPing::validate($input);
+
+	   if($validator->fails())
+	   {
+	   		return Redirect::to('database/tbl_ref_data4forecast_ping/create')->withErrors($validator);
+	   }
 	
-		if($validator->fails())
-		{
-			
-		   return Redirect::to('database/amphur/create')->withErrors($validator);
-			
-		}
-		
-		unset($input['_token']);
 		try {
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create success.
-            </div>');
-			$id = DB::table('amphur')->insertGetId($input);
-			
-			return Redirect::to('database/amphur/'. $id.'/update');
-				
-				
-			
-		} catch (Exception $e) {
-			
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create fail.
-            </div>');
-			return Redirect::to('database/amphur/create');
-			
-		}
-		
 	
-		
-		
+			Session::put('amphur_message','<div class="alert alert-success" role="alert"> create success.</div>');
+			if(isset($input['id'])) $last = $input['id'];
+			else $input['id'] = xTblRefData4forecastPing::max('id')+1;
+			xTblRefData4forecastPing::insert($input);
+			return Redirect::to('database/tbl_ref_data4forecast_ping/'.$input['id'].'/update');
+
+		}
+	
+		catch (Exception $e) {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">create fail. </div>');
+			return Redirect::to('database/tbl_ref_data4forecast_ping/create');
+	
+		}
+	
+	
+	
+	
 	}
 //END CREATE
 
@@ -182,8 +163,8 @@ class xTblRefData4forecastPingController extends AdminController {
 	public function postDelete($id)
 	{
 		
-		DB::table('amphur')
-		->where('AMPHUR_ID', $id)
+		DB::table('tbl_ref_data4forecast_ping')
+		->where('id', $id)
 		->delete();
 
 		

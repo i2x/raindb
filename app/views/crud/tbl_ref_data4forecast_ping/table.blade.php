@@ -11,14 +11,14 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">Ampur</li>
+  	<li class="active">tbl_ref_data4forecast_ping</li>
 	</ol>
 	
 	
 	
 
 			<div class="pull-right">
-				<a href="{{{ URL::to('database/amphur/create') }}}" class="btn btn-small btn-info iframe">
+				<a href="{{{ URL::to('database/tbl_ref_data4forecast_ping/create') }}}" class="btn btn-small btn-info iframe">
 				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
 			</div>
 			<br>
@@ -33,13 +33,17 @@
 			
 						<table id="gridview" class="table table-striped table-hover table-condensed " >
 						<thead>
-						
 								<tr>
 									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
+									<th class="col-md-1">season</th>
+									<th class="col-md-1">meas_year</th>
+									<th class="col-md-1">meas_month</th>
+									<th class="col-md-1">meas_value1</th>
+									<th class="col-md-1">meas_value2</th>
+									<th class="col-md-1">meas_value3</th>
+									<th class="col-md-1">meas_value4</th>
+									<th class="col-md-1">meas_value5</th>
+									
 									<th class="col-md-1"> </th>
 
 								
@@ -92,7 +96,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_ref_data4forecast_ping/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
@@ -107,7 +111,7 @@
 					 $.ajax( 
 							 {
 
-							    url: 'amphur/'+id+'/delete',
+							    url: 'tbl_ref_data4forecast_ping/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
 							   	 	parent.oTable.fnReloadAjax(null,null,true);

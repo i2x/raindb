@@ -8,7 +8,6 @@
 			<p>{{ Session::get('flash_message') }}</p>
 	@endif
 
-
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
   	<li class="active">Ampur</li>
@@ -18,7 +17,7 @@
 	
 
 			<div class="pull-right">
-				<a href="{{{ URL::to('database/amphur/create') }}}" class="btn btn-small btn-info iframe">
+				<a href="{{{ URL::to('database/groups/create') }}}" class="btn btn-small btn-info iframe">
 				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
 			</div>
 			<br>
@@ -107,7 +106,7 @@
 					 $.ajax( 
 							 {
 
-							    url: 'amphur/'+id+'/delete',
+							    url: 'groups/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
 							   	 	parent.oTable.fnReloadAjax(null,null,true);

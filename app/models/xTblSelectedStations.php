@@ -17,9 +17,7 @@ class xTblSelectedStations extends Eloquent{
 	
 	$validator = Validator::make($data,
 			array(
-					'basin_id' => 'required',
 					'station_id' => 'required',
-					'source' => 'required',
 					
 					
 					

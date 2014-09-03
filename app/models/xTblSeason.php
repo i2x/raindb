@@ -17,7 +17,7 @@ class xTblSeason extends Eloquent{
 	
 	$validator = Validator::make($data,
 			array(
-					'season' => 'required',
+					'season' => 'required|max:3',
 			
 					
 					

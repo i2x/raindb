@@ -8,10 +8,10 @@
 
 
 
-@if(isset($data['AMPHUR_ID']))
+@if(isset($data['id']))
 {{ Form::open(array('url' => URL::to('database/groups/'.$data['id'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/groups/create') )) }}
 @endif
 
 	

@@ -1,8 +1,10 @@
 @extends('protected.admin.master')
 
-@section('title', 'CRUD - Ampur')
+@section('title', 'CRUD - tbl_rain_measurement')
 
 @section('content')
+
+
 
 @if (Session::has('flash_message'))
 			<p>{{ Session::get('flash_message') }}</p>
@@ -11,14 +13,14 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">Ampur</li>
+  	<li class="active">tbl_rain_measurement</li>
 	</ol>
 	
 	
 	
 
 			<div class="pull-right">
-				<a href="{{{ URL::to('database/amphur/create') }}}" class="btn btn-small btn-info iframe">
+				<a href="{{{ URL::to('database/tbl_rain_measurement/create') }}}" class="btn btn-small btn-info iframe">
 				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
 			</div>
 			<br>
@@ -38,7 +40,7 @@
 						
 								<tr>
 									<th class="col-md-1">meas_id</th>
-									<th class="col-md-1">meas_date</th>
+									<th class="col-md-2">meas_date</th>
 									<th class="col-md-1">station_id</th>
 									<th class="col-md-1">max_temp</th>
 									<th class="col-md-1">min_temp</th>
@@ -47,10 +49,7 @@
 									<th class="col-md-1">evapor</th>
 									<th class="col-md-1">mean_temp</th>
 									<th class="col-md-1">source</th>
-									<th class="col-md-1">meas_year</th>
-									<th class="col-md-1">meas_month</th>
-									<th class="col-md-1">meas_day</th>
-									<th class="col-md-4"> </th>
+									<th class="col-md-2"> </th>
 
 								
 								</tr>
@@ -117,7 +116,7 @@
 					 $.ajax( 
 							 {
 
-							    url: 'amphur/'+id+'/delete',
+							    url: 'tbl_rain_measurement/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
 							   	 	parent.oTable.fnReloadAjax(null,null,true);
