@@ -56,6 +56,7 @@ class GraphController extends BaseController
 		->where('station_id',$input['station'])
 		->where('meas_date','>=',$input['start'])
 		->where('meas_date','<=',$input['end'])
+		->orderBy('meas_date')
 		->get();
 			
 		$graph = ' ';
