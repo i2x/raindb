@@ -11,7 +11,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">season</li>
+  	<li class="active">tbl_season</li>
 	</ol>
 	
 	

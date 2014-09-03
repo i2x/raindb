@@ -1,6 +1,6 @@
 @extends('protected.admin.master')
 
-@section('title', 'CRUD - Ampur')
+@section('title', 'CRUD - groups')
 
 @section('content')
 
@@ -10,7 +10,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="{{URL::to('database')}}">Database</a></li>
-  	<li class="active">Ampur</li>
+  	<li class="active">groups</li>
 	</ol>
 	
 	
