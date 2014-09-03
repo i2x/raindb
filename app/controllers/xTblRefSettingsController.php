@@ -16,14 +16,16 @@ class xTblRefSettingsController extends AdminController {
 	public function getData()
 	{
 		
-		$groups = DB::table('groups')->select(array('groups.id',
-				 'groups.name', 'groups.permissions', 'groups.created_at','groups.updated_at'));
-		return Datatables::of($groups)
+		$tbl_ref_settings = DB::table('tbl_ref_settings')->select(array(
+				'idtbl_ref_settings', 'basin_id', 'reftype', 'varname' ,'analysis_level' ,'latitude_from', 
+				'latitude_to', 'longtitude_from', 'longtitude_to', 'time_scale', 'month_from',
+				 'month_to', 'area_weight_grid' ,'source_url'));
+		return Datatables::of($tbl_ref_settings)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $id . \'/update
+				 '<a href="{{{ URL::to(\'database/tbl_ref_settings/\' . $idtbl_ref_settings . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
-				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $id  }}})"
+				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $idtbl_ref_settings  }}})"
 				 href="javascript:void(0)">Delete</a>
 				
 				
@@ -44,8 +46,7 @@ class xTblRefSettingsController extends AdminController {
 // INDEX
 	public function index()
 	{
-	
-		return View::make('crud.groups.table');
+		return View::make('crud.tbl_ref_settings.table');
 	}
 	
 	
@@ -53,125 +54,103 @@ class xTblRefSettingsController extends AdminController {
 
 	
 //EDIT
-	
+
 	public function getUpdate($post)
 	{
 		$ampher_message = NULL;
-		if(Session::get('amphur_message') != NULL) 
+		if(Session::get('amphur_message') != NULL)
 		{
 			$ampher_message = Session::get('amphur_message');
 			Session::forget('amphur_message');
 		}
 		Session::put('post',$post);
-		$ampher = xGroups::where('id',$post)->first()->toArray();
-		return View::make('crud.groups.create_edit')
+		$ampher = xTblRefSettings::where('idtbl_ref_settings',$post)->first()->toArray();
+		return View::make('crud.tbl_ref_settings.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> tbl_ref_settings')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
-		
+	
 		;
-		
-		
+	
+	
 	}
 	public function postUpdate($id)
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
 		
-		if($validator->fails())
-				{
-				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
-			
-		
-				
-		}
-
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblRefSettings::validate($input);
+		if($validator->fails())return Redirect::to('database/tbl_ref_settings/'.$id.'/update')->withErrors($validator);
+	
 		try {
 	
-			DB::table('amphur')
-            ->where('AMPHUR_ID', $id)
-            ->update(
-            array(
-            'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
-            'AMPHUR_NAME' => Input::get('AMPHUR_NAME'),
-            'GEO_ID' => Input::get('GEO_ID'),
-            'PROVINCE_ID' => Input::get('PROVINCE_ID'),
-            ));
-		
-			// Redirect to the new ampher ..
-			
-          
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            update success.
-            </div>');
-			return Redirect::to('database/amphur/'. $id.'/update');
-
-		} catch (Exception $e) {
-			
-
-			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
-            update fail.
-            </div>');
-		    return Redirect::to('database/amphur/'.$id.'/update');
-
+			DB::table('tbl_ref_settings') ->where('idtbl_ref_settings', $id)->update($input);
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">update success. </div>');
+			if(isset($input['idtbl_ref_settings']))$id = $input['idtbl_ref_settings'];
+			return Redirect::to('database/tbl_ref_settings/'. $id.'/update');
 		}
-			
+	
+		catch (Exception $e) {
+			Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+			return Redirect::to('database/tbl_ref_settings/'.$id.'/update');
+		}
+	
 	}
 	
-//END EDIT
-
+	//END EDIT
 	
-// CREATE	
+	
+	// CREATE
 	
 	public function getCreate()
 	{
 	
-		
-		return View::make('crud.amphur.create_edit')
+	
+	
+		return View::make('crud.tbl_ref_settings.create_edit')
 		->with('ampher_message','')
 		->with('title','Create Amphur')
 		->with('mode','Create')
 		;
-
+	
 	}
+	
+	
 	
 	public function postCreate()
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblRefSettings::validate($input);
 	
 		if($validator->fails())
 		{
-			
-		   return Redirect::to('database/amphur/create')->withErrors($validator);
-			
+			return Redirect::to('database/tbl_ref_settings/create')->withErrors($validator);
 		}
-		
-		unset($input['_token']);
-		try {
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create success.
-            </div>');
-			$id = DB::table('amphur')->insertGetId($input);
-			
-			return Redirect::to('database/amphur/'. $id.'/update');
-				
-				
-			
-		} catch (Exception $e) {
-			
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create fail.
-            </div>');
-			return Redirect::to('database/amphur/create');
-			
-		}
-		
 	
-		
-		
+		try {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert"> create success.</div>');
+			if(isset($input['idtbl_ref_settings'])) $last = $input['idtbl_ref_settings'];
+			else $input['idtbl_ref_settings'] = xTblRefSettings::max('idtbl_ref_settings')+1;
+			xTblRefSettings::insert($input);
+			return Redirect::to('database/tbl_ref_settings/'.$input['idtbl_ref_settings'].'/update');
+	
+		}
+	
+		catch (Exception $e) {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">create fail. </div>');
+			return Redirect::to('database/tbl_ref_settings/create');
+	
+		}
+	
+	
+	
+	
 	}
 //END CREATE
 
@@ -182,8 +161,8 @@ class xTblRefSettingsController extends AdminController {
 	public function postDelete($id)
 	{
 		
-		DB::table('amphur')
-		->where('AMPHUR_ID', $id)
+		DB::table('tbl_ref_settings')
+		->where('idtbl_ref_settings', $id)
 		->delete();
 
 		

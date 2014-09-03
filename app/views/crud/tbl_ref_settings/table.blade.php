@@ -18,7 +18,7 @@
 	
 
 			<div class="pull-right">
-				<a href="{{{ URL::to('database/amphur/create') }}}" class="btn btn-small btn-info iframe">
+				<a href="{{{ URL::to('database/tbl_ref_settings/create') }}}" class="btn btn-small btn-info iframe">
 				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
 			</div>
 			<br>
@@ -33,13 +33,23 @@
 			
 						<table id="gridview" class="table table-striped table-hover table-condensed " >
 						<thead>
-						
+					
 								<tr>
-									<th class="col-md-1">id</th>
-									<th class="col-md-1">name</th>
-									<th class="col-md-1">permissions</th>
-									<th class="col-md-1">created_at</th>
-									<th class="col-md-1">updated_at</th>
+									<th class="col-md-1">idtbl_ref_settings</th>
+									<th class="col-md-1">basin_id</th>
+									<th class="col-md-1">reftype</th>
+									<th class="col-md-1">varname</th>
+									<th class="col-md-1">analysis_level</th>
+									<th class="col-md-1">latitude_from</th>
+									<th class="col-md-1">latitude_to</th>
+									<th class="col-md-1">longtitude_from</th>
+									<th class="col-md-1">longtitude_to</th>
+									<th class="col-md-1">time_scale</th>
+									<th class="col-md-1">month_from</th>
+									<th class="col-md-1">month_to</th>
+									<th class="col-md-1">area_weight_grid</th>
+									<th class="col-md-1">source_url</th>
+									
 									<th class="col-md-1"> </th>
 
 								
@@ -92,7 +102,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/groups/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/tbl_ref_settings/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
@@ -107,7 +117,7 @@
 					 $.ajax( 
 							 {
 
-							    url: 'amphur/'+id+'/delete',
+							    url: 'tbl_ref_settings/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
 							   	 	parent.oTable.fnReloadAjax(null,null,true);
