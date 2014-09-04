@@ -36,7 +36,7 @@ class Forecast {
         //$forecast->refExportToTextFile();
         // modify parameter according to the web form
 
-        $cmd = 'C:\wamp\www\rain\protected\R\Chi'. DIRECTORY_SEPARATOR.$model->select_season.DIRECTORY_SEPARATOR.$script_file;
+        $cmd = base_path().'\R\Chi'. DIRECTORY_SEPARATOR.$model->select_season.DIRECTORY_SEPARATOR.$script_file;
           //TODO: cross platform
         echo $cmd;
         $text = shell_exec($cmd);
@@ -90,15 +90,15 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
         
         // 3rd modify parameter according to the web form
         $script_file =  $model->select_season.'.bat';
-        $cmd = 'C:\\\\wamp\\www\\rain\\protected\\R\\Mun\\'.$model->select_season.'\\'.$script_file; //TODO: cross platform
-        $cmdtxt = 'C:\\\\wamp\\www\\rain\\protected\\R\\Mun\\'.$model->select_season.'\\'.$model->select_season.'.txt'; //TODO: cross platform
+        $cmd = base_path().'\\R\\Mun\\'.$model->select_season.'\\'.$script_file; //TODO: cross platform
+        $cmdtxt = base_path().'\\R\\Mun\\'.$model->select_season.'\\'.$model->select_season.'.txt'; //TODO: cross platform
         $file = $cmdtxt.'.org';
         file_put_contents($cmdtxt,str_replace('$$LAGTIME$$',$lagtime,file_get_contents($file)));
         
         
         // 4th execute command line
         $script_file =  $model->select_season.'.bat';
-        $cmd = 'C:\\\\wamp\\www\\rain\\protected\\R\\Mun\\'.$model->select_season.'\\'.$script_file; //TODO: cross platform
+        $cmd = base_path().'\\R\\Mun\\'.$model->select_season.'\\'.$script_file; //TODO: cross platform
         $text = shell_exec($cmd);
         
         // read output and display
@@ -120,7 +120,7 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
     {    	    	     
         //TODO basin ID 
     //$outputfile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'R'. DIRECTORY_SEPARATOR . 'Ping' . DIRECTORY_SEPARATOR .'rainfall4G.txt';
-        $outputfile = "C:\\\\wamp\\\\www\\\\rain\\\\protected\\\\R\\\\".$select_basin."\\\\".$select_season."\\\\".$select_basin."rain.txt" ; //
+        $outputfile = base_path()."\\\\R\\\\".$select_basin."\\\\".$select_season."\\\\".$select_basin."rain.txt" ; //
     
     if (file_exists($outputfile)){unlink($outputfile);};
     //meas_year >= 1948 and meas_year <=2007 and

@@ -16,7 +16,7 @@ class ForecastPing extends Forecast {
         
         $year=$baseyear+$addyear; 
         if($season=="NDJ") {$year = $year+1;}
-        $outputfile = 'C:\\\\wamp\\\\www\\\\rain\\\\protected\\\\R\\\\'.$basin.'\\\\'.$season.'\\\\'.$season.'_predictors.txt' ; //
+        $outputfile = base_path().'\\\\R\\\\'.$basin.'\\\\'.$season.'\\\\'.$season.'_predictors.txt' ; //
         $cmd =
                 " select meas_year,meas_month, " .
                 " coalesce(meas_value1,-9999) as val1, " .
@@ -61,7 +61,7 @@ class ForecastPing extends Forecast {
             "NDJ" => 11,
             "FMA" => 2
         );
-        chdir( 'C:\\\\wamp\\www\\rain\\protected'.DIRECTORY_SEPARATOR . 'R' . DIRECTORY_SEPARATOR.'Ping'.'\\'.$Input['season'].'\\');
+        chdir( base_path().DIRECTORY_SEPARATOR . 'R' . DIRECTORY_SEPARATOR.'Ping'.'\\'.$Input['season'].'\\');
         exec('del *.Rdata');
         exec('del *.out');
         exec('del pingrain.txt');
@@ -89,20 +89,20 @@ class ForecastPing extends Forecast {
         
         // 3rd modify parameter according to the web form
         $script_file =  $Input['season'].'.bat';
-        $cmd = 'C:\\\\wamp\\www\\rain\\protected\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
-        $cmdtxt = 'C:\\\\wamp\\www\\rain\\protected\\R\\Ping\\'.$Input['season'].'\\'.$Input['season'].'.txt'; //TODO: cross platform
+        $cmd = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
+        $cmdtxt = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$Input['season'].'.txt'; //TODO: cross platform
         $file = $cmdtxt.'.org';
         file_put_contents($cmdtxt,str_replace('$$LAGTIME$$',$lagtime,file_get_contents($file)));
         
         
         // 4th execute command line
         $script_file =  $Input['season'].'.bat';
-        $cmd = 'C:\\\\wamp\\www\\rain\\protected\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
+        $cmd = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
         $text = shell_exec($cmd);
         
          // 5th execute SPI
         $script_file =  'spi.bat';
-        $cmd = 'C:\\\\wamp\\www\\rain\\protected\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
+        $cmd = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
         $text = shell_exec($cmd);
         
        

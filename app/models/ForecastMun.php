@@ -3,7 +3,7 @@
 class ForecastMun extends Forecast {
 
     public function refExportToTextFile($basin,$season,$year) {
-        $outputfile = 'C:\\\\wamp\\\\www\\\\rain\\\\protected\\\\R\\\\'.$basin.'\\\\'.$season.'\\\\'.$season.'_predictors.txt' ; //
+        $outputfile = base_path().'\\\\R\\\\'.$basin.'\\\\'.$season.'\\\\'.$season.'_predictors.txt' ; //
         $cmd =
                 " select meas_year,meas_month, " .
                 " ifnull(meas_value1,'NA'), " .

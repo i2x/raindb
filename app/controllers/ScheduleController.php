@@ -5,7 +5,7 @@ class ScheduleController extends BaseController {
     public function getIndex() {
 
 
-        $file = scandir('C:\\wamp\\www' . DIRECTORY_SEPARATOR . 'schedule');
+        $file = scandir(base_path() . DIRECTORY_SEPARATOR . 'schedule');
         $temp = array();
         if (isset($file[2])) {
             for ($i = 2; $i < sizeof($file); $i++) {
@@ -43,7 +43,7 @@ public function actionUpdate()
 		foreach ($files as $file)
 		{
 			
-			$path = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'schedule'.DIRECTORY_SEPARATOR.$file;
+			$path = base_path() . DIRECTORY_SEPARATOR . 'schedule'.DIRECTORY_SEPARATOR.$file;
 			
 			if(substr($file,-3) == "xls")
 			{
@@ -80,7 +80,7 @@ public function actionUpdate()
 	}
 	public function FileList()
 	{
-		$file =  scandir(Yii::app()->basePath . DIRECTORY_SEPARATOR . 'schedule');
+		$file =  scandir(base_path() . DIRECTORY_SEPARATOR . 'schedule');
 		$temp = array();
 		
 		if(isset($file[2]))
@@ -156,10 +156,10 @@ public function actionUpdate()
 				if( $row < $highestRow) // push some data for preview
 				{
 		
-					$command = Yii::app()->db->createCommand();
-					$command->reset();
+					
 					try {
-						$result = $command->insert('tbl_rain_measurement', array(
+						$result =  DB::table('tbl_rain_measurement')->insert(
+                                                        array(
 								'station_id' => $sta_id,
 								'meas_date' => $dyear . '-' . $dmonth . '-' . $dday,
 								'max_temp' => $maxtmp,
@@ -170,7 +170,7 @@ public function actionUpdate()
 								'mean_temp' => $meantemp,
 								'source' => 1 //source from excel
 						));
-					} catch (CDbException $exc) {
+					} catch (\Exception $exc) {
 						//echo $exc->getTraceAsString();
 					}
 				}
