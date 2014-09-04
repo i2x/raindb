@@ -9,29 +9,39 @@
 	
 		<thead>
 			<tr>
-				<th class="col-md-3">date</th>
-				<th class="col-md-3">file name</th>
-				<th class="col-md-1">url</th>
-				<th class="col-md-1">message</th>
-				<th class="col-md-1">level</th>
-				<th class="col-md-2">detail</th>
-				
-				
-		
-				
-				
+				<th class="col-md-3">Files waiting to be uploaded</th>				
 			</tr>
 		</thead>
+                		<tfoot>
+			<tr>
+				<th class="col-md-3">Files waiting to be uploaded</th>				
+			</tr>
+		</tfoot>
+                <tbody>
+                <?php 
+                    foreach($files as $file){
+                        echo "<tr><td>".$file['file_name']."</td></tr>";
+                    }
+                ?>
+                </tbody>
 	</table>
+
+
 
 
 
 {{ Form::open(array('url' => 'schedule' ,'method' => 'POST')) }}
 
-<button class="btn btn-primary"><span class="glyphicon glyphicon-check"></span> schedule</button>
+<button class="btn btn-primary"><span class="glyphicon glyphicon-check"></span> Upload Now</button>
 
 
 
 {{ Form::close() }}
 
 @stop
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#gridview').dataTable();
+} );
+</script>

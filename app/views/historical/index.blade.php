@@ -22,7 +22,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
-  	<li class="active">Histoorical Data</li>
+  	<li class="active">Historical Data</li>
 	</ol>
 	
 	
