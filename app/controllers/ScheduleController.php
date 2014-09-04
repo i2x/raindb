@@ -73,7 +73,7 @@ public function actionUpdate()
 		
 		
 		
-		$from = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'schedule'.DIRECTORY_SEPARATOR;
+		$from = base_path() . DIRECTORY_SEPARATOR . 'schedule'.DIRECTORY_SEPARATOR;
 		
 	    $this->render('schedule',array('update' => $update,'temp' => $path));
 				
@@ -102,7 +102,7 @@ public function actionUpdate()
 		
 		$new_name = $file; 
 		
-		if(array_search($file, scandir(Yii::app()->basePath . DIRECTORY_SEPARATOR . 'upload_file')))
+		if(array_search($file, scandir(base_path() . DIRECTORY_SEPARATOR . 'upload_file')))
 		{
 		
 		$new_name =substr($file,0,-4).date('Y-m-d His').$type;
@@ -110,13 +110,17 @@ public function actionUpdate()
 		
 		}
 		
-		$from = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'schedule'.DIRECTORY_SEPARATOR;
-	    $to   = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'upload_file'.DIRECTORY_SEPARATOR;
+		$from = base_path() . DIRECTORY_SEPARATOR . 'schedule'.DIRECTORY_SEPARATOR;
+	    $to   = base_path() . DIRECTORY_SEPARATOR . 'upload_file'.DIRECTORY_SEPARATOR;
 	    
 
 	    $sql = "INSERT INTO `rain`.`tbl_import_log` ( `importdate`, `filename`, `detail`)
                 			VALUES ( CURRENT_TIMESTAMP, '".$new_name."','update from schedule');";
-	    Yii::app()->db->createCommand($sql)->execute();
+	    DB:table('tbl_import_log')->insert(
+                    array(
+                        importdate
+                    )
+                    );
 	
 		$success = rename($from.$file, $to.$new_name);
 				
