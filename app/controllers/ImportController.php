@@ -153,19 +153,43 @@ class ImportController extends BaseController
 				'tbl_temp_measurement.avgrh',
 				'tbl_temp_measurement.evapor',
 				'tbl_temp_measurement.mean_temp',
+				'tbl_source.source_name'
 										
 
 		));
 
 
-
+			
 	
 		return  Datatables::of($data)->make();
 	
 	
 	}
 	
+	public static  function getMissing()
 	
+	{
+		$sql = "select calendar_table.dt, 
+				tbl_temp_measurement.meas_date,tbl_temp_measurement.station_id,
+				tbl_temp_measurement.max_temp,
+				tbl_temp_measurement.max_temp,tbl_temp_measurement.min_temp,tbl_temp_measurement.rain,
+				tbl_temp_measurement.avgrh,tbl_temp_measurement.evapor,tbl_temp_measurement.mean_temp,
+				tbl_temp_measurement.source
+				
+				from calendar_table left join tbl_temp_measurement on
+ 				tbl_temp_measurement.meas_date = calendar_table.dt
+ 				where calendar_table.dt >= (select min(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
+ 				and calendar_table.dt <=   (select max(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
+ 				AND (tbl_temp_measurement.rain is NULL OR tbl_temp_measurement.meas_date is NULL)
+				order by dt asc";
+		$data = DB::select(DB::raw($sql));
+		
+		
+		return   $data;
+		
+		
+		
+	}
 
 	public function checkName($file)
 	{

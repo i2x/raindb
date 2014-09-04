@@ -55,23 +55,73 @@
   				<div class="tab-pane fade " id="Missing">
   				 <!-- Missing Tabs --> 
   				 	<br><br>
-  				 	<table id="gridview" class="table table-striped table-hover" >
-							<thead>
-									<tr>
-										<th class="col-md-2">meas_id</th>
-										<th class="col-md-3">meas_date</th>
-										<th class="col-md-2">station_id</th>
-										<th class="col-md-2">max_temp</th>
-										<th class="col-md-2">min_temp</th>
-										<th class="col-md-2">rain</th>
-										<th class="col-md-2">avgrh</th>
-										<th class="col-md-2">mean_temp</th>
-										<th class="col-md-2">source</th>
+  				 	
+  				
+					
+					
+					
+						<table class="table table-striped table-bordered table-hover ">
+			<thead>
+	        <tr>
+	        
+	        <th>dt</th>
+	        	        <th>meas_date</th>
+	        	        <th>station_id</th>
+	        	        <th>max_temp</th>
+	        	        <th>min_temp</th>
+	        	        <th>rain</th>
+	        	        <th>avgrh</th>
+	        	        <th>evapor</th>
+	        	        <th>mean_temp</th>
+	        	        <th>source</th>
+	        	        
+	       
+
+	        </tr>
+      	</thead>
+      	     <tbody>
+      	     
+      	      	<?php 
+								$missingg = ImportController::getMissing();
+								
+								foreach ($missingg as $row)
+								{
+									echo '<tr>';
+									foreach ($row as $key => $cell)
+									{
+										if($cell == NULL) $cell ='<span class="glyphicon glyphicon-remove"></span>';
+										echo '<td> '.$cell.' </td>';
 									
-									
-									</tr>
-								</thead>
-							</table>
+									}
+									echo '</tr>';
+					
+								}
+								
+					?>
+      	     	
+      	           	     
+      	     
+      
+			</tbody>
+	</table>
+  				 	
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+															
+							
   				</div>
 		</div>
 		
@@ -92,7 +142,6 @@
 			 cancle
 		 </button></a>
 		 
-</div>
 
 <br><br>
 <br>
@@ -161,6 +210,8 @@
 		        "sAjaxSource": "{{ URL::to('import/data') }}",
 		    
 			});
+
+		
 
 		});
 	</script>
