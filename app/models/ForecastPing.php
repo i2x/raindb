@@ -61,7 +61,8 @@ class ForecastPing extends Forecast {
             "NDJ" => 11,
             "FMA" => 2
         );
-        chdir( base_path().DIRECTORY_SEPARATOR . 'R' . DIRECTORY_SEPARATOR.'Ping'.'\\'.$Input['season'].'\\');
+        $forecastpath = base_path().DIRECTORY_SEPARATOR . 'R' . DIRECTORY_SEPARATOR.'Ping'. DIRECTORY_SEPARATOR.$Input['season']. DIRECTORY_SEPARATOR;
+        chdir($forcastpath );
         exec('del *.Rdata');
         exec('del *.out');
         exec('del pingrain.txt');
@@ -89,20 +90,25 @@ class ForecastPing extends Forecast {
         
         // 3rd modify parameter according to the web form
         $script_file =  $Input['season'].'.bat';
-        $cmd = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
-        $cmdtxt = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$Input['season'].'.txt'; //TODO: cross platform
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; 
+        $cmdtxt = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].'.txt'; 
         $file = $cmdtxt.'.org';
         file_put_contents($cmdtxt,str_replace('$$LAGTIME$$',$lagtime,file_get_contents($file)));
         
+        // 3.5 modify scrip file
+        $org_script_file = $forcastpath.$Input['season'].'.bat';   // original script file    
+        $output_file = $forecastpath.$Input['season'].'.sh'; // unix style
+        file_put_contents($output_file,str_replace('$$path$$',$forecastpath,file_get_contents($org_script_file)));
+                
         
         // 4th execute command line
         $script_file =  $Input['season'].'.bat';
-        $cmd = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
         $text = shell_exec($cmd);
         
          // 5th execute SPI
         $script_file =  'spi.bat';
-        $cmd = base_path().'\\R\\Ping\\'.$Input['season'].'\\'.$script_file; //TODO: cross platform
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
         $text = shell_exec($cmd);
         
        
