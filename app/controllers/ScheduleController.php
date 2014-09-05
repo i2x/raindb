@@ -192,7 +192,8 @@ public function actionUpdate()
 		
 				foreach ($results[0] as $value)
 				{
-					if(isset($value['year']) || isset($value['rain']) )
+					if(isset($value['year']) && isset($value['month']) && isset($value['dday'])  )
+					
 					{
 						$temp = array(
 		

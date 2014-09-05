@@ -74,7 +74,7 @@ class ImportController extends BaseController
 
 			foreach ($results[0] as $value)
 			{
-				if(isset($value['year']) || isset($value['rain']) )
+				if(isset($value['year']) && isset($value['month']) && isset($value['dday'])  )
 			 	{
 				 	$temp = array(
 				 	
@@ -93,7 +93,10 @@ class ImportController extends BaseController
 				 	);
 				 	
 				 	array_push($arr, $temp);
-			 	}}
+			 	}
+			
+			
+			}
 			 	
 			 	try {
 			 		
