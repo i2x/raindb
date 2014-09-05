@@ -1,2 +1,2 @@
-cd C:\wamp\www\rain\protected\R\Ping\NDJ\
+cd $$path$$
 R CMD BATCH SPI.txt
