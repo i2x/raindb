@@ -1,0 +1,153 @@
+#setwd("6-8")
+library(locfit)
+#library(e1071) 
+T2=read.table("T2.txt")
+P4=read.table("P4.txt")
+P5=read.table("P5.txt")
+U5=read.table("U5.txt")
+V5=read.table("V5.txt")
+bcase=c(21, 21, 21, 8, 8, 8, 7, 7, 7, 13, 20, 20)
+num_input=5 ###num of predictors###
+pre_num=4 ## limit of predictors s group##
+month=6
+shape_mean=NULL
+shape_sd=NULL
+shape_skew=NULL
+degree=1  ## degree of polynomial
+Kn=6 ## num of neighbour hood
+num_sim=300
+collect_all_year=NULL
+### end of current data ###
+current=10
+############Input Data
+RF=read.table("RAINFALL.txt") ### YEAR X 27
+RF_range=nrow(RF)
+Raw_parameter_range=nrow(T2)  ########<<<<<<<<<<<<<<<<<<<<1ST PARAMETER
+rf=RF[, month+15]
+if (RF_range!=Raw_parameter_range) {del=(Raw_parameter_range-RF_range)} else {del=0}
+year_range=max(RF_range, Raw_parameter_range)-abs(del)
+test=read.table("iforecast.txt")
+if (del<0) { 
+for (remove in 1:del) {
+rm=year_range-del+1
+RF=cbind(RF[-rm,])
+} 
+rf=RF[, month+15]}
+###########read combination case ###############
+lag=read.table("st_lag.txt")#for (lag in 1:12) {  ###<<<<<<<<<<<<<<<<
+lag=sum(lag)  ##<<<<<<<<<<<<<<<<<<
+collect_all_year=NULL
+i=lag+3
+b_set=bcase[lag]
+jj=c(0,5,15,25,30)
+if (b_set<=5) {j=1} else if (b_set<=15) {j=2} else if (b_set<=25) {j=3} else if (b_set<=30) {j=4} else {j=5}
+#xx=t(combn(7,j))[,]
+xx=t(combn(num_input,j))[(b_set-jj[j]),]   #### set
+pre_set=cbind(T2[,15+month-i], P4[,15+month-i],P5[15+month-i],U5[, 15+month-i],V5[, 15+month-i])
+
+if (del>0) {   #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+pre_set=cbind(T2[,15+month-i], P4[,15+month-i],P5[15+month-i],U5[, 15+month-i],V5[, 15+month-i])   ###<<<<<< PASTE G OF INPUT
+for (remove in 1:del) {
+rm=year_range-del+1
+pre_set=cbind(pre_set[-rm,])
+} 
+pre_set=cbind(pre_set, RF[,15+month-i])  ###MAY REMOVE THIS LINE###
+} else if (del==0) {pre_set=cbind(T2[,15+month-i], P4[,15+month-i],P5[15+month-i],U5[, 15+month-i],V5[, 15+month-i])} # <<<<<PASTE G OF INPUT
+pre_combn=NULL  ###ok
+data_pre=NULL  ##ok
+for (c in 1:j) {
+pre_combn=cbind(pre_combn,pre_set[ ,xx[c]])
+}  ###close spot still in " num combn"
+data_pre=cbind(pre_combn,rf)
+data_pre=data.frame(data_pre)
+names(data_pre) <- paste("X", 1:(j+1), sep="") ##### above sure correct ###
+n=year_range#for (n in 1:(year_range)) {   ##########Change Herererererereeeeeeeeeeeeee###############################5#######################
+data_test=test[,t(combn(num_input,j))[(b_set-jj[j]),]]  ###<<<<<<<<
+data_test=data.frame(data_test)
+names(data_test) <- paste("X", 1:j, sep="")
+data_for_fit=data_pre ###<<<<<<<<
+alpha_available=c(0.2,0.5,1,1,1)
+if  (j==5) {fitt=locfit(X6 ~ lp(X1, X2, X3, X4, X5, nn=fix_bandwidth, deg=degree, scale=T), data_for_fit)}
+if  (j==4) {
+alphaf=seq(alpha_available[j],1,by=0.05)
+g1=gcvplot(X5 ~ X1,X2,X3,X4,data=data_for_fit,alpha=alphaf,deg=1)
+g2=g1$values
+g3=order(g2)
+alphaf=alphaf[g3[1]]
+fitt=locfit(X5 ~ lp(X1, X2, X3, X4, nn=alphaf, deg=degree, scale=T), data_for_fit)}
+if (j==3) {
+alphaf=seq(alpha_available[j],1,by=0.05)
+g1=gcvplot(X4 ~ X1,X2,X3,data=data_for_fit,alpha=alphaf,deg=1)
+g2=g1$values
+g3=order(g2)
+alphaf=alphaf[g3[1]]
+fitt=locfit(X4 ~ lp(X1, X2, X3, nn=alphaf, deg=degree, scale=T), data_for_fit)}
+if (j==2) {
+alphaf=seq(alpha_available[j],1,by=0.05)
+g1=gcvplot(X3 ~ X1,X2,data=data_for_fit,alpha=alphaf,deg=1)
+g2=g1$values
+g3=order(g2)
+alphaf=alphaf[g3[1]]
+fitt=locfit(X3 ~ lp(X1, X2, nn=alphaf, deg=degree, scale=T), data_for_fit)}
+if (j==1) {
+alphaf=seq(alpha_available[j],1,by=0.05)
+g1=gcvplot(X2 ~ X1,data=data_for_fit,alpha=alphaf,deg=1)
+g2=g1$values
+g3=order(g2)
+alphaf=alphaf[g3[1]]
+fitt=locfit(X2 ~ lp(X1, nn=alphaf, deg=degree, scale=T), data_for_fit)}
+g1=NULL
+g2=NULL
+g3=NULL
+alphaf=NULL
+y_out=1:nrow(data_for_fit)
+for (ggg in 1:(nrow(data_for_fit))) { #######all residual
+y_out[ggg]=predict(fitt, data_for_fit[ggg,])
+}
+residual=(data_for_fit[,(j+1)]-y_out)
+##close residual 
+###compute distance##########
+#for (sim in 1:300)
+num_fit=nrow(data_for_fit)
+distance=1:nrow(data_for_fit)
+Wj=1:nrow(data_for_fit)
+for (cc in 1:num_fit) { #######all distance###########
+dd=0
+for (c in 1:j) {
+d=((data_test[1,j]-data_for_fit[cc,j])^2)
+dd=dd+d
+}####close 1 distance
+dd=sqrt(dd)
+distance[cc]=dd    ####collect data here<<<
+}#### distance all####
+drank=order(distance)
+sumw=NULL
+sum1=1:Kn
+sum1=1/sum1
+sumw=sum(sum1)
+for (ccc in 1:Kn) {
+Wj[ccc]=(1/ccc)/sumw
+}
+Pop=cumsum(Wj)
+##collect residual all#####
+##############################simulate/predict N round from model#######
+YYY=1:num_fit
+for (nnn in 1:num_sim) {
+rand=runif(1,0,1)
+ran_rank=c(rand,Pop)
+choose_error=drank[rank(ran_rank)[1]] #####No. error choose##
+YYY[nnn]=abs(predict(fitt, data_test)+residual[choose_error])  ####<<<<<<<<<<<<<<<<<<
+}##close simulate####
+collect_all_year=rbind(collect_all_year,YYY)
+YYY=NULL
+residual=NULL
+data_test=NULL
+data_for_fit=NULL
+#} ### close year_range time leave one out##################5################
+month
+i
+collect_all_year=t(collect_all_year)
+collect_all_year=data.frame(collect_all_year)
+#names(collect_all_year) <- paste(1977:(1977+year_range-1), sep="") ####<<<<<<<<<<<<<<<
+write.table(collect_all_year, file=paste( "out.txt", sep=""),col.names = FALSE, row.names = FALSE)  ###<<<<<<
+collect_all_year=t(collect_all_year)

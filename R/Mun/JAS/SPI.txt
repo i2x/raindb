@@ -1,0 +1,37 @@
+rain_file="PingRain"
+rain_name=paste(rain_file,".txt",sep="")
+rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=3)
+n_rr=nrow(rf)
+sy_rain=rf[1,1]
+ye_rain=rf[n_rr,1]
+n.yr=ye_rain-sy_rain+1
+year=sy_rain:ye_rain
+mth=5			# starting month of season
+mon=7			# ending month of season
+
+ss.rain=matrix(nrow=n.yr,ncol=1)
+for(i in 1:n.yr){
+r.y=matrix(rf[][rf[,1]==year[i]],ncol=3)
+r.m=matrix(r.y[][r.y[,2]>(mth-1)],ncol=3)
+r.m=matrix(r.m[][r.m[,2]<(mon+1)],ncol=3)
+ss.rain[i,1]=sum(r.m[,3],na.rm=FALSE)
+}
+
+load("InitialValue_JAS.Rdata")
+
+file_names=paste(mon_names,best_lag,"-mForecast.Rdata",sep="")
+load(file_names)
+fc.r=ensemblef_1[,2:(n_simul+1)]
+SPI.fc=matrix(nrow=n_simul,ncol=1)
+
+for (j in 1:n_simul){
+data=c(ss.rain,fc.r[j])
+fit.cdf <- ecdf(data)
+cdfs <- sapply(data,fit.cdf)
+SPI <- qnorm(cdfs)
+SPI.fc[j,1]=SPI[length(SPI)]
+SPI.fc=round(SPI.fc,digits=2)
+}
+
+file_names1=paste(mon_names,best_lag,"-mSPI.out",sep="")
+write(t(SPI.fc),file=file_names1,ncol=ncol(SPI.fc),append=FALSE,sep="\t")
