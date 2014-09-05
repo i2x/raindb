@@ -1,2 +1,2 @@
-cd C:\wamp\www\rain\protected\R\Mun\MAM\
+cd $$path$$
 R CMD BATCH MAM.txt
