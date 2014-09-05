@@ -94,12 +94,13 @@ class ForecastPing extends Forecast {
         $cmdtxt = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$Input['season'].'.txt'; 
         $file = $cmdtxt.'.org';
         file_put_contents($cmdtxt,str_replace('$$LAGTIME$$',$lagtime,file_get_contents($file)));
-        // TODO chmod
+        chmod($cmdtxt,0775);
+        
         // 3.5 modify scrip file
         $org_script_file = $forecastpath.$Input['season'].'.bat';   // original script file    
         $output_file = $forecastpath.$Input['season'].'.sh'; // unix style
         file_put_contents($output_file,str_replace('$$path$$',$forecastpath,file_get_contents($org_script_file)));
-         //todo CHMOD       
+        chmod($output_file,0755);      
         
         // 4th execute command line
         $script_file =  $Input['season'].'.bat';
