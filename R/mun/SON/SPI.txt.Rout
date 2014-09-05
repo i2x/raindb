@@ -1,0 +1,28 @@
+
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> rain_file="PingRain"
+> rain_name=paste(rain_file,".txt",sep="")
+> rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=3)
+Error in file(file, "r") : cannot open the connection
+Calls: matrix -> scan -> file
+In addition: Warning message:
+In file(file, "r") :
+  cannot open file 'PingRain.txt': No such file or directory
+Execution halted

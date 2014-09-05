@@ -1,0 +1,343 @@
+#----------------------------------------------
+#    		MODIFIED K-NN MODEL
+#----------------------------------------------
+
+# 1. Use y-hat from the locfit model 
+#    (fpredicted.loc$fit and cpredicted.loc$fit)
+# 2. The residuals from the locfit model will be used 
+#    (residuals(locf.model), residuals(locc.model))
+# 3. Get the distance between the predicted point x values
+#    and the x values for all points in the model (will get the 
+#    Euclidean distance of the normalized values) 
+# 4. Pick the K (based on heuristic scheme) nearest neighbors
+# 5. Weight the K nearest neighbors 
+# 6. The weighted K-NN residuals will then be used in a bootstrap
+     
+# LOAD REQUIRED PACKAGE FOR FORECASTING
+library(akima)		# load the package "akima"
+library(locfit)		# load the package "locfit"
+
+# LOAD RAINFALL DATA
+mon_names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+mon_names=c("JAS")
+G_rain=c("Averg50")
+n_rain=length(G_rain)
+rain_file="MunRain"
+rain_name=paste(rain_file,".txt",sep="")
+rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=(n_rain+2))
+n_rr=nrow(rf)
+sy_rain=rf[1,1]
+ye_rain=rf[n_rr,1]
+
+no_rain=1		# rainfall data required to run model e.g. NIR (change as needed)
+yfVol_obs=rf[,(no_rain+2)]
+
+# LOAD INDEX DATA
+pred_index=c("SAT","SLP","SXW","SYW","RAIN")	# predictors of seasonal rainfall
+unit=c("C","mb","m/s","m/s","mm")
+n_pred=length(pred_index)
+pred_fname=paste(mon_names,"_predictors.txt",sep="")
+pred=matrix(scan(pred_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
+n_rp=nrow(pred)
+n_cp=ncol(pred)
+sy_pred=pred[1,1]
+ye_pred=pred[n_rp,1]
+
+fpreds1=pred[,3:n_cp]
+
+# LOAD GCM DATA
+gcm_fname=paste(mon_names,"_predictors.txt",sep="")
+gcm_pred=matrix(scan(gcm_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
+gcm_rp=nrow(gcm_pred)
+gcm_cp=ncol(gcm_pred)
+sy_gcm=gcm_pred[1,1]
+ye_gcm=gcm_pred[gcm_rp,1]
+
+gcm_fpreds1=gcm_pred[,3:gcm_cp]
+
+# INITIAL VALUES OF FITTING
+const=sy_rain
+sy=1975		# sy is the starting year of fitting (change as needed)
+ye=ye_rain		# ye is the ending year of fitting (change as needed)
+SS=(sy-const)*12+1	# starting point of fitting
+se=(ye-const+1)*12	# ending point of fitting
+yf=(ye-sy+1)*12		# yf is the number of data to fit model
+ty=ye-sy+1		# number of fitting years
+yr=c(sy:ye)		# fitting year
+best_lag=$$LAGTIME$$		# the lag time of forecast (change as needed)
+
+mth=7			# starting month of season
+mon=9			# ending month of season
+
+# INITIAL VALUES OF FORECASTING
+sfy=ye_gcm		# sfy is the starting year of forecasting (change as needed)
+yef=sfy			# yef is the ending year of forecasting (change as needed)
+SSf=(sfy-sy_gcm)*12+1	# starting point of forecasting
+sef=(yef-sy_gcm+1)*12	# ending point of forecasting
+yff=(yef-sfy+1)*12	# yff is the number of data to forecast
+tyf=yef-sfy+1		# number of forecated years
+yrf=c(sfy:yef)		# forecasted year
+n_simul=300		# number of simulations
+
+year1=gcm_pred[SSf:sef,1]
+month1=gcm_pred[SSf:sef,2]
+
+# SET UP VARIABLES FOR FITTING & FORECASTING MODEL
+yfVol_preds=yfVol_obs[SS:se]
+year=rf[SS:se,1]
+month=rf[SS:se,2]
+
+for(v in best_lag:best_lag)	# predictors by lag time
+{
+if(v == 1)
+{fpreds=cbind(fpreds1[,1])
+gcm_fpreds=cbind(gcm_fpreds1[,1])
+name_p=paste(pred_index[1],sep="")}
+if(v == 2)
+{fpreds=cbind(fpreds1[,5])
+gcm_fpreds=cbind(gcm_fpreds1[,5])
+name_p=paste(pred_index[5],sep="")}
+if(v == 3)
+{fpreds=cbind(fpreds1[,1])
+gcm_fpreds=cbind(gcm_fpreds1[,1])
+name_p=paste(pred_index[1],sep="")}
+if(v == 4)
+{fpreds=cbind(fpreds1[,1])
+gcm_fpreds=cbind(gcm_fpreds1[,1])
+name_p=paste(pred_index[1],sep="")}
+if(v == 5)
+{fpreds=cbind(fpreds1[,1],fpreds1[,4])
+gcm_fpreds=cbind(gcm_fpreds1[,1],gcm_fpreds1[,4])
+name_p=paste(pred_index[1],"_",pred_index[4],sep="")}
+if(v == 6)
+{fpreds=cbind(fpreds1[,1],fpreds1[,2])
+gcm_fpreds=cbind(gcm_fpreds1[,1],gcm_fpreds1[,2])
+name_p=paste(pred_index[1],"_",pred_index[2],sep="")}
+if(v == 7)
+{fpreds=cbind(fpreds1[,1],fpreds1[,4])
+gcm_fpreds=cbind(gcm_fpreds1[,1],gcm_fpreds1[,4])
+name_p=paste(pred_index[1],"_",pred_index[4],sep="")}
+if(v == 8)
+{fpreds=cbind(fpreds1[,1],fpreds1[,4])
+gcm_fpreds=cbind(gcm_fpreds1[,1],gcm_fpreds1[,4])
+name_p=paste(pred_index[1],"_",pred_index[4],sep="")}
+if(v == 9)
+{fpreds=cbind(fpreds1[,2],fpreds1[,3])
+gcm_fpreds=cbind(gcm_fpreds1[,2],gcm_fpreds1[,3])
+name_p=paste(pred_index[2],"_",pred_index[3],sep="")}
+if(v == 10)
+{fpreds=cbind(fpreds1[,2])
+gcm_fpreds=cbind(gcm_fpreds1[,2])
+name_p=paste(pred_index[2],sep="")}
+if(v == 11)
+{fpreds=cbind(fpreds1[,1])
+gcm_fpreds=cbind(gcm_fpreds1[,1])
+name_p=paste(pred_index[1],sep="")}
+if(v == 12)
+{fpreds=cbind(fpreds1[,2],fpreds1[,5])
+gcm_fpreds=cbind(gcm_fpreds1[,2],gcm_fpreds1[,5])
+name_p=paste(pred_index[2],"_",pred_index[5],sep="")}
+
+# VARIABLES FOR FITTING MODEL
+X_preds=fpreds[(SS-v-3):(SS-v-3-1+yf),]
+cX_preds=ncol(fpreds)
+DF=data.frame(year,month,X_preds,yfVol_preds)
+DF=subset(DF,DF$month>(mth-1))
+DF=subset(DF,DF$month<(mon+1))
+
+XP1=matrix(nrow=ty,ncol=cX_preds)
+yfVol1=matrix(nrow=ty,ncol=1)
+for(e in 1:ty)
+{
+sDF=subset(DF,DF$year==yr[e])
+sDF=na.exclude(sDF)
+ro=length(sDF$year)
+if(ro != 3)
+{XP1[e,]=NA
+yfVol1[e,]=NA}
+if(ro == 3)
+{for(b in 1:cX_preds)
+{XP1[e,b]=mean(sDF[,(b+2)])}
+yfVol1[e,]=sum(sDF$yfVol_preds)}
+}
+
+DF2=data.frame(yr,XP1,yfVol1)
+DF2=na.exclude(DF2)	# exclude missing values
+
+YR=DF2$yr
+yfVol=DF2$yfVol1
+ys=length(yfVol)		# number of forecasting years exclude missing data
+X=matrix(nrow=ys,ncol=cX_preds)
+for(b in 1:cX_preds)
+{X[,b]=DF2[,(b+1)]}
+
+#-----------------------------------------------------------
+# VARIABLES FOR FORECASTING
+X_preds1=gcm_fpreds[(SSf-v-3):(SSf-v-3-1+yff),]
+DFf=data.frame(year1,month1,X_preds1)
+DFf=subset(DFf,DFf$month1>(mth-1))
+DFf=subset(DFf,DFf$month1<(mon+1))
+
+XPf1=matrix(nrow=tyf,ncol=cX_preds)
+
+for(e in 1:tyf)
+{
+sDFf=subset(DFf,DFf$year1==yrf[e])
+sDFf=na.exclude(sDFf)
+ro=length(sDFf$year1)
+if(ro != 3)
+{XPf1[e,]=NA}
+if(ro == 3)
+{for(b in 1:cX_preds)
+{XPf1[e,b]=mean(sDFf[,(b+2)])}
+}	# loop "b"
+}	# loop "tyf"
+
+DFf2=data.frame(yrf,XPf1)
+DFf2=na.exclude(DFf2)	# exclude missing values
+
+YRf=DFf2$yrf
+ys=length(YRf)		# number of forecasting years exclude missing data
+Xf=matrix(nrow=ys,ncol=cX_preds)
+for(b in 1:cX_preds)
+{Xf[,b]=DFf2[,(b+1)]}
+
+ensemblef_1=array(dim=c(ys,(n_simul+1)))
+ensemblef_1[,1]=YRf
+
+#------------------------------------------------------------
+# FITTING MODEL
+  xmodel=X
+  yfmodel=yfVol
+  ym=length(yfmodel) 
+  #alphaf=seq(0.2,1,by=0.05)
+  #xxf=gcvplot(yfmodel~xmodel,alpha=alphaf)
+  #zxf=xxf$values
+  #zzf=order(zxf)
+  #alphaf=alphaf[zzf[1]]
+  alphaf=1
+            
+  # Do the LOCFIT and get the expected value for each of the p  points
+  locf.model=locfit(yfmodel~xmodel,alpha=alphaf)
+  fit=locf.model
+
+# DO FORECASTING AND SIMULATION
+p=1			# p is number of predictors - i.e. only SST in this case (change as needed)
+XX=scale(xmodel)         	# normalize predictors (so higher magnitude variables don't get more weight in distance calculation)
+
+for(i in 1:ys)		# yearly loop
+{
+  # p1 is the position of the year we're predicting
+  p1=i               
+  xpred=rbind(Xf[p1,],xmodel)
+  fpredicted.loc=predict(locf.model,xpred,se.fit=T,band="global")
+  
+  # Distance calculation
+  # calculate the distance between the predictors of the point we're predicting and all other points-- use scaled data
+  xdist=scale(xpred)
+  distance=1:ym
+  for(j in 1:ym)
+  {
+     if(cX_preds==1)
+     distance[j]=sqrt(((xdist[1,1]-XX[j,1])^2))
+     if(cX_preds==2)
+     distance[j]=sqrt(((xdist[1,1]-XX[j,1])^2)+((xdist[1,2]-XX[j,2])^2))
+     if(cX_preds==3)
+     distance[j]=sqrt(((xdist[1,1]-XX[j,1])^2)+((xdist[1,2]-XX[j,2])^2)+((xdist[1,3]-XX[j,3])^2))
+     if(cX_preds==4)
+     distance[j]=sqrt(((xdist[1,1]-XX[j,1])^2)+((xdist[1,2]-XX[j,2])^2)+((xdist[1,3]-XX[j,3])^2)+((xdist[1,4]-XX[j,4])^2))     
+     if(cX_preds==5)
+     distance[j]=sqrt(((xdist[1,1]-XX[j,1])^2)+((xdist[1,2]-XX[j,2])^2)+((xdist[1,3]-XX[j,3])^2)+((xdist[1,4]-XX[j,4])^2)+((xdist[1,5]-XX[j,5])^2))
+  }
+  
+  # Rank the distances
+  drank=rank(distance)       # here rank 1 is the nearest neighbor - i.e. the smallest distance
+          
+  # Determine K and weight it
+  n=length(distance)
+  kk=sqrt(n)
+  kk=round(kk)
+        	
+  W=1:kk 
+  W=1/W        
+  W=W/sum(W)    
+  W=cumsum(W)   
+       
+  # now weight the neighbors and pick one at random (using the weights): do this 'n' simulations
+  residualsf=residuals(locf.model)    	# get the residuals of the locfit model
+  for(k in 1:n_simul)         		# simulation loop (bootstrap residuals)
+  {
+      rannum=runif(1,0,1)
+      xy=c(rannum,W)      # adds a random number (between 0 and 1) to the weight function (CDF)
+      rankW=rank(xy)      # assigns a rank to the random number (and W vector)
+      pos=order(drank)[rankW[1]]     # gives the position in the distance matrix (and corrrespondingly the y matrix for the selected neighbor)
+      resids=residualsf[pos]         # Once getting a neighbor, need to find the residual associated with that neighbor
+
+      ensemblef_1[i,(k+1)]=fpredicted.loc$fit[1]+resids	# add that residual to the mean prediction from the locfit model
+      if(ensemblef_1[i,(k+1)]<0)(ensemblef_1[i,(k+1)]=0)
+      ensemblef_1[i,(k+1)]=round(ensemblef_1[i,(k+1)],digits=1)
+   }			# simulation loop
+}		# year loop
+file_names1=paste(mon_names,best_lag,"-mForecast.out",sep="")
+title1=paste(n_simul," Ensembles from K-NN (",name_p,")",sep="")
+write(title1,file=file_names1,append=FALSE)
+write(t(ensemblef_1),file=file_names1,ncol=ncol(ensemblef_1),append=TRUE,sep="\t")
+file_names2=paste(mon_names,best_lag,"-mForecast.Rdata",sep="")
+save(ensemblef_1,file=file_names2)
+}		# lag loop
+
+#---------------------------------------------------------------
+# Now save the initial values
+f_names=paste("InitialValue_",mon_names,".Rdata",sep="")
+save(mon_names,pred_index,G_rain,no_rain,best_lag,n_simul,sfy,yef,file=f_names)
+
+#---------TERMINATE THE MODIFIED K-NN MODEL---------------------
+
+#---------------------------------------------------------------
+#	PROBABILITY OF THE ANOMALOUS EVENTS
+#---------------------------------------------------------------
+# LOAD INITIAL SET UP OF K-NN MODEL
+load("InitialValue_MJJ.Rdata")
+
+# PDF PLOT
+#library(sm)		# Load the package "sm"
+
+b_lag=best_lag		# best lag among 12 lags (change as needed)
+yr_pdf=sfy:yef		# years making PDF plot
+nyr=length(yr_pdf)
+#limit=c(381.7,528.9)	# p20th and p80th of seasonal rainfall (change as needed)
+limit=c(408.3,498.7)	# p30th and p70th of seasonal rainfall (change as needed)
+#conf_d=c(348.9,400.1)
+#conf_w=c(479.0,530.1)
+nlim=length(limit)
+prob=matrix(ncol=(nlim+2),nrow=nyr)
+prob[,1]=yr_pdf
+
+for(v in b_lag:b_lag)	# lag loop
+{
+file_names=paste(mon_names,best_lag,"-mForecast.Rdata",sep="")
+load(file_names)
+for(i in 1:nyr)		# year loop
+{
+ensem_p=subset(ensemblef_1,ensemblef_1[,1]==yr_pdf[i])
+ensem_s=ensem_p[,2:(n_simul+1)]
+n_ensem=length(ensem_s)
+
+D=length(ensem_s[ensem_s<limit[1]])
+prob[,2]=D/n_ensem
+
+W=length(ensem_s[ensem_s>limit[2]])
+prob[,4]=W/n_ensem
+
+prob[,3]=1-prob[,2]-prob[,4]
+prob=round(prob,digits=3)
+}	# year loop
+}	# lag loop
+file_name=paste("PDF_",mon_names,"_",b_lag,"-mForecast.out",sep="")
+title=paste("Probabilities of anomalous events (D N W) of ",mon_names,sep="")
+write(title,file=file_name,append=FALSE)
+write(t(prob),ncol=ncol(prob),file=file_name,sep="\t",append=TRUE)
+remark=paste("Remark: D is rainfall<",limit[1]," mm; W is rainfall>",limit[2]," mm; Otherwise, N",sep="")
+write(remark,file=file_name,append=TRUE)
+
+#----------TERMINATE THE PROBABILITY CALCULATION-------------------

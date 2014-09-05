@@ -120,7 +120,7 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
     {    	    	     
         //TODO basin ID 
     //$outputfile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'R'. DIRECTORY_SEPARATOR . 'Ping' . DIRECTORY_SEPARATOR .'rainfall4G.txt';
-        $outputfile = base_path()."\\\\R\\\\".$select_basin."\\\\".$select_season."\\\\".$select_basin."rain.txt" ; //
+        $outputfile = base_path(). DIRECTORY_SEPARATOR ."R". DIRECTORY_SEPARATOR .$select_basin. DIRECTORY_SEPARATOR .$select_season. DIRECTORY_SEPARATOR .$select_basin."rain.txt" ; //
     
     if (file_exists($outputfile)){unlink($outputfile);};
     //meas_year >= 1948 and meas_year <=2007 and

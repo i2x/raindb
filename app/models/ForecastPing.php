@@ -16,7 +16,7 @@ class ForecastPing extends Forecast {
         
         $year=$baseyear+$addyear; 
         if($season=="NDJ") {$year = $year+1;}
-        $outputfile = base_path().'\\\\R\\\\'.$basin.'\\\\'.$season.'\\\\'.$season.'_predictors.txt' ; //
+        $outputfile = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.$basin.DIRECTORY_SEPARATOR.$season.DIRECTORY_SEPARATOR.$season.'_predictors.txt' ; //
         $cmd =
                 " select meas_year,meas_month, " .
                 " coalesce(meas_value1,-9999) as val1, " .
@@ -61,8 +61,8 @@ class ForecastPing extends Forecast {
             "NDJ" => 11,
             "FMA" => 2
         );
-        $forecastpath = base_path().DIRECTORY_SEPARATOR . 'R' . DIRECTORY_SEPARATOR.'Ping'. DIRECTORY_SEPARATOR.$Input['season']. DIRECTORY_SEPARATOR;
-        chdir($forcastpath );
+        $forecastpath = base_path().DIRECTORY_SEPARATOR . 'R' . DIRECTORY_SEPARATOR.'ping'. DIRECTORY_SEPARATOR.$Input['season']. DIRECTORY_SEPARATOR;
+        chdir($forecastpath );
         exec('del *.Rdata');
         exec('del *.out');
         exec('del pingrain.txt');
@@ -75,7 +75,7 @@ class ForecastPing extends Forecast {
         $lagtime = $season2month[$Input['season']] - $curmonth;
         if($lagtime < 0){
             $lagtime=$lagtime+12;
-            $add_year = 1; // forcast next year
+            $add_year = 1; // forecast next year
         }
         //echo $lagtime;
         
@@ -90,25 +90,25 @@ class ForecastPing extends Forecast {
         
         // 3rd modify parameter according to the web form
         $script_file =  $Input['season'].'.bat';
-        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; 
-        $cmdtxt = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].'.txt'; 
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; 
+        $cmdtxt = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$Input['season'].'.txt'; 
         $file = $cmdtxt.'.org';
         file_put_contents($cmdtxt,str_replace('$$LAGTIME$$',$lagtime,file_get_contents($file)));
-        
+        // TODO chmod
         // 3.5 modify scrip file
-        $org_script_file = $forcastpath.$Input['season'].'.bat';   // original script file    
+        $org_script_file = $forecastpath.$Input['season'].'.bat';   // original script file    
         $output_file = $forecastpath.$Input['season'].'.sh'; // unix style
         file_put_contents($output_file,str_replace('$$path$$',$forecastpath,file_get_contents($org_script_file)));
-                
+         //todo CHMOD       
         
         // 4th execute command line
         $script_file =  $Input['season'].'.bat';
-        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
         $text = shell_exec($cmd);
         
          // 5th execute SPI
         $script_file =  'spi.bat';
-        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'Ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
         $text = shell_exec($cmd);
         
        
