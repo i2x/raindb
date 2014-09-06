@@ -111,7 +111,7 @@
 
 		});
 		function Delete(id) {
-			bootbox.confirm("The <code> AMPHUR ID "+id+" </code>will be deleted immediately. Are you sure you want to continue?", 
+			bootbox.confirm("<code>idtbl_ref_settings "+id+" </code>will be deleted immediately. Are you sure you want to continue?", 
 			function(result) {
 				if(result){
 					 $.ajax( 
