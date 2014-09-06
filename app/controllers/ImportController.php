@@ -72,9 +72,7 @@ class ImportController extends BaseController
 		
 		try {
 
-			//foreach ($results[0] as $value)
 			foreach ($results as $value)
-			 	
 			{
 				if(isset($value['year']) && isset($value['month']) && isset($value['dday'])  )
 			 	{
