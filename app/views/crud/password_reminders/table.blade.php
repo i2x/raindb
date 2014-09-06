@@ -18,7 +18,7 @@
 	
 
 			<div class="pull-right">
-				<a href="{{{ URL::to('database/tbl_source/create') }}}" class="btn btn-small btn-info iframe">
+				<a href="{{{ URL::to('database/password_reminders/create') }}}" class="btn btn-small btn-info iframe">
 				<span class="glyphicon glyphicon-plus-sign"></span> Create</a>
 			</div>
 			<br>
@@ -34,10 +34,15 @@
 						<table id="gridview" class="table table-striped table-hover table-condensed " >
 						<thead>
 						
+					
 								<tr>
-									<th class="col-md-1">source_id</th>
-									<th class="col-md-1">source_name</th>
+									<th class="col-md-1">email</th>
+									<th class="col-md-1">tokey</th>
+									<th class="col-md-1">created_at</th>
+									
 									<th class="col-md-1"> </th>
+																		<th class="col-md-1"> </th>
+									
 
 								
 								</tr>
@@ -89,7 +94,7 @@
 				"bProcessing": true,
 		        "bServerSide": true,
 		        "iDisplayLength": 25,
-		        "sAjaxSource": "{{ URL::to('database/tbl_source/data') }}",
+		        "sAjaxSource": "{{ URL::to('database/password_reminders/data') }}",
 		        "fnDrawCallback": function ( oSettings ) {
 	           	$(".iframe").colorbox({iframe:true, transition:"none", width:"80%", height:"80%", escKey: false,
 	           		    overlayClose: false});
@@ -104,7 +109,7 @@
 					 $.ajax( 
 							 {
 
-							    url: 'tbl_source/'+id+'/delete',
+							    url: 'password_reminders/'+id+'/delete',
 							    type: 'POST',
 							    success: function(result) {
 							   	 	parent.oTable.fnReloadAjax(null,null,true);
