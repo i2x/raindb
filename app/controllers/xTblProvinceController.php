@@ -111,7 +111,7 @@ public function postUpdate($id)
 	
 		return View::make('crud.tbl_province.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Province')
 		->with('mode','Create')
 		;
 	

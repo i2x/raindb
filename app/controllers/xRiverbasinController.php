@@ -109,7 +109,7 @@ public function postUpdate($id)
 	
 		return View::make('crud.riverbasin.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  River Basin')
 		->with('mode','Create')
 		;
 	

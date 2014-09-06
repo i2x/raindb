@@ -66,7 +66,7 @@ class xTblSelectedStationsController extends AdminController {
 		$ampher = xTblSelectedStations::where('id',$post)->first()->toArray();
 		return View::make('crud.tbl_selected_stations.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span>tbl_selected_stations '.$post)
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		
@@ -110,7 +110,7 @@ class xTblSelectedStationsController extends AdminController {
 	
 		return View::make('crud.tbl_selected_stations.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Selected Stations')
 		->with('mode','Create')
 		;
 	

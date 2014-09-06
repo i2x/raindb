@@ -35,7 +35,7 @@
 					<button class="btn btn-default btn-small btn-inverse close_popup"><span class="glyphicon glyphicon-circle-arrow-left"></span> Back</button>
 				</div>
 				
-		<h4><center>{{$title}}</center> </h4>
+		<h4><center>{{$title}} </center> </h4>
 
 		
 		</div>

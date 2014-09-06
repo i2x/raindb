@@ -66,7 +66,7 @@ class xTblSeasonController extends AdminController {
 		$ampher = xTblSeason::where('id',$post)->first()->toArray();
 		return View::make('crud.tbl_season.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'AMPHUR ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span>tbl_season'.$post)
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		
@@ -111,7 +111,7 @@ class xTblSeasonController extends AdminController {
 	
 		return View::make('crud.tbl_season.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Season')
 		->with('mode','Create')
 		;
 	

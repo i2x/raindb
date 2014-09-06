@@ -65,7 +65,7 @@ class xTblImportLogController extends AdminController {
 		$ampher = xTblImportLog::where('logid',$post)->first()->toArray();
 		return View::make('crud.tbl_import_log.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span> '.'tbl_import_log ID: '.$post)
+		->with('title',' <span class="glyphicon glyphicon-edit"></span>tbl_import_log')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		
@@ -130,7 +130,7 @@ class xTblImportLogController extends AdminController {
 		
 		return View::make('crud.amphur.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Import Log')
 		->with('mode','Create')
 		;
 

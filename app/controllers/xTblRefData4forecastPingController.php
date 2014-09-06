@@ -110,7 +110,7 @@ public function postUpdate($id)
 	
 		return View::make('crud.tbl_ref_data4forecast_ping.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Ref Data4forecast Ping')
 		->with('mode','Create')
 		;
 	

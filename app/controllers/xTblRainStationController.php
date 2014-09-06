@@ -114,7 +114,7 @@ class xTblRainStationController extends AdminController {
 	
 		return View::make('crud.tbl_rain_station.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Rain Station')
 		->with('mode','Create')
 		;
 	

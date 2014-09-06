@@ -117,7 +117,7 @@ public function postUpdate($id)
 	
 		return View::make('crud.tbl_rain_measurement.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Rain Measurement')
 		->with('mode','Create')
 		;
 	

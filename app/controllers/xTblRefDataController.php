@@ -101,7 +101,7 @@ class xTblRefDataController extends AdminController {
 		
 		return View::make('crud.tbl_ref_data.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Ref Data')
 		->with('mode','Create')
 		;
 

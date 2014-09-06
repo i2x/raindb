@@ -109,7 +109,7 @@ public function postUpdate($id)
 	
 		return View::make('crud.tbl_source.create_edit')
 		->with('ampher_message','')
-		->with('title','Create Amphur')
+		->with('title','Create  Source')
 		->with('mode','Create')
 		;
 	
