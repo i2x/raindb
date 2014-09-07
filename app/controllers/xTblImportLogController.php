@@ -19,7 +19,7 @@ class xTblImportLogController extends AdminController {
 		$groups = DB::table('tbl_import_log')->select(array('logid', 'importdate', 'filename', 'url' ,'message', 'level', 'detail'));
 		return Datatables::of($groups)
 		->add_column('actions',
-				 '<a href="{{{ URL::to(\'database/amphur/\' . $logid . \'/update
+				 '<a href="{{{ URL::to(\'database/tbl_import_log/\' . $logid . \'/update
 				\' ) }}}" class="btn btn-default btn-xs iframe" >Edit</a>
 				
 				<a class="btn btn-xs btn-danger" onclick="Delete({{{  $logid  }}})"
@@ -53,7 +53,7 @@ class xTblImportLogController extends AdminController {
 	
 //EDIT
 	
-	public function getUpdate($post)
+public function getUpdate($post)
 	{
 		$ampher_message = NULL;
 		if(Session::get('amphur_message') != NULL) 
@@ -65,7 +65,7 @@ class xTblImportLogController extends AdminController {
 		$ampher = xTblImportLog::where('logid',$post)->first()->toArray();
 		return View::make('crud.tbl_import_log.create_edit')
 		->with('data',$ampher)
-		->with('title',' <span class="glyphicon glyphicon-edit"></span>tbl_import_log')
+		->with('title',' <span class="glyphicon glyphicon-edit"></span> tbl_import_log')
 		->with('ampher_message',$ampher_message)
 		->with('mode','Edit')
 		
@@ -73,104 +73,84 @@ class xTblImportLogController extends AdminController {
 		
 		
 	}
-	public function postUpdate($id)
+public function postUpdate($id)
 	{
+		
+		//		$groups = DB::table('tbl_import_log')->select(array('logid', 'province_name' ,'region_id'));
+		
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblImportLog::validate($input);
+		if($validator->fails())return Redirect::to('database/tbl_import_log/'.$id.'/update')->withErrors($validator);
 		
-		if($validator->fails())
-				{
-				
-			return Redirect::to('database/amphur/'.$id.'/update')->withErrors($validator);
-			
-		
-				
-		}
-
 		try {
-	
-			DB::table('amphur')
-            ->where('AMPHUR_ID', $id)
-            ->update(
-            array(
-            'AMPHUR_CODE' =>Input::get('AMPHUR_CODE'),
-            'AMPHUR_NAME' => Input::get('AMPHUR_NAME'),
-            'GEO_ID' => Input::get('GEO_ID'),
-            'PROVINCE_ID' => Input::get('PROVINCE_ID'),
-            ));
-		
-			// Redirect to the new ampher ..
 			
-          
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            update success.
-            </div>');
-			return Redirect::to('database/amphur/'. $id.'/update');
-
-		} catch (Exception $e) {
-			
-
-			Session::put('amphur_message','<div class="alert alert-danger" role="alert">
-            update fail.
-            </div>');
-		    return Redirect::to('database/amphur/'.$id.'/update');
-
+			DB::table('tbl_import_log') ->where('logid', $id)->update($input);
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">update success. </div>');
+			if(isset($input['logid']))$id = $input['logid'];
+			return Redirect::to('database/tbl_import_log/'. $id.'/update');
 		}
-			
+	
+			catch (Exception $e) {
+				Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+				return Redirect::to('database/tbl_import_log/'.$id.'/update');
+			}
+	
 	}
 	
-//END EDIT
-
+	//END EDIT
 	
-// CREATE	
+	
+	// CREATE
 	
 	public function getCreate()
 	{
-	
 		
-		return View::make('crud.amphur.create_edit')
+		
+	
+		return View::make('crud.tbl_import_log.create_edit')
 		->with('ampher_message','')
-		->with('title','Create  Import Log')
+		->with('title','Create  Import Logs')
 		->with('mode','Create')
 		;
-
+	
 	}
+	
+	
 	
 	public function postCreate()
 	{
 		$input = Input::get();
-		$validator = xAmphur::validate($input);
+		unset($input['_token'] );
+		foreach($input as $key => $value)if($value == NULL)unset($input[$key]);
+		$validator = xTblImportLog::validate($input);
+
+	   if($validator->fails())
+	   {
+	   		return Redirect::to('database/tbl_import_log/create')->withErrors($validator);
+	   }
 	
-		if($validator->fails())
-		{
-			
-		   return Redirect::to('database/amphur/create')->withErrors($validator);
-			
-		}
-		
-		unset($input['_token']);
 		try {
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create success.
-            </div>');
-			$id = DB::table('amphur')->insertGetId($input);
-			
-			return Redirect::to('database/amphur/'. $id.'/update');
-				
-				
-			
-		} catch (Exception $e) {
-			
-			Session::put('amphur_message','<div class="alert alert-success" role="alert">
-            create fail.
-            </div>');
-			return Redirect::to('database/amphur/create');
-			
-		}
-		
 	
-		
-		
+			Session::put('amphur_message','<div class="alert alert-success" role="alert"> create success.</div>');
+			if(isset($input['logid'])) $last = $input['logid'];
+			else $input['logid'] = xTblImportLog::max('logid')+1;
+			xTblImportLog::insert($input);
+			return Redirect::to('database/tbl_import_log/'.$input['logid'].'/update');
+
+		}
+	
+		catch (Exception $e) {
+	
+			Session::put('amphur_message','<div class="alert alert-success" role="alert">create fail. </div>');
+			return Redirect::to('database/tbl_import_log/create');
+	
+		}
+	
+	
+	
+	
 	}
 //END CREATE
 
@@ -181,8 +161,8 @@ class xTblImportLogController extends AdminController {
 	public function postDelete($id)
 	{
 		
-		DB::table('amphur')
-		->where('AMPHUR_ID', $id)
+		DB::table('tbl_import_log')
+		->where('logid', $id)
 		->delete();
 
 		

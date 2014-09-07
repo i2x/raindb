@@ -7,15 +7,12 @@
 @endif
 
 
-<?php 
-print_r($data);
 
-?>	
 
 @if(isset($data['logid']))
-{{ Form::open(array('url' => URL::to('database/amphur/'.$data['logid'].'/update') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_import_log/'.$data['logid'].'/update') )) }}
 @else
-{{ Form::open(array('url' => URL::to('database/amphur/create') )) }}
+{{ Form::open(array('url' => URL::to('database/tbl_import_log/create') )) }}
 @endif
 
 	
