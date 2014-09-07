@@ -36,12 +36,11 @@
 						
 					
 								<tr>
+									<th class="col-md-1">id</th>
 									<th class="col-md-1">email</th>
 									<th class="col-md-1">tokey</th>
 									<th class="col-md-1">created_at</th>
-									
 									<th class="col-md-1"> </th>
-																		<th class="col-md-1"> </th>
 									
 
 								
@@ -103,7 +102,7 @@
 
 		});
 		function Delete(id) {
-			bootbox.confirm("<code> source_id "+id+" </code>will be deleted immediately. Are you sure you want to continue?", 
+			bootbox.confirm("<code> id "+id+" </code>will be deleted immediately. Are you sure you want to continue?", 
 			function(result) {
 				if(result){
 					 $.ajax( 
