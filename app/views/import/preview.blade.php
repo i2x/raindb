@@ -64,7 +64,7 @@
 			<thead>
 	        <tr>
 	        
-	        <th>dt</th>
+	      				  <th>dt</th>
 	        	        <th>meas_date</th>
 	        	        <th>station_id</th>
 	        	        <th>max_temp</th>
@@ -82,7 +82,9 @@
       	     <tbody>
       	     
       	      	<?php 
-								$missingg = ImportController::getMissing();
+								$missingg = DB::table('tbl_missing_measurement')
+								->select('dt','meas_date','station_id','max_temp','min_temp',
+								'rain','avgrh','evapor','mean_temp','source')->get();
 								
 								foreach ($missingg as $row)
 								{
@@ -96,6 +98,9 @@
 									echo '</tr>';
 					
 								}
+      	      	
+      	      	
+      	      	
 								
 					?>
       	     	

@@ -7,7 +7,12 @@
 @endif
 
 <?php 
-if(isset($data))print_r($data);
+
+$test  = xPasswordReminders::select('created_at')->where('id',1)->get();
+foreach ($test as $key => $abc)
+{
+	print_r($abc->created_at);
+}
 ?>
 	
 			

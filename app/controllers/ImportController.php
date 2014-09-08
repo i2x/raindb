@@ -24,6 +24,8 @@ class ImportController extends BaseController
 		
 		//init
 		ImportPreview::truncate();// Remove all of 'tbl_temp_measurement' table for preview
+		DB::table('tbl_missing_measurement')->truncate();
+		
 		
 		// send message if upload success
 		if (!empty(Session::get('success')))
@@ -48,6 +50,7 @@ class ImportController extends BaseController
 	public function postImport()
 	{
 		//check input paramiter or file type input
+		
         $validator = ImportForm::validate(Input::all());
         if($validator->fails())
 		{
@@ -92,7 +95,10 @@ class ImportController extends BaseController
 				 			'meas_day'    => $value['dday'],
 				 	);
 				 	
-				 	array_push($arr, $temp);
+				 	//array_push($arr, $temp);
+				 	$arr[$value['stncode']][] = $temp;
+				 	
+				 	
 			 	}
 			
 			
@@ -100,7 +106,22 @@ class ImportController extends BaseController
 			 	
 			 	try {
 			 		
-			 		DB::table('tbl_temp_measurement')->insert($arr);
+			 	
+			 		//get missing
+			 		foreach ($arr as $station => $value)
+			 		{
+			 			DB::table('tbl_temp_measurement')->insert($value);
+			 			$this->pushMissing($station);
+			 			DB::table('tbl_temp_measurement')->truncate();
+			 						 			
+			 		}
+			 		//insert all data
+			 		foreach ($arr as $station => $value)
+			 		{
+			 			DB::table('tbl_temp_measurement')->insert($value);
+			 			 
+			 			
+			 		}
 			 		
 			 		
 			 	} 
@@ -169,31 +190,38 @@ class ImportController extends BaseController
 	
 	}
 	
-	public static  function getMissing()
+
 	
+	
+	public function pushMissing($station)
 	{
-		$sql = "select calendar_table.dt, 
-				tbl_temp_measurement.meas_date,tbl_temp_measurement.station_id,
-				tbl_temp_measurement.max_temp,
+		
+		$sql = "INSERT INTO tbl_missing_measurement(
+            dt,meas_date, station_id, max_temp, min_temp, rain, avgrh, evapor, 
+            mean_temp,meas_year,meas_month,meas_day, source )
+   
+
+
+			(select calendar_table.dt, 
+				tbl_temp_measurement.meas_date,".$station.",
 				tbl_temp_measurement.max_temp,tbl_temp_measurement.min_temp,tbl_temp_measurement.rain,
 				tbl_temp_measurement.avgrh,tbl_temp_measurement.evapor,tbl_temp_measurement.mean_temp,
+				tbl_temp_measurement.meas_year,tbl_temp_measurement.meas_month,tbl_temp_measurement.meas_day,
 				tbl_temp_measurement.source
 				
 				from calendar_table left join tbl_temp_measurement on
  				tbl_temp_measurement.meas_date = calendar_table.dt
  				where calendar_table.dt >= (select min(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
  				and calendar_table.dt <=   (select max(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
- 				AND (tbl_temp_measurement.rain is NULL OR tbl_temp_measurement.meas_date is NULL)
-				order by dt asc";
-		$data = DB::select(DB::raw($sql));
+				and (tbl_temp_measurement.meas_date is NULL or tbl_temp_measurement.rain is NULL)
+				
+				order by dt asc,station_id)";
 		
-		
-		return   $data;
+		return DB::select(DB::raw($sql));
 		
 		
 		
 	}
-
 	public function checkName($file)
 	{
 	
