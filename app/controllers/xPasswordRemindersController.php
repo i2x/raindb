@@ -94,7 +94,7 @@ public function getUpdate($post)
 	
 			catch (Exception $e) {
 	
-				ion::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
+				Session::put('amphur_message','<div class="alert alert-danger" role="alert">update fail.</div>');
 				return Redirect::to('database/password_reminders/'.$id.'/update');
 			}
 	

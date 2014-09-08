@@ -6,7 +6,9 @@
 @if($ampher_message != NULL){{$ampher_message}}
 @endif
 
-
+<?php 
+if(isset($data))print_r($data);
+?>
 	
 			
 
