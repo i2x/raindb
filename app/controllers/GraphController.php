@@ -52,12 +52,16 @@ class GraphController extends BaseController
 
 	public function graph($input)
 	{
+		
 		$data = HistoricData::select(array('mean_temp','meas_date','rain'))
 		->where('station_id',$input['station'])
 		->where('meas_date','>=',$input['start'])
 		->where('meas_date','<=',$input['end'])
-		->orderBy('meas_date')
-		->get();
+		->orderBy('meas_date');
+		if(isset($input['only_rainy_day']))$data->where('rain','>',0);
+		$data = $data->get();
+		
+		
 			
 		$graph = ' ';
 		$mean_temp = ' ';

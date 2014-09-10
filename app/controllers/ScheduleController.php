@@ -121,8 +121,8 @@ public function actionUpdate()
 	public function _excel($fileName){
 		
 		
-		File::move(base_path('schedule/').$fileName, base_path('upload_files/').$fileName);//Move File Form 'temp' To 'uploadFiles'UploadFiles
-		
+	//	File::move(base_path('schedule/').$fileName, base_path('upload_files/').$fileName);//Move File Form 'temp' To 'uploadFiles'UploadFiles
+		$this->Moveto_upload_files($fileName, '.xls');
 		ImportLog::insert(array(
 			'filename'   => $fileName,
 			'detail'     => 'import by schedule',

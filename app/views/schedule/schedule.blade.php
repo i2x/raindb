@@ -14,7 +14,7 @@
 		</thead>
                 		<tfoot>
 			<tr>
-				<th class="col-md-3">Files waiting to be uploaded</th>				
+				<th class="col-md-3">		</th>				
 			</tr>
 		</tfoot>
                 <tbody>
