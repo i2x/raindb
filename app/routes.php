@@ -96,8 +96,8 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 {
 	// Profile 
 	
-	//Route::get('userProtected', 'StandardUserController@getUserProtected');
-	//Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
+	Route::get('userProtected', 'StandardUserController@getUserProtected');
+	Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
 	
 	
 	

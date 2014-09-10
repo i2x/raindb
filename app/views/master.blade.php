@@ -158,7 +158,7 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 						Admin Panel</a></li>
 
 					@else
-						<li><a href="/profiles/{{Sentry::getUser()->id}}">
+						<li><a href="{{URL::to('/')}}/profiles/{{Sentry::getUser()->id}}">
 						<span class="glyphicon glyphicon-cog"></span> Setting Profile
 						</a></li>
 					@endif
