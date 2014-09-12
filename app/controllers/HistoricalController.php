@@ -40,7 +40,10 @@ class HistoricalController extends BaseController
 				'tbl_rain_measurement.station_id','=','tbl_rain_station.stationid')
 				->leftJoin('tbl_source',
 						'tbl_rain_measurement.source','=','tbl_source.source_id')
-				->select(array(
+				->select(
+						
+	//select 					
+				array(
 				'tbl_rain_measurement.meas_date',
 				'tbl_rain_measurement.station_id',
 				'tbl_rain_station.name',		
