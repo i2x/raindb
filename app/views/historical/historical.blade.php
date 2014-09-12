@@ -231,7 +231,6 @@
 			
 			
 			
-				<th class="col-md-1">meas_id</th>
 				<th class="col-md-3">meas_date</th>
 				<th class="col-md-1">station_id</th>
 				<th class="col-md-4">Name</th>
