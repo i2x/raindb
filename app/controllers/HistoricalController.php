@@ -66,8 +66,8 @@ class HistoricalController extends BaseController
 			if($Input['ampher'] != NULL)$data->where('ampher',$Input['ampher']);
 			if($Input['start'] != NULL)$data->where('meas_date','>=',$Input['start']);
 			if($Input['end'] != NULL)$data->where('meas_date','<=',$Input['end']);
-			if($Input['only_rainy_day'] != NULL)$data->where('rain','>',0);
-				
+			if(isset($Input['only_rainy_day']))$data->where('rain','>',0);
+							
 			
 			
 		
