@@ -40,8 +40,23 @@ class HistoricalController extends BaseController
 				'tbl_rain_measurement.station_id','=','tbl_rain_station.stationid')
 				->leftJoin('tbl_source',
 						'tbl_rain_measurement.source','=','tbl_source.source_id')
-				->select(DB::raw(
-				'to_char(meas_date,\'YYYY-MM-DD\'),
+				->select(array(
+				'tbl_rain_measurement.meas_date',
+				'tbl_rain_measurement.station_id',
+				'tbl_rain_station.name',		
+				'tbl_rain_measurement.max_temp',
+				'tbl_rain_measurement.min_temp',
+				'tbl_rain_measurement.rain',
+				'tbl_rain_measurement.avgrh',
+				'tbl_rain_measurement.evapor',
+				'tbl_rain_measurement.mean_temp',
+				'tbl_source.source_name'
+										
+
+		)
+		
+		/*DB::raw(
+				'to_char(tbl_rain_measurement.meas_date,\'YYYY-MM-DD\'),
 				tbl_rain_measurement.station_id,
 				tbl_rain_station.name,		
 				tbl_rain_measurement.max_temp,
@@ -50,11 +65,12 @@ class HistoricalController extends BaseController
 				tbl_rain_measurement.avgrh,
 				tbl_rain_measurement.evapor,
 				tbl_rain_measurement.mean_temp,
-				tbl_source.source_name'))
-				->orderBy('meas_date');
-		
+				tbl_source.source_name')*/
+		);
+				
+				
 			
-			$Input = Session::get('input');
+		$Input = Session::get('input');
 		
 		
 		
