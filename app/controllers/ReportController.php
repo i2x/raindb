@@ -169,9 +169,7 @@ class ReportController extends Controller
 		
 		
 		$province = $ampher = $station = " ";
-		
-		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
-		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+	
 		
 		if($input['province'] != NULL)$province = "and province  = ".$input['province'];
 		if($input['ampher']   != NULL)$ampher = "and ampher    = ".$input['ampher'];
@@ -209,7 +207,7 @@ class ReportController extends Controller
 			MAX(  rain )   AS _monthmax
 			FROM  tbl_rain_measurement
 			WHERE  station_id IN(".$condition.")
-			".$start." ".$end."	
+			and meas_date BETWEEN  '".$start."' AND '".$end."'
 			GROUP BY date_part('year',meas_date) ,date_part( 'month', meas_date )
 			ORDER by _YEAR,_month ASC
 			 "));
