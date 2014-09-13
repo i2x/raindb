@@ -20,6 +20,11 @@
   	<li><a href="#">Home</a></li>
   	<li class="active">Import</li>
 	</ol>
+	
+	
+	
+	
+
 
 	
 	
@@ -69,6 +74,25 @@
 		 array('class' => 'btn btn-primary btn-sm','id' => 'submit','type'=>'submit'))?>
 </div>
 {{ Form::close() }}
+<br>
+
+
+
+
+
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+  <span class="glyphicon glyphicon-floppy-save"></span>
+   Download 
+  </div>
+  <div class="panel-body">
+   	<li><a href="{{URL::to('import/template')}}">	<i class="glyphicon glyphicon-list-alt"></i> Template </a></li>
+	<li><a href="{{URL::to('import/example')}}">	<i class="glyphicon glyphicon-list-alt"></i> Duplicate </a></li>  </div>
+  </div>
+</div>
+
+
 
 
 

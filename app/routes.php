@@ -117,6 +117,13 @@ Route::group(['before' => 'auth|(standardUser || admin)'], function()
 	Route::post('import/upload', 'ImportController@toDatabase');
 	
 	
+	Route::get('import/template', 'ImportController@getTemplate');
+	
+	Route::get('import/example', 'ImportController@getExample');
+	
+	
+	
+	
 	
 	
 	//Log

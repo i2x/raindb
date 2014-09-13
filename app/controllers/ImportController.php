@@ -321,6 +321,25 @@ class ImportController extends BaseController
 		}
 		
 	}
+	
+	public function getTemplate()
+	{
+		$file= public_path(). "/template.xls";
+		$headers = array(
+				'Content-Type: application/excel',
+		);
+		return Response::download($file, 'template.xls', $headers);
+	}
+	
+	public function getExample()
+	{
+		$file= public_path(). "/example.xls";
+		$headers = array(
+				'Content-Type: application/excel',
+		);
+		return Response::download($file, 'example.xls', $headers);
+	}
+	
 
 
 
