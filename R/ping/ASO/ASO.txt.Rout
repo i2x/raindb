@@ -87,7 +87,7 @@ Read 4824 items
 > yf=(ye-sy+1)*12		# yf is the number of data to fit model
 > ty=ye-sy+1		# number of fitting years
 > yr=c(sy:ye)		# fitting year
-> best_lag=2		# the lag time of forecast (change as needed)
+> best_lag=1		# the lag time of forecast (change as needed)
 > 
 > mth=8			# starting month of season
 > mon=10			# ending month of season
@@ -312,10 +312,6 @@ Warning messages:
   Estimated rdf < 1.0; not estimating variance
 2: In lfproc(x, y, weights = weights, cens = cens, base = base, geth = geth,  :
   Estimated rdf < 1.0; not estimating variance
-3: In lfproc(x, y, weights = weights, cens = cens, base = base, geth = geth,  :
-  Estimated rdf < 1.0; not estimating variance
-4: In lfproc(x, y, weights = weights, cens = cens, base = base, geth = geth,  :
-  Estimated rdf < 1.0; not estimating variance
 > 
 > #---------------------------------------------------------------
 > # Now save the initial values
@@ -375,4 +371,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-   0.70    0.06    0.75 
+   0.71    0.04    0.76 

@@ -109,8 +109,8 @@ class ReportController extends Controller
 	{
 		
 		$province = $ampher = $station = " ";
-		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
-		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+		if($start != NULL) $start = "AND  to_char(meas_date,'YYYY-MM-DD') >=  '".$start."' ";
+		if($end != NULL) $end = "AND  to_char(meas_date,'YYYY-MM-DD') <=  '".$end."' ";
 		
 		if($input['province'] != NULL )$province = "and province  = ".$input['province'];
 		if($input['ampher']   != NULL )$ampher = "and ampher    = ".$input['ampher'];
@@ -175,6 +175,8 @@ class ReportController extends Controller
 		if($input['ampher']   != NULL)$ampher = "and ampher    = ".$input['ampher'];
 		if($input['station'] != NULL )$station = "and stationid = ".$input['station'];
 		
+		if($start != NULL) $start = "AND  to_char(meas_date,'YYYY-MM-DD') >=  '".$start."' ";
+		if($end != NULL) $end = "AND  to_char(meas_date,'YYYY-MM-DD') <=  '".$end."' ";
 		
 		 $condition = "	
 		select tbl_rain_station.stationid as station_id
@@ -207,7 +209,7 @@ class ReportController extends Controller
 			MAX(  rain )   AS _monthmax
 			FROM  tbl_rain_measurement
 			WHERE  station_id IN(".$condition.")
-			and meas_date BETWEEN  '".$start."' AND '".$end."'
+			".$start." ".$end."			
 			GROUP BY date_part('year',meas_date) ,date_part( 'month', meas_date )
 			ORDER by _YEAR,_month ASC
 			 "));
