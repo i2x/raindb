@@ -22,7 +22,26 @@
 	</ol>
 	
 	
-			
+	
+	<?php 
+            
+            		try {
+					$test = Station::where('stationid','=',$oldInput['station'])->get();
+					foreach ($test as $value)
+
+					$graphTitle= '\''.$value->name.'\'';
+					$graphSubtitle = '\'start: '.$oldInput['start'].'   end:'.
+					$oldInput['end'].'\'';
+            			
+            		} catch (Exception $e) {
+					$graphTitle = '\'N/A\'';
+					$graphSubtitle = '\'N/A\'';
+            		}
+            		
+            		
+            		?>	
+	
+	
 		
 
 	{{ Form::open(array('url' => 'graph', 'method' => 'POST')) }}
@@ -206,9 +225,9 @@
 
 
 	<ul class="nav nav-tabs" id="Tab_" >
-	  	<li class="active"><a href="#rain" data-toggle="tab">Rain</a></li>
+	  	<li class="active"><a href="#rain" data-toggle="tab">Rainfall (mm.)</a></li>
 	
-  		<li ><a href="#temp" data-toggle="tab">Temp</a></li>
+  		<li ><a href="#temp" data-toggle="tab">Temperature(°C)</a></li>
 
 		</ul>
 
@@ -229,12 +248,10 @@ $(function () {
                 
         },
         title: {
-            text: 'Rain'
+            text: <?php echo $graphTitle ?>	
         },
         subtitle: {
-            text: document.ontouchstart === undefined ?
-                'Click and drag in the plot area to zoom in' :
-                'Pinch the chart to zoom in'
+            text:<?php echo $graphSubtitle?>	
         },
 
         tooltip: {
@@ -305,12 +322,10 @@ $(function () {
         colors: ['#ff371c', '#0d233a', '#8bbc21', '#910000', '#1aadce', 
                  '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'],
         title: {
-            text: 'Temperature(°C)'
+            text: <?php echo $graphTitle ?>	
         },
         subtitle: {
-            text: document.ontouchstart === undefined ?
-                'Click and drag in the plot area to zoom in' :
-                'Pinch the chart to zoom in'
+            text:<?php echo $graphSubtitle ?>	
         },
 
         tooltip: {
