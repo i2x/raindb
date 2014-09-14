@@ -231,16 +231,16 @@
 			
 			
 			
-				<th class="col-md-3">meas_date</th>
-				<th class="col-md-1">station_id</th>
+				<th class="col-md-3">Date</th>
+				<th class="col-md-1">Station ID</th>
 				<th class="col-md-4">Name</th>
-				<th class="col-md-1">max_temp</th>
-				<th class="col-md-1">min_temp</th>
-				<th class="col-md-1">rain</th>
-				<th class="col-md-1">avgrh</th>
+				<th class="col-md-1">Max Temperature</th>
+				<th class="col-md-1">Min Temperature</th>
+				<th class="col-md-1">Rain(mm)</th>
+				<th class="col-md-1">Average Relative Humidity</th>
 				<th class="col-md-1">evapor</th>
-				<th class="col-md-1">mean_temp</th>
-				<th class="col-md-1">source</th>
+				<th class="col-md-1">Mean Temperature</th>
+				<th class="col-md-1">Source</th>
 				
 				
 				
