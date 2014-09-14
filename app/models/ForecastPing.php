@@ -16,7 +16,7 @@ class ForecastPing extends Forecast {
         
         $year=$baseyear+$addyear; 
         if($season=="NDJ") {$year = $year+1;}
-        $outputfile = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.$basin.DIRECTORY_SEPARATOR.$season.DIRECTORY_SEPARATOR.$season.'_predictors.txt' ; //
+        $outputfile = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.$basin.DIRECTORY_SEPARATOR.$season.DIRECTORY_SEPARATOR.'predictors.txt' ; //
         $cmd =
                 " select meas_year,meas_month, " .
                 " coalesce(meas_value1,-9999) as val1, " .
@@ -65,7 +65,7 @@ class ForecastPing extends Forecast {
         chdir($forecastpath );
         exec('del *.Rdata');
         exec('del *.out');
-        exec('del pingrain.txt');
+        exec('del rain.txt');
         exec('del '.$Input['season'].'_predictors.txt');
         
         
@@ -89,27 +89,24 @@ class ForecastPing extends Forecast {
         parent::Exportrainfall4G("ping",7,$Input['season']);
         
         // 3rd modify parameter according to the web form
-        $script_file =  $Input['season'].'.bat';
-        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; 
         $cmdtxt = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$Input['season'].'.txt'; 
         $file = $cmdtxt.'.org';
         file_put_contents($cmdtxt,str_replace('$$LAGTIME$$',$lagtime,file_get_contents($file)));
-        chmod($cmdtxt,0775);
+        //chmod($cmdtxt,0775);
         
         // 3.5 modify scrip file
-        $org_script_file = $forecastpath.$Input['season'].'.bat';   // original script file    
-        $output_file = $forecastpath.$Input['season'].'.sh'; // unix style
+        $org_script_file = $forecastpath.'R.bat.org';   // original script file    
+        $output_file = $forecastpath.'R.bat'; // unix style
         file_put_contents($output_file,str_replace('$$path$$',$forecastpath,file_get_contents($org_script_file)));
         chmod($output_file,0755);      
         
         // 4th execute command line
-        $script_file =  $Input['season'].'.bat';
-        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
+        $cmd = $output_file;
         $text = shell_exec($cmd);
         
          // 5th execute SPI
         $script_file =  'spi.bat';
-        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; //TODO: cross platform
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; 
         $text = shell_exec($cmd);
         
        
@@ -121,8 +118,7 @@ class ForecastPing extends Forecast {
             $text = "please update NOAA data";
             echo $text;
         } else {
-        $text = file_get_contents($outputfile);
-        //file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata.txt', $text);   
+        $text = file_get_contents($outputfile);        
         $Input['rawdata'] = $text;        
         }
         

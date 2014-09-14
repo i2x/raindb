@@ -13,9 +13,9 @@ class RefRefreshController extends BaseController
 	
 	public function postIndex()
 	{
-               $refSetsModel = new RefSettings();   
+               $refSetsModel = new xTblRefSettings();   
 
-               $allsettings = RefSettings::all();
+               $allsettings = xTblRefSettings::all();
 
                //$refdata = new RefData();                  
                foreach ($allsettings as $row){
@@ -56,7 +56,7 @@ class RefRefreshController extends BaseController
                     {
                         $value = $columns[$i];
                         if($value>-999.999){
-                                $m = new RefData();
+                                $m = new xTblRefData();
                                 $m->refid =$refid;
                                 $m->meas_year=$year;
                                 $m->meas_month=$i;

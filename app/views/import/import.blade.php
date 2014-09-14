@@ -88,7 +88,7 @@
   </div>
   <div class="panel-body">
    	<li><a href="{{URL::to('import/template')}}">	<i class="glyphicon glyphicon-list-alt"></i> Template </a></li>
-	<li><a href="{{URL::to('import/example')}}">	<i class="glyphicon glyphicon-list-alt"></i> Duplicate </a></li>  </div>
+	<li><a href="{{URL::to('import/example')}}">	<i class="glyphicon glyphicon-list-alt"></i> Example </a></li>  </div>
   </div>
 </div>
 

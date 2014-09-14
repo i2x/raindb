@@ -87,7 +87,7 @@ Read 4896 items
 > yf=(ye-sy+1)*12		# yf is the number of data to fit model
 > ty=ye-sy+1		# number of fitting years
 > yr=c(sy:ye)		# fitting year
-> best_lag=8		# the lag time of forecast (change as needed)
+> best_lag=7		# the lag time of forecast (change as needed)
 > 
 > mth=2			# starting month of season
 > mon=4			# ending month of season
@@ -366,4 +366,4 @@ Read 4896 items
 > 
 > proc.time()
    user  system elapsed 
-   0.67    0.06    0.73 
+   0.71    0.00    0.75 

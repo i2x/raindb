@@ -21,13 +21,18 @@ class ForecastController extends BaseController
         	if (Input::get('basin') == 7) {
         		$forcast = new ForecastPing();
                         $output = $forcast->forecast(Input::all());
-        	} else if ($model->select_basin == 9) {
-        		$this->actionRainForecastChi($model);
-        	} else if ($model->select_basin == 10) {
-        
-        		$this->actionRainForecastMun($model);
+        	} else if (Input::get('basin') == 9) {
+        		$forcast = new ForecastChi();
+                        $output = $forcast->forecast(Input::all());
+        	} else if (Input::get('basin') == 10) {
+        		$forcast = new ForecastMun();
+                        $output = $forcast->forecast(Input::all());
+        	} else if (Input::get('basin') == 8) {
+        		$forcast = new ForecastNan();
+                        $output = $forcast->forecast(Input::all());
         	} else {
-        		$this->render('rainforecast', array('model' => $model));
+        		$forcast = new ForecastTapi();
+                        $output = $forcast->forecast(Input::all());
         	}
 
   $nseason = array(
