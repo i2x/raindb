@@ -240,15 +240,30 @@
 				</div>
 		</div>
 
-<script type="text/javascript">
+<script type="text/javascript" charset="UTF-8">
 $(function () {
     $('#container').highcharts({
         chart: {
             zoomType: 'x'
                 
         },
+
+        exporting: {
+
+        	buttons: { 
+            
+                printButton: {
+                    enabled:false
+                }
+
+            }
+        },
+        
         title: {
-            text: <?php echo $graphTitle ?>	
+            text: <?php echo $graphTitle ?>	,
+            		  style: {
+            	            "font-family":'verdana'
+            	    },
         },
         subtitle: {
             text:<?php echo $graphSubtitle?>	
@@ -273,6 +288,9 @@ $(function () {
         legend: {
             enabled: false
         },
+        
+
+        
         plotOptions: {
 
             

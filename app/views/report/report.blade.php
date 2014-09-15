@@ -564,7 +564,9 @@ $(function () {
 $(document).ready(function(){
 
 	$('.input-group.date').datepicker({
-	    format: "yyyy-mm-dd"
+	    format: "yyyy-mm-dd",
+	    autoclose: true
+	    
 	});
 	
 
