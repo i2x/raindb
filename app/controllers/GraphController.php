@@ -56,7 +56,7 @@ class GraphController extends BaseController
 		$data = HistoricData::select(array('mean_temp','meas_date','rain'))
 		->where('station_id',$input['station'])
 		->where('meas_date','>=',$input['start'])
-		->where('meas_date','<=',$input['end'])
+		->where('meas_date','<=',$input['end'].' 23:59:59')
 		->orderBy('meas_date');
 		if(isset($input['only_rainy_day']))$data->where('rain','>',0);
 		$data = $data->get();

@@ -110,7 +110,7 @@ class ReportController extends Controller
 		
 		$province = $ampher = $station = " ";
 		if($start != NULL) $start = "AND  to_char(meas_date,'YYYY-MM-DD') >=  '".$start."' ";
-		if($end != NULL) $end = "AND  to_char(meas_date,'YYYY-MM-DD') <=  '".$end."' ";
+		if($end != NULL) $end = "AND  to_char(meas_date,'YYYY-MM-DD') <=  '".$end." 23:59:59' ";
 		
 		if($input['province'] != NULL )$province = "and province  = ".$input['province'];
 		if($input['ampher']   != NULL )$ampher = "and ampher    = ".$input['ampher'];
@@ -176,7 +176,7 @@ class ReportController extends Controller
 		if($input['station'] != NULL )$station = "and stationid = ".$input['station'];
 		
 		if($start != NULL) $start = "AND  to_char(meas_date,'YYYY-MM-DD') >=  '".$start."' ";
-		if($end != NULL) $end = "AND  to_char(meas_date,'YYYY-MM-DD') <=  '".$end."' ";
+		if($end != NULL) $end = "AND  to_char(meas_date,'YYYY-MM-DD') <=  '".$end." 23:59:59'  ";
 		
 		 $condition = "	
 		select tbl_rain_station.stationid as station_id
@@ -271,7 +271,7 @@ class ReportController extends Controller
 		$rain = " ";
 		if($station == NULL) $station = 327016;
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
-		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+		if($end != NULL) $end = "AND  meas_date <=  '".$end." 23:59:59'  ";
 		if($only_rainy_day != NULL)
 		{
 			$rain = "and rain > 0";
@@ -331,7 +331,7 @@ class ReportController extends Controller
 		$rain = " ";
 		if($station == NULL) $station = 327016;
 		if($start != NULL) $start = "AND  meas_date >=  '".$start."' ";
-		if($end != NULL) $end = "AND  meas_date <=  '".$end."' ";
+		if($end != NULL) $end = "AND  meas_date <=  '".$end." 23:59:59'  ";
 		
 		if($only_rainy_day != NULL)
 		{
