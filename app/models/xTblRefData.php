@@ -9,7 +9,7 @@ class xTblRefData extends Eloquent{
 	 * @var string
 	 */
 	protected $table = 'tbl_ref_data';
-	
+	//protected $timestamps = false;
 	
 	public static function  validate($data)
 	{

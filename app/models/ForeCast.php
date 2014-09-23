@@ -3,6 +3,24 @@
 
 class Forecast {
 
+        public function season2month($season) {
+        $s2m = array(
+            "JFM" => 1,
+            "FMA" => 2,
+            "MAM" => 3,
+            "AMJ" => 4,
+            "MJJ" => 5,
+            "JJA" => 6,
+            "JAS" => 7,
+            "ASO" => 8,
+            "SON" => 9,
+            "OND" => 10,
+            "NDJ" => 11,
+            "DJF" => 12
+        );
+        return $s2m[$season];
+    }
+
     // query raw reference data and put on another table, ready for forecasting
     public function refRawDataToForecast($basin,$basin_id,$season) {
         $cmd = "SELECT * FROM tbl_ref_settings_forecast_season_basin where basin_id = ".$basin_id." and season = '".$season."' order by columnorder";

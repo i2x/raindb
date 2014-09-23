@@ -11,7 +11,7 @@ class ForecastMun extends Forecast {
         update tbl_rainsum set rain = ccc.rx 
 from (
 select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx   	
-    		 from (select min(ye) as yee, min(mo) as moo from calendar_table where calendar_table.ye >= 1948 and calendar_table.ye <=2007 
+    		 from (select min(ye) as yee, min(mo) as moo from calendar_table where calendar_table.ye >= 1948  
              group by ye,mo ) c
     		 left join 
              (
@@ -60,23 +60,6 @@ select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx
        file_put_contents($outputfile,$textoutput);
     }
 
-    public function season2month($season) {
-        $s2m = array(
-            "JFM" => 1,
-            "FMA" => 2,
-            "MAM" => 3,
-            "AMJ" => 4,
-            "MJJ" => 5,
-            "JJA" => 6,
-            "JAS" => 7,
-            "ASO" => 8,
-            "SON" => 9,
-            "OND" => 10,
-            "NDJ" => 11,
-            "DJF" => 12
-        );
-        return $s2m[$season];
-    }
 
     public function forecast($Input) {
         $forecastpath = base_path().DIRECTORY_SEPARATOR . 'R' . DIRECTORY_SEPARATOR.'mun'. DIRECTORY_SEPARATOR.$Input['season']. DIRECTORY_SEPARATOR;
@@ -90,7 +73,7 @@ select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx
         $add_year = 0;
         $curmonth = $Input['basemonth']; 
         $lagtime = $this->season2month($Input['season']) - $curmonth;
-        if ($lagtime < 0) {
+        if ($lagtime <= 0) {
             $lagtime = $lagtime + 12;
             $add_year = 1; // forecast next year
         }
@@ -125,7 +108,7 @@ select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx
         
          // 5th execute SPI
         $script_file =  'spi.bat';
-        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; 
+        $cmd = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'mun'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$script_file; 
         $text = shell_exec($cmd);
         
        
@@ -134,8 +117,9 @@ select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx
         // read output and display
         $outputfile = $Input['season'].$lagtime.'-mForecast.out';
         if(!file_exists($outputfile)){
-            $text = "please update NOAA data";
-            echo $text;
+            $text = "Error occured, please check parameters and data";
+            $Input['errormessage'] = $text;
+            return $Input;
         } else {
         $text = file_get_contents($outputfile);        
         $Input['rawdata'] = $text;        

@@ -133,6 +133,13 @@
         {{ Form::close() }}
 
     </div>
+    
+@if (isset($errormessage) )
+<div>
+{{$errormessage}}
+</div>
+@endif
+
 @if (isset($oldInput) && isset($rawdata))
     <div>
         Forecast Info:<br/>

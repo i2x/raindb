@@ -19,7 +19,7 @@ class RefRefreshController extends BaseController
 
                //$refdata = new RefData();                  
                foreach ($allsettings as $row){
-                 //  echo $row->idtbl_ref_settings."<br/>";
+                 //Log::info($row->idtbl_ref_settings);
                    $datapage = file_get_contents($row->source_url);
                    $this->import($datapage,$row->idtbl_ref_settings);
                }
@@ -45,6 +45,7 @@ class RefRefreshController extends BaseController
             foreach($line_data as $row){
                
                 if(strlen($row) > 100 ){
+                        $rawrow = $row;
                     $row = str_replace('    ', ' ', $row);
                     $row = str_replace('   ', ' ', $row);
                     $row = str_replace('  ', ' ', $row);
@@ -52,6 +53,17 @@ class RefRefreshController extends BaseController
                     //var_dump($columns);
                     
                     $year=$columns[0];
+                        $rr = new xTblRefDataRaw();
+                                $rr->refid =$refid;
+                                $rr->ye=$year;
+                                $rr->rawtext = $rawrow;
+                                try{
+                                    $rr->save();
+                                }
+                                catch (\Exception $e){
+                                    //Log::info($e->getMessage());
+                                }                    
+
                     for($i=1;$i<13;$i++)
                     {
                         $value = $columns[$i];
@@ -65,7 +77,7 @@ class RefRefreshController extends BaseController
                                     $m->save();
                                 }
                                 catch (\Exception $e){
-                                    //
+                                    //Log::info($e->getMessage());
                                 }
                                 
                         }

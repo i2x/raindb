@@ -56,7 +56,9 @@ class ForecastController extends BaseController
      $targetyear = Input::get('baseyear')+1;
  }else {
      $targetyear = Input::get('baseyear');
- } 
+ }
+ 
+ if(isset($output['rawdata'])){
             
 	return View::make('forecast.index')
                 ->with('rawdata',$output['rawdata'])
@@ -68,6 +70,10 @@ class ForecastController extends BaseController
                 ->with('p20',$output['p20'])
                 ->with('dataISP',$output['dataISP'])
 	->with('oldInput', Input::all());
+ }
+ else{
+     return View::make('forecast.index')->with('errormessage',$output['errormessage']);
+ }
 	}
 
 
