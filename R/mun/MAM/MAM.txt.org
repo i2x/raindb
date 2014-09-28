@@ -22,7 +22,7 @@ mon_names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","D
 mon_names=c("MAM")
 G_rain=c("Averg50")
 n_rain=length(G_rain)
-rain_file="MunRain"
+rain_file="rain"
 rain_name=paste(rain_file,".txt",sep="")
 rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=(n_rain+2))
 n_rr=nrow(rf)
@@ -36,7 +36,7 @@ yfVol_obs=rf[,(no_rain+2)]
 pred_index=c("SAT","SLP","SXW","SYW","RAIN")	# predictors of seasonal rainfall
 unit=c("C","mb","m/s","m/s","mm")
 n_pred=length(pred_index)
-pred_fname=paste(mon_names,"_predictors.txt",sep="")
+pred_fname=paste("predictors.txt",sep="")
 pred=matrix(scan(pred_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
 n_rp=nrow(pred)
 n_cp=ncol(pred)
@@ -46,7 +46,7 @@ ye_pred=pred[n_rp,1]
 fpreds1=pred[,3:n_cp]
 
 # LOAD GCM DATA
-gcm_fname=paste(mon_names,"_predictors.txt",sep="")
+gcm_fname=paste("predictors.txt",sep="")
 gcm_pred=matrix(scan(gcm_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
 gcm_rp=nrow(gcm_pred)
 gcm_cp=ncol(gcm_pred)
@@ -57,7 +57,7 @@ gcm_fpreds1=gcm_pred[,3:gcm_cp]
 
 # INITIAL VALUES OF FITTING
 const=sy_rain
-sy=1975			# sy is the starting year of fitting (change as needed)
+sy=1980			# sy is the starting year of fitting (change as needed)
 ye=ye_rain		# ye is the ending year of fitting (change as needed)
 SS=(sy-const)*12+1	# starting point of fitting
 se=(ye-const+1)*12	# ending point of fitting
@@ -297,7 +297,7 @@ save(mon_names,pred_index,G_rain,no_rain,best_lag,n_simul,sfy,yef,file=f_names)
 #	PROBABILITY OF THE ANOMALOUS EVENTS
 #---------------------------------------------------------------
 # LOAD INITIAL SET UP OF K-NN MODEL
-load("InitialValue_MJJ.Rdata")
+load("InitialValue_MAM.Rdata")
 
 # PDF PLOT
 #library(sm)		# Load the package "sm"

@@ -1,0 +1,159 @@
+#setwd("MODEL (12)")
+month=12
+########  Rainfall############
+XX=read.table("IRF.txt")
+S=which( XX[, 1]>=1976, arr.ind=T )
+Start=min(S)
+End=nrow(XX)
+XX=XX[Start:End,2:13]
+available=nrow(XX)*ncol(XX)-abs(round(sum(XX[XX<=-999])/1000))
+data_last_year=available%%12 ## remain months
+cr_data=(12+data_last_year-2)%%12
+lagtime=(12+month-cr_data-3)%%12
+if (lagtime==0) {lagtime=12}
+write.table(lagtime, file=paste("st_lag.txt", sep=""),col.names = FALSE, row.names = FALSE)
+if (data_last_year<2) {data_use=(available%/%12)-1} else {data_use=available%/%12}  ## n year input
+#### 3 monthly (average)
+A=NULL
+for (i in 1:(data_use*12)) {
+UU=t(XX)
+A[i]=(UU[i]+UU[i+1]+UU[i+2]) ### for rainfall
+}
+###create input file###
+Var=NULL
+V=NULL
+for (j in 3:(data_use)) {
+	for (k in 1:27) {
+	p=(j*12)-27+k
+	V[k]=A[p]
+	}
+Var=rbind(Var,V)
+V=NULL
+}
+write.table(Var, file=paste("RAINFALL.txt", sep=""),col.names = FALSE, row.names = FALSE)
+data_sim_RF=(UU[available]+UU[available-1]+UU[available-2])
+available_RF=available
+iforecast=NULL
+####################1###############
+XX=read.table("IT1.txt")
+S=which( XX[, 1]>=1975, arr.ind=T )
+Start=min(S)
+End=nrow(XX)
+XX=XX[Start:End,2:13 ]
+available=nrow(XX)*ncol(XX)-abs(round(sum(XX[XX<=-999])/1000))
+data_last_year=available%%12 ## remain months
+if (data_last_year<2) {data_use=(available%/%12)-1} else {data_use=available%/%12}  ## n year input
+#### 3 monthly (average)
+A=NULL
+for (i in 1:(data_use*12)) {
+UU=t(XX)
+A[i]=(UU[i]+UU[i+1]+UU[i+2])/3
+### A[i]=(UU[i]+UU[i+1]+UU[i+2])/3 ### for rainfall
+}
+###create input file###
+Var=NULL
+V=NULL
+for (j in 3:(data_use)) {
+	for (k in 1:27) {
+	p=(j*12)-27+k
+	V[k]=A[p]
+	}
+Var=rbind(Var,V)
+V=NULL
+}
+data_sim=(UU[available_RF]+UU[available_RF-1]+UU[available_RF-2])/3
+iforecast=cbind(iforecast,data_sim)
+write.table(Var, file=paste("T1.txt", sep=""),col.names = FALSE, row.names = FALSE)
+####################2###############
+XX=read.table("IU1.txt")
+S=which( XX[, 1]>=1975, arr.ind=T )
+Start=min(S)
+End=nrow(XX)
+XX=XX[Start:End,2:13 ]
+available=nrow(XX)*ncol(XX)-abs(round(sum(XX[XX<=-999])/1000))
+data_last_year=available%%12 ## remain months
+if (data_last_year<2) {data_use=(available%/%12)-1} else {data_use=available%/%12}  ## n year input
+#### 3 monthly (average)
+A=NULL
+for (i in 1:(data_use*12)) {
+UU=t(XX)
+A[i]=(UU[i]+UU[i+1]+UU[i+2])/3
+### A[i]=(UU[i]+UU[i+1]+UU[i+2])/3 ### for rainfall
+}
+###create input file###
+Var=NULL
+V=NULL
+for (j in 3:(data_use)) {
+	for (k in 1:27) {
+	p=(j*12)-27+k
+	V[k]=A[p]
+	}
+Var=rbind(Var,V)
+V=NULL
+}
+data_sim=(UU[available_RF]+UU[available_RF-1]+UU[available_RF-2])/3
+iforecast=cbind(iforecast,data_sim)
+write.table(Var, file=paste("U1.txt", sep=""),col.names = FALSE, row.names = FALSE)
+####################3###############
+XX=read.table("IU2.txt")
+S=which( XX[, 1]>=1975, arr.ind=T )
+Start=min(S)
+End=nrow(XX)
+XX=XX[Start:End,2:13 ]
+available=nrow(XX)*ncol(XX)-abs(round(sum(XX[XX<=-999])/1000))
+data_last_year=available%%12 ## remain months
+if (data_last_year<2) {data_use=(available%/%12)-1} else {data_use=available%/%12}  ## n year input
+#### 3 monthly (average)
+A=NULL
+for (i in 1:(data_use*12)) {
+UU=t(XX)
+A[i]=(UU[i]+UU[i+1]+UU[i+2])/3
+### A[i]=(UU[i]+UU[i+1]+UU[i+2])/3 ### for rainfall
+}
+###create input file###
+Var=NULL
+V=NULL
+for (j in 3:(data_use)) {
+	for (k in 1:27) {
+	p=(j*12)-27+k
+	V[k]=A[p]
+	}
+Var=rbind(Var,V)
+V=NULL
+}
+data_sim=(UU[available_RF]+UU[available_RF-1]+UU[available_RF-2])/3
+iforecast=cbind(iforecast,data_sim)
+write.table(Var, file=paste("U2.txt", sep=""),col.names = FALSE, row.names = FALSE)
+####################4###############
+XX=read.table("IV3.txt")
+S=which( XX[, 1]>=1975, arr.ind=T )
+Start=min(S)
+End=nrow(XX)
+XX=XX[Start:End,2:13 ]
+available=nrow(XX)*ncol(XX)-abs(round(sum(XX[XX<=-999])/1000))
+data_last_year=available%%12 ## remain months
+if (data_last_year<2) {data_use=(available%/%12)-1} else {data_use=available%/%12}  ## n year input
+#### 3 monthly (average)
+A=NULL
+for (i in 1:(data_use*12)) {
+UU=t(XX)
+A[i]=(UU[i]+UU[i+1]+UU[i+2])/3
+### A[i]=(UU[i]+UU[i+1]+UU[i+2])/3 ### for rainfall
+}
+###create input file###
+Var=NULL
+V=NULL
+for (j in 3:(data_use)) {
+	for (k in 1:27) {
+	p=(j*12)-27+k
+	V[k]=A[p]
+	}
+Var=rbind(Var,V)
+V=NULL
+}
+data_sim=(UU[available_RF]+UU[available_RF-1]+UU[available_RF-2])/3
+iforecast=cbind(iforecast,data_sim)
+write.table(Var, file=paste("V3.txt", sep=""),col.names = FALSE, row.names = FALSE)
+#############collect iforecast#############################
+iforecast=cbind(iforecast,data_sim_RF)
+write.table(iforecast, file=paste("iforecast.txt", sep=""),col.names = FALSE, row.names = FALSE)

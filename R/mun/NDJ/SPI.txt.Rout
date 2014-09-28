@@ -1,0 +1,66 @@
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> rain_file="rain"
+> rain_name=paste(rain_file,".txt",sep="")
+> rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=3)
+Read 2304 items
+> n_rr=nrow(rf)
+> sy_rain=rf[1,1]
+> ye_rain=rf[n_rr,1]
+> n.yr=ye_rain-sy_rain+1
+> year=sy_rain:ye_rain
+> mth=2			# starting month of season
+> mon=10			# ending month of season
+> 
+> ss.rain=matrix(nrow=n.yr,ncol=1)
+> for(i in 1:(n.yr-1)){
++ r.y1=matrix(rf[][rf[,1]==year[i]],ncol=3)
++ r.m1=matrix(r.y1[][r.y1[,2]>mon],ncol=3)
++ r.y2=matrix(rf[][rf[,1]==year[(i+1)]],ncol=3)
++ r.m2=matrix(r.y2[][r.y2[,2]<mth],ncol=3)
++ ss.rain[i,1]=sum(r.m1[,3],na.rm=FALSE)+sum(r.m2[,3],na.rm=FALSE)
++ }
+> 
+> load("InitialValue_NDJ.Rdata")
+> 
+> file_names=paste(mon_names,best_lag,"-mForecast.Rdata",sep="")
+> load(file_names)
+> fc.r=ensemblef_1[,2:(n_simul+1)]
+> SPI.fc=matrix(nrow=n_simul,ncol=1)
+> 
+> for (j in 1:n_simul){
++ data=c(ss.rain,fc.r[j])
++ fit.cdf <- ecdf(data)
++ cdfs <- sapply(data,fit.cdf)
++ SPI <- qnorm(cdfs)
++ if(SPI[length(SPI)]=="Inf"){SPI.fc[j,1]=3}	# ***** delete the line "SPI.fc[j,1]=SPI[length(SPI)]"
++ if(SPI[length(SPI)]=="-Inf"){SPI.fc[j,1]=-3}	# ***** and use these 3 lines
++ if(SPI[length(SPI)]!="Inf" && SPI[length(SPI)]!="-Inf"){SPI.fc[j,1]=SPI[length(SPI)]}	# *****
++ SPI.fc=round(SPI.fc,digits=2)
++ }
+> 
+> file_names1=paste(mon_names,best_lag,"-mSPI.out",sep="")
+> write(t(SPI.fc),file=file_names1,ncol=ncol(SPI.fc),append=FALSE,sep="\t")
+> 
+> proc.time()
+   user  system elapsed 
+  0.543   0.023   0.600 

@@ -22,7 +22,7 @@ mon_names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","D
 mon_names=c("MJJ")
 G_rain=c("Averg50")
 n_rain=length(G_rain)
-rain_file="PingRain"
+rain_file="rain"
 rain_name=paste(rain_file,".txt",sep="")
 rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=(n_rain+2))
 n_rr=nrow(rf)
@@ -36,7 +36,7 @@ yfVol_obs=rf[,(no_rain+2)]
 pred_index=c("SAT","SLP","SXW","SYW")	# predictors of seasonal rainfall
 unit=c("C","mb","m/s","m/s")
 n_pred=length(pred_index)
-pred_fname=paste(mon_names,"_predictors.txt",sep="")
+pred_fname=paste("predictors.txt",sep="")
 pred=matrix(scan(pred_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
 n_rp=nrow(pred)
 n_cp=ncol(pred)
@@ -46,7 +46,7 @@ ye_pred=pred[n_rp,1]
 fpreds1=pred[,3:n_cp]
 
 # LOAD GCM DATA
-gcm_fname=paste(mon_names,"_predictors.txt",sep="")
+gcm_fname=paste("predictors.txt",sep="")
 gcm_pred=matrix(scan(gcm_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
 gcm_rp=nrow(gcm_pred)
 gcm_cp=ncol(gcm_pred)
@@ -64,7 +64,7 @@ se=(ye-const+1)*12	# ending point of fitting
 yf=(ye-sy+1)*12		# yf is the number of data to fit model
 ty=ye-sy+1		# number of fitting years
 yr=c(sy:ye)		# fitting year
-best_lag=10		# the lag time of forecast (change as needed)
+best_lag=4		# the lag time of forecast (change as needed)
 
 mth=5			# starting month of season
 mon=7			# ending month of season

@@ -1,4 +1,4 @@
-rain_file="PingRain"
+rain_file="rain"
 rain_name=paste(rain_file,".txt",sep="")
 rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=3)
 n_rr=nrow(rf)

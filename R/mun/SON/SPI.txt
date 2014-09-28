@@ -1,4 +1,4 @@
-rain_file="PingRain"
+rain_file="MunRain"
 rain_name=paste(rain_file,".txt",sep="")
 rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=3)
 n_rr=nrow(rf)
@@ -6,8 +6,8 @@ sy_rain=rf[1,1]
 ye_rain=rf[n_rr,1]
 n.yr=ye_rain-sy_rain+1
 year=sy_rain:ye_rain
-mth=5			# starting month of season
-mon=7			# ending month of season
+mth=9			# starting month of season
+mon=11			# ending month of season
 
 ss.rain=matrix(nrow=n.yr,ncol=1)
 for(i in 1:n.yr){
@@ -29,7 +29,9 @@ data=c(ss.rain,fc.r[j])
 fit.cdf <- ecdf(data)
 cdfs <- sapply(data,fit.cdf)
 SPI <- qnorm(cdfs)
-SPI.fc[j,1]=SPI[length(SPI)]
+if(SPI[length(SPI)]=="Inf"){SPI.fc[j,1]=3}	# ***** delete the line "SPI.fc[j,1]=SPI[length(SPI)]"
+if(SPI[length(SPI)]=="-Inf"){SPI.fc[j,1]=-3}	# ***** and use these 3 lines
+if(SPI[length(SPI)]!="Inf" && SPI[length(SPI)]!="-Inf"){SPI.fc[j,1]=SPI[length(SPI)]}	# *****
 SPI.fc=round(SPI.fc,digits=2)
 }
 

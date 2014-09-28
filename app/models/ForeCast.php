@@ -69,11 +69,6 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
        
     public function Exportrainfall4G($select_basin,$basin_id,$select_season)
     {    	    	     
-        //TODO basin ID 
-    //$outputfile = Yii::app()->basePath . DIRECTORY_SEPARATOR . 'R'. DIRECTORY_SEPARATOR . 'Ping' . DIRECTORY_SEPARATOR .'rainfall4G.txt';
-        $outputfile = base_path(). DIRECTORY_SEPARATOR ."R". DIRECTORY_SEPARATOR .$select_basin. DIRECTORY_SEPARATOR .$select_season. DIRECTORY_SEPARATOR ."rain.txt" ; //
-    
-    if (file_exists($outputfile)){unlink($outputfile);};
     //meas_year >= 1948 and meas_year <=2007 and
     $cmd = " select  c.yee, c.moo, coalesce(a.r1,-9999) as rx   	
     		 from (select min(ye) as yee, min(mo) as moo from calendar_table where calendar_table.ye >= 1948 and calendar_table.ye <=".$this->getlatestyear($basin_id)." 
@@ -92,6 +87,9 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
 
      $results = DB::select(DB::raw($cmd));
      $textoutput = "";
+    $outputfile = base_path(). DIRECTORY_SEPARATOR ."R". DIRECTORY_SEPARATOR .$select_basin. DIRECTORY_SEPARATOR .$select_season. DIRECTORY_SEPARATOR ."rain.txt" ; //
+    
+    if (file_exists($outputfile)){unlink($outputfile);};
 
        foreach($results as $result){
            $textoutput = $textoutput. $result->yee . "\t" . $result->moo . "\t" .

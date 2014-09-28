@@ -1,0 +1,49 @@
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> rain_file="rain"
+> rain_name=paste(rain_file,".txt",sep="")
+> rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=3)
+Read 2304 items
+> n_rr=nrow(rf)
+> sy_rain=rf[1,1]
+> ye_rain=rf[n_rr,1]
+> n.yr=ye_rain-sy_rain+1
+> year=sy_rain:ye_rain
+> mth=6			# starting month of season
+> mon=8			# ending month of season
+> 
+> ss.rain=matrix(nrow=n.yr,ncol=1)
+> for(i in 1:n.yr){
++ r.y=matrix(rf[][rf[,1]==year[i]],ncol=3)
++ r.m=matrix(r.y[][r.y[,2]>(mth-1)],ncol=3)
++ r.m=matrix(r.m[][r.m[,2]<(mon+1)],ncol=3)
++ ss.rain[i,1]=sum(r.m[,3],na.rm=FALSE)
++ }
+> 
+> load("InitialValue_JJA.Rdata")
+> 
+> file_names=paste(mon_names,best_lag,"-mForecast.Rdata",sep="")
+> load(file_names)
+Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
+Calls: load -> readChar
+In addition: Warning message:
+In readChar(con, 5L, useBytes = TRUE) :
+  cannot open compressed file 'JJA5-mForecast.Rdata', probable reason 'No such file or directory'
+Execution halted
