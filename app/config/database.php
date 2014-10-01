@@ -68,7 +68,7 @@ return array(
 			//'host'     => '192.168.159.128',
 			'host'     => 'localhost',
 			'database' => 'rain',
-			'username' => 'postgres',
+			'username' => 'root',
 			//'password' => 'phisan243',
 			'password' => '9066',
 				
