@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'basicAuth\\' => array($baseDir . '/app/basicAuth'),
     'Zizaco\\Entrust\\' => array($vendorDir . '/zizaco/entrust/src/Entrust'),
+    'TijsVerkoyen\\CssToInlineStyles\\' => array($vendorDir . '/tijsverkoyen/css-to-inline-styles/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Barryvdh\\LaravelIdeHelper\\' => array($vendorDir . '/barryvdh/laravel-ide-helper/src'),
 );

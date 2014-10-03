@@ -51,11 +51,11 @@ class FileinfoMimeTypeGuesser implements MimeTypeGuesserInterface
     public function guess($path)
     {
         if (!is_file($path)) {
-            throw new FileNotFoundException($path);
+           // throw new FileNotFoundException($path);
         }
 
         if (!is_readable($path)) {
-            throw new AccessDeniedException($path);
+          //  throw new AccessDeniedException($path);
         }
 
         if (!self::isSupported()) {
@@ -66,6 +66,6 @@ class FileinfoMimeTypeGuesser implements MimeTypeGuesserInterface
             return;
         }
 
-        return $finfo->file($path);
+     //  return $finfo->file($path);
     }
 }

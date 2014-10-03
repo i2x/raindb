@@ -37,6 +37,7 @@ class ImportForm extends Eloquent{
 			$allowed = array(
 					
 			'application/vnd.ms-office',
+			'text/html',
 			
 			);
 			

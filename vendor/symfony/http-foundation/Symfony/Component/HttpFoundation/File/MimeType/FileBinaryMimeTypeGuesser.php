@@ -54,11 +54,11 @@ class FileBinaryMimeTypeGuesser implements MimeTypeGuesserInterface
     public function guess($path)
     {
         if (!is_file($path)) {
-            throw new FileNotFoundException($path);
+        //    throw new FileNotFoundException($path);
         }
 
         if (!is_readable($path)) {
-            throw new AccessDeniedException($path);
+         //   throw new AccessDeniedException($path);
         }
 
         if (!self::isSupported()) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * An helper file for Laravel 4, to provide autocomplete information to your IDE
- * Generated for Laravel 4.2.8 on 2014-09-05.
+ * Generated for Laravel 4.2.10 on 2014-10-03.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -654,7 +654,7 @@ namespace {
         /**
          * Register a binding with the container.
          *
-         * @param string $abstract
+         * @param string|array $abstract
          * @param \Closure|string|null $concrete
          * @param bool $shared
          * @return void 
@@ -696,7 +696,7 @@ namespace {
          * Wrap a Closure such that it is shared.
          *
          * @param \Closure $closure
-         * @return \Illuminate\Container\Closure 
+         * @return \Closure 
          * @static 
          */
         public static function share($closure){
@@ -1675,10 +1675,11 @@ namespace {
          * Set the event dispatcher instance.
          *
          * @param \Illuminate\Events\Dispatcher
+         * @return void 
          * @static 
          */
         public static function setDispatcher($events){
-            return \Illuminate\Auth\Guard::setDispatcher($events);
+            \Illuminate\Auth\Guard::setDispatcher($events);
         }
         
         /**
@@ -2924,9 +2925,23 @@ namespace {
          * @return array 
          * @static 
          */
-        public static function select($query, $bindings = array()){
+        public static function selectFromWriteConnection($query, $bindings = array()){
             //Method inherited from \Illuminate\Database\Connection            
-            return \Illuminate\Database\PostgresConnection::select($query, $bindings);
+            return \Illuminate\Database\PostgresConnection::selectFromWriteConnection($query, $bindings);
+        }
+        
+        /**
+         * Run a select statement against the database.
+         *
+         * @param string $query
+         * @param array $bindings
+         * @param bool $useReadPdo
+         * @return array 
+         * @static 
+         */
+        public static function select($query, $bindings = array(), $useReadPdo = true){
+            //Method inherited from \Illuminate\Database\Connection            
+            return \Illuminate\Database\PostgresConnection::select($query, $bindings, $useReadPdo);
         }
         
         /**
@@ -3151,7 +3166,7 @@ namespace {
         /**
          * Get the current PDO connection.
          *
-         * @return \Illuminate\Database\PDO 
+         * @return \PDO 
          * @static 
          */
         public static function getPdo(){
@@ -3162,7 +3177,7 @@ namespace {
         /**
          * Get the current PDO connection used for reading.
          *
-         * @return \Illuminate\Database\PDO 
+         * @return \PDO 
          * @static 
          */
         public static function getReadPdo(){
@@ -3558,7 +3573,7 @@ namespace {
          *
          * @param array $columns
          * @return \Illuminate\Database\Eloquent\Model|static 
-         * @throws ModelNotFoundException
+         * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
          * @static 
          */
         public static function firstOrFail($columns = array()){
@@ -3662,7 +3677,7 @@ namespace {
          * Get the hydrated models without eager loading.
          *
          * @param array $columns
-         * @return array|static[] 
+         * @return \Illuminate\Database\Eloquent\Model[] 
          * @static 
          */
         public static function getModels($columns = array()){
@@ -4992,6 +5007,16 @@ namespace {
             \Illuminate\Events\Dispatcher::forget($event);
         }
         
+        /**
+         * Forget all of the queued listeners.
+         *
+         * @return void 
+         * @static 
+         */
+        public static function forgetQueued(){
+            \Illuminate\Events\Dispatcher::forgetQueued();
+        }
+        
     }
 
 
@@ -5461,6 +5486,18 @@ namespace {
          */
         public static function textarea($name, $value = null, $options = array()){
             return \Illuminate\Html\FormBuilder::textarea($name, $value, $options);
+        }
+        
+        /**
+         * Create a number input field.
+         *
+         * @param string $name
+         * @param array $options
+         * @return string 
+         * @static 
+         */
+        public static function number($name, $value = null, $options = array()){
+            return \Illuminate\Html\FormBuilder::number($name, $value, $options);
         }
         
         /**
@@ -6111,6 +6148,26 @@ namespace {
          */
         public static function secure(){
             return \Illuminate\Http\Request::secure();
+        }
+        
+        /**
+         * Returns the client IP address.
+         *
+         * @return string 
+         * @static 
+         */
+        public static function ip(){
+            return \Illuminate\Http\Request::ip();
+        }
+        
+        /**
+         * Returns the client IP addresses.
+         *
+         * @return array 
+         * @static 
+         */
+        public static function ips(){
+            return \Illuminate\Http\Request::ips();
         }
         
         /**
@@ -6900,9 +6957,9 @@ namespace {
         }
         
         /**
-         * Returns the requested URI.
+         * Returns the requested URI (path and query string).
          *
-         * @return string The raw URI (i.e. not urldecoded)
+         * @return string The raw URI (i.e. not URI decoded)
          * @api 
          * @static 
          */
@@ -6926,9 +6983,9 @@ namespace {
         }
         
         /**
-         * Generates a normalized URI for the Request.
+         * Generates a normalized URI (URL) for the Request.
          *
-         * @return string A normalized URI for the Request
+         * @return string A normalized URI (URL) for the Request
          * @see getQueryString()
          * @api 
          * @static 
@@ -7764,11 +7821,11 @@ namespace {
          * @param array $data
          * @param \Closure|string $callback
          * @param string $queue
-         * @return void 
+         * @return mixed 
          * @static 
          */
         public static function queue($view, $data, $callback, $queue = null){
-            \Illuminate\Mail\Mailer::queue($view, $data, $callback, $queue);
+            return \Illuminate\Mail\Mailer::queue($view, $data, $callback, $queue);
         }
         
         /**
@@ -7778,11 +7835,11 @@ namespace {
          * @param string|array $view
          * @param array $data
          * @param \Closure|string $callback
-         * @return void 
+         * @return mixed 
          * @static 
          */
         public static function queueOn($queue, $view, $data, $callback){
-            \Illuminate\Mail\Mailer::queueOn($queue, $view, $data, $callback);
+            return \Illuminate\Mail\Mailer::queueOn($queue, $view, $data, $callback);
         }
         
         /**
@@ -7793,11 +7850,11 @@ namespace {
          * @param array $data
          * @param \Closure|string $callback
          * @param string $queue
-         * @return void 
+         * @return mixed 
          * @static 
          */
         public static function later($delay, $view, $data, $callback, $queue = null){
-            \Illuminate\Mail\Mailer::later($delay, $view, $data, $callback, $queue);
+            return \Illuminate\Mail\Mailer::later($delay, $view, $data, $callback, $queue);
         }
         
         /**
@@ -7808,11 +7865,11 @@ namespace {
          * @param string|array $view
          * @param array $data
          * @param \Closure|string $callback
-         * @return void 
+         * @return mixed 
          * @static 
          */
         public static function laterOn($queue, $delay, $view, $data, $callback){
-            \Illuminate\Mail\Mailer::laterOn($queue, $delay, $view, $data, $callback);
+            return \Illuminate\Mail\Mailer::laterOn($queue, $delay, $view, $data, $callback);
         }
         
         /**
@@ -8292,6 +8349,16 @@ namespace {
         }
         
         /**
+         * Determine if the application is in maintenance mode.
+         *
+         * @return bool 
+         * @static 
+         */
+        public static function isDownForMaintenance(){
+            return \Illuminate\Queue\QueueManager::isDownForMaintenance();
+        }
+        
+        /**
          * Push a new job onto the queue.
          *
          * @param string $job
@@ -8713,6 +8780,26 @@ namespace {
          */
         public static function secure(){
             return \Illuminate\Http\Request::secure();
+        }
+        
+        /**
+         * Returns the client IP address.
+         *
+         * @return string 
+         * @static 
+         */
+        public static function ip(){
+            return \Illuminate\Http\Request::ip();
+        }
+        
+        /**
+         * Returns the client IP addresses.
+         *
+         * @return array 
+         * @static 
+         */
+        public static function ips(){
+            return \Illuminate\Http\Request::ips();
         }
         
         /**
@@ -9502,9 +9589,9 @@ namespace {
         }
         
         /**
-         * Returns the requested URI.
+         * Returns the requested URI (path and query string).
          *
-         * @return string The raw URI (i.e. not urldecoded)
+         * @return string The raw URI (i.e. not URI decoded)
          * @api 
          * @static 
          */
@@ -9528,9 +9615,9 @@ namespace {
         }
         
         /**
-         * Generates a normalized URI for the Request.
+         * Generates a normalized URI (URL) for the Request.
          *
-         * @return string A normalized URI for the Request
+         * @return string A normalized URI (URL) for the Request
          * @see getQueryString()
          * @api 
          * @static 
@@ -10776,6 +10863,17 @@ namespace {
         }
         
         /**
+         * Determine if this is a valid session ID.
+         *
+         * @param string $id
+         * @return bool 
+         * @static 
+         */
+        public static function isValidId($id){
+            return \Illuminate\Session\Store::isValidId($id);
+        }
+        
+        /**
          * Returns the session name.
          *
          * @return mixed The session name.
@@ -11456,7 +11554,7 @@ namespace {
          *
          * @param string $path
          * @param mixed $extra
-         * @param bool $secure
+         * @param bool|null $secure
          * @return string 
          * @static 
          */
@@ -11480,7 +11578,7 @@ namespace {
          * Generate a URL to an application asset.
          *
          * @param string $path
-         * @param bool $secure
+         * @param bool|null $secure
          * @return string 
          * @static 
          */
@@ -12664,7 +12762,7 @@ namespace {
         /**
          * Create a new file
          *
-         * @param string $title
+         * @param $filename
          * @param callable|null $callback
          * @return \Maatwebsite\Excel\LaravelExcelWriter 
          * @static 
@@ -12675,11 +12773,11 @@ namespace {
         
         /**
          * Load an existing file
-         * 
-         * @param  string $file The file we want to load
          *
-         * @param callback|null $callback @param  string|null $encoding
-         *  @return LaravelExcelReader
+         * @param string $file The file we want to load
+         * @param callback|null $callback
+         * @param string|null $encoding
+         * @return \Maatwebsite\Excel\LaravelExcelReader 
          * @static 
          */
         public static function load($file, $callback = null, $encoding = null){
@@ -12700,8 +12798,8 @@ namespace {
         /**
          * Select sheets by index
          *
-         * @param \Maatwebsite\Excel\[type] $sheets [description]
-         * @return \Maatwebsite\Excel\[type] [description]
+         * @param array $sheets
+         * @return $this 
          * @static 
          */
         public static function selectSheetsByIndex($sheets = array()){
@@ -12744,6 +12842,40 @@ namespace {
          */
         public static function loadView($view, $data = array(), $mergeData = array()){
             return \Maatwebsite\Excel\Excel::loadView($view, $data, $mergeData);
+        }
+        
+        /**
+         * Set filters
+         *
+         * @param array $filters
+         * @return \Maatwebsite\Excel\Excel 
+         * @static 
+         */
+        public static function registerFilters($filters = array()){
+            return \Maatwebsite\Excel\Excel::registerFilters($filters);
+        }
+        
+        /**
+         * Enable certain filters
+         *
+         * @param string|array $filter
+         * @param bool|false|string $class
+         * @return \Maatwebsite\Excel\Excel 
+         * @static 
+         */
+        public static function filter($filter, $class = false){
+            return \Maatwebsite\Excel\Excel::filter($filter, $class);
+        }
+        
+        /**
+         * Get register, enabled (or both) filters
+         *
+         * @param string|boolean $key [description]
+         * @return array 
+         * @static 
+         */
+        public static function getFilters($key = false){
+            return \Maatwebsite\Excel\Excel::getFilters($key);
         }
         
     }

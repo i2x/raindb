@@ -51,7 +51,7 @@ class ImportController extends BaseController
 	{
 		//check input paramiter or file type input
 		
-        $validator = ImportForm::validate(Input::all());
+       $validator = ImportForm::validate(Input::all());
         if($validator->fails())
 		{
 			//if file display eror message
@@ -59,20 +59,88 @@ class ImportController extends BaseController
 				
 			
 		}
-		if ($validator->passes())
+		
+		
+		
+		//html
+		
+		
+		if ($validator->passes() && Input::file('file')->getMimeType() == "text/html")
+		{
+		
+			
+			$file = Input::file('file');
+			$fileName = $this->checkName($file->getClientOriginalName(),'.html');
+			Session::put('filename',$fileName);
+			Input::file('file')->move( base_path('temp'),$fileName); // import to temp folder
+			$encode = new Html_Import(base_path('temp').'/'.$fileName);
+			
+			$arr = $encode->getResult();
+	
+			
+			try {
+			
+					
+				//get missing
+			/*	foreach ( $arr as $station => $value)
+				{
+					DB::table('tbl_temp_measurement')->insert($value);
+				 //	$this->pushMissing($station,'html');
+					DB::table('tbl_temp_measurement')->truncate();
+			
+				}*/
+				//insert all data
+				
+				foreach ($arr  as $station => $value)
+				{
+					DB::table('tbl_temp_measurement')->insert($value);
+						
+						
+				}
+			
+			
+			
+			}
+			catch (Exception $e)
+			{
+			
+					
+			}
+			
+			
+			
+			return View::make('import.preview')->with('fileName','<code>'.$fileName.'</code>');
+				
+			
+			
+			
+				
+			
+				
+			
+		}
+		
+		
+		//excel
+	
+		
+		if ($validator->passes() && Input::file('file')->getMimeType() == "application/vnd.ms-office")
 		{
 			
+			
+			
+	
+	
 	
 		$file = Input::file('file');
-		$fileName = $this->checkName($file->getClientOriginalName());
+		$fileName = $this->checkName($file->getClientOriginalName(),'xls');
 		Session::put('filename',$fileName);
 		Input::file('file')->move( base_path('temp'),$fileName); // import to temp folder
 	
-		//pull file excel to array
 		Excel::load(base_path('temp/'.$fileName), function($reader) {
 		$results = $reader->toArray();
 		$arr = array();	
-		
+	
 		try {
 
 			foreach ($results as $value)
@@ -95,14 +163,12 @@ class ImportController extends BaseController
 				 			'meas_day'    => $value['dday'],
 				 	);
 				 	
-				 	//array_push($arr, $temp);
 				 	$arr[$value['stncode']][] = $temp;
-				 	
-				 	
 			 	}
 			
 			
 			}
+			
 			 	
 			 	try {
 			 		
@@ -111,7 +177,7 @@ class ImportController extends BaseController
 			 		foreach ($arr as $station => $value)
 			 		{
 			 			DB::table('tbl_temp_measurement')->insert($value);
-			 			$this->pushMissing($station);
+			 			$this->pushMissing($station,'xls');
 			 			DB::table('tbl_temp_measurement')->truncate();
 			 						 			
 			 		}
@@ -139,6 +205,12 @@ class ImportController extends BaseController
 		
 				
 		}
+		
+		
+		
+		
+		
+		
 		
 
 		
@@ -193,9 +265,12 @@ class ImportController extends BaseController
 
 	
 	
-	public function pushMissing($station)
+	public function pushMissing($station,$format)
 	{
 		
+	
+		if($format == 'xls')
+		{
 		$sql = "INSERT INTO tbl_missing_measurement(
             dt,meas_date, station_id, max_temp, min_temp, rain, avgrh, evapor, 
             mean_temp,meas_year,meas_month,meas_day, source )
@@ -216,18 +291,50 @@ class ImportController extends BaseController
 				and (tbl_temp_measurement.meas_date is NULL or tbl_temp_measurement.rain is NULL)
 				
 				order by dt asc,station_id)";
+		}
+		if($format == 'html')
+		{
+			
+			
+			$sql = "INSERT INTO tbl_missing_measurement(
+			dt,meas_date, station_id,rain )
+			
+			(select calendar_table.dt,
+				tbl_temp_measurement.meas_date,				
+				tbl_temp_measurement.station_id,
+				tbl_temp_measurement.rain
+		
+				from calendar_table left join tbl_temp_measurement on
+ 				tbl_temp_measurement.meas_date = calendar_table.dt
+ 				where calendar_table.dt >= (select min(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
+ 				and calendar_table.dt <=   (select max(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
+				and (tbl_temp_measurement.meas_date is NULL or tbl_temp_measurement.rain is NULL)
+		
+				order by dt asc,station_id";
+			
+		}
 		
 		return DB::select(DB::raw($sql));
 		
 		
+	
+		
+		
 		
 	}
-	public function checkName($file)
+	
+	
+	
+	
+	
+	
+	public function checkName($file,$type)
 	{
+		
 	
 		if(array_search($file, scandir(base_path().DIRECTORY_SEPARATOR . 'upload_files')))
 		{
-			$Name  = substr($file,0,-4).'_'.date('Y-m-d His').'.xls';
+			$Name  = substr($file,0,-4).'_'.date('Y-m-d His').$type;
 		}
 		else 
 		{
@@ -347,3 +454,122 @@ class ImportController extends BaseController
 
 
 }
+
+
+
+class Html_Import
+{
+	
+	public $result;
+	public function Html_Import($file)
+	{
+		$result = array();
+		$html = file_get_contents($file, true);
+		$doc = new DOMDocument();
+		libxml_use_internal_errors(true);
+		$doc->loadHTML($html);
+
+		$xpath = new DOMXPath($doc);
+		$arr = array();
+		$row = $doc->getElementsByTagName('tr');
+		foreach ($row as $key =>$node)
+		{
+			if($key > 1)	array_push($arr, $this->tdrows($node->childNodes) );
+		
+		}
+		
+		foreach  ($arr as $key =>$node)
+		{
+			if($key < sizeof($node)) 
+			{
+				$temp = $this->html_decode($node);
+				$this->result[$key] = $temp;
+		
+			}
+		
+		}
+
+	}
+	
+	public function getResult()
+	{
+		return $this->result;
+	}
+	
+	
+	
+
+	function tdrows($elements)
+	{
+		$str = array();
+		foreach ($elements as $element)
+		{
+			array_push($str, $element->nodeValue  );
+		}
+		return $str;
+	}
+	
+	
+	function html_decode($node)
+	{
+		
+	$station = substr($node[2], 0,6);
+	$temp = array();
+
+	for($i=4;$i<sizeof($node)-1;$i++)
+	{
+		$data =  ($i-3).'/'.$node[3];
+		
+		$date = str_replace('/', '-', $data);
+		$date = date('Y-m-d', strtotime($date));
+		
+	
+		if( is_numeric($node[$i]) && $this->validateDate(''.$date))
+		{
+			
+			$temp[$i-4]['station_id'] = $station;
+			$temp[$i-4]['meas_date'] =$date;
+			$temp[$i-4]['rain'] = $node[$i];
+			$temp[$i-4]['source'] = 1;
+
+		}
+		
+	}
+	
+
+	return $temp;
+		
+	}
+	
+	
+	function validateDate($date, $format = 'Y-m-d')
+	{
+		$d = DateTime::createFromFormat($format, $date);
+		return $d && $d->format($format) == $date;
+	}
+	
+
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
