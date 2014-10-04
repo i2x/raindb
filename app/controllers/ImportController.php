@@ -26,6 +26,9 @@ class ImportController extends BaseController
 		ImportPreview::truncate();// Remove all of 'tbl_temp_measurement' table for preview
 		DB::table('tbl_missing_measurement')->truncate();
 		
+		Session::forget('FRIST_DATE'); //for missing row
+		
+		
 		
 		// send message if upload success
 		if (!empty(Session::get('success')))
@@ -75,34 +78,45 @@ class ImportController extends BaseController
 			Input::file('file')->move( base_path('temp'),$fileName); // import to temp folder
 			$encode = new Html_Import(base_path('temp').'/'.$fileName);
 			
-			$arr = $encode->getResult();
+			
+			$data = $encode->getResult() ;
+		
+				
 	
 			
 			try {
-			
-					
-				//get missing
-			/*	foreach ( $arr as $station => $value)
-				{
-					DB::table('tbl_temp_measurement')->insert($value);
-				 //	$this->pushMissing($station,'html');
-					DB::table('tbl_temp_measurement')->truncate();
-			
-				}*/
-				//insert all data
 				
-				foreach ($arr  as $station => $value)
+				
+				
+				
+				foreach ($data as $station => $value)
+				{
+						
+				
+					DB::table('tbl_temp_measurement')->insert($value);
+					$this->pushMissing($station,'html');
+					DB::table('tbl_temp_measurement')->truncate();
+				}
+					
+				foreach ($data as $station => $value)
 				{
 					DB::table('tbl_temp_measurement')->insert($value);
 						
 						
 				}
+					
+				
+		
 			
 			
 			
 			}
 			catch (Exception $e)
 			{
+				
+				
+				return Redirect::to('import')->with('message' , 'file incorrect	');
+				
 			
 					
 			}
@@ -171,6 +185,7 @@ class ImportController extends BaseController
 			
 			 	
 			 	try {
+			 		
 			 		
 			 	
 			 		//get missing
@@ -297,20 +312,20 @@ class ImportController extends BaseController
 			
 			
 			$sql = "INSERT INTO tbl_missing_measurement(
-			dt,meas_date, station_id,rain )
-			
-			(select calendar_table.dt,
-				tbl_temp_measurement.meas_date,				
-				tbl_temp_measurement.station_id,
+            dt,meas_date, station_id,rain )
+   
+
+
+			(select calendar_table.dt, 
+				tbl_temp_measurement.meas_date,".$station.",
 				tbl_temp_measurement.rain
-		
+				
 				from calendar_table left join tbl_temp_measurement on
  				tbl_temp_measurement.meas_date = calendar_table.dt
- 				where calendar_table.dt >= (select min(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
- 				and calendar_table.dt <=   (select max(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
+ 				 where calendar_table.dt <=   (select max(tbl_temp_measurement.meas_date) from tbl_temp_measurement)
+				and calendar_table.dt >=  	'". Session::get('FRIST_DATE')[0]."' 
 				and (tbl_temp_measurement.meas_date is NULL or tbl_temp_measurement.rain is NULL)
-		
-				order by dt asc,station_id";
+				order by dt asc,station_id)";
 			
 		}
 		
@@ -463,7 +478,7 @@ class Html_Import
 	public $result;
 	public function Html_Import($file)
 	{
-		$result = array();
+		$temp = array();
 		$html = file_get_contents($file, true);
 		$doc = new DOMDocument();
 		libxml_use_internal_errors(true);
@@ -478,16 +493,38 @@ class Html_Import
 		
 		}
 		
+		
+		$only_one = true;
 		foreach  ($arr as $key =>$node)
 		{
 			if($key < sizeof($node)) 
 			{
-				$temp = $this->html_decode($node);
-				$this->result[$key] = $temp;
+				
+				
+				$station = substr($node[2], 0,6);
+				$temp[$station] = $this->html_decode($node,$station);
+				
+				
+				
+				if($only_one == true)
+				{
+				
+				$frist_date =  '01/'.$node[3];
+				
+				$frist_date = str_replace('/', '-', $frist_date);
+				$frist_date = date('Y-m-d', strtotime($frist_date));
+				Session::push('FRIST_DATE', $frist_date);
+				$only_one = false;
+						
+				}
+				
+
 		
 			}
 		
 		}
+		
+		$this->result = $temp;
 
 	}
 	
@@ -510,11 +547,11 @@ class Html_Import
 	}
 	
 	
-	function html_decode($node)
+	function html_decode($node,$station)
 	{
 		
-	$station = substr($node[2], 0,6);
 	$temp = array();
+	
 
 	for($i=4;$i<sizeof($node)-1;$i++)
 	{
@@ -522,18 +559,21 @@ class Html_Import
 		
 		$date = str_replace('/', '-', $data);
 		$date = date('Y-m-d', strtotime($date));
+	
 		
 	
 		if( is_numeric($node[$i]) && $this->validateDate(''.$date))
 		{
 			
-			$temp[$i-4]['station_id'] = $station;
+			
+			$temp[$i-4]['station_id'] =$station;				
 			$temp[$i-4]['meas_date'] =$date;
 			$temp[$i-4]['rain'] = $node[$i];
 			$temp[$i-4]['source'] = 1;
+			
+			
 
 		}
-		
 	}
 	
 
@@ -547,6 +587,20 @@ class Html_Import
 		$d = DateTime::createFromFormat($format, $date);
 		return $d && $d->format($format) == $date;
 	}
+	
+	
+	
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+	
 	
 
 	
