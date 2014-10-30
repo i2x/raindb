@@ -80,21 +80,35 @@ class ImportController extends BaseController
 			
 			
 			$data = $encode->getResult() ;
-		
+			
+			DB::table('tbl_temp_measurement')->truncate();
 				
+			foreach ($data as $station => $value)
+			{
+				
+				try {
+					
+					DB::table('tbl_temp_measurement')->insert($value);
+						
+					
+				} catch (Exception $e) {
+				}
+			
+			
+			}
 	
 			
-			try {
+		/*	try {
 				
 				
 				
 				
-				foreach ($data as $station => $value)
+			/*	foreach ($data as $station => $value)
 				{
 						
 				
 					DB::table('tbl_temp_measurement')->insert($value);
-					$this->pushMissing($station,'html');
+				//	$this->pushMissing($station,'html');
 					DB::table('tbl_temp_measurement')->truncate();
 				}
 					
@@ -120,7 +134,7 @@ class ImportController extends BaseController
 			
 					
 			}
-			
+			*/
 			
 			
 			return View::make('import.preview')->with('fileName','<code>'.$fileName.'</code>');
@@ -497,12 +511,12 @@ class Html_Import
 		$only_one = true;
 		foreach  ($arr as $key =>$node)
 		{
-			if($key < sizeof($node)) 
+			if(isset($node[2])) 
 			{
 				
 				
 				$station = substr($node[2], 0,6);
-				$temp[$station] = $this->html_decode($node,$station);
+				$temp[$station.$key] = $this->html_decode($node,$station);
 				
 				
 				
