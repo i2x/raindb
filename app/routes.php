@@ -1,24 +1,10 @@
 <?php
 
-
-
-
-
-
-
-
 /** ------------------------------------------
  *  Route constraint patterns
  *  ------------------------------------------
  */
 Route::pattern('id', '[0-9]+');
-
-
-
-
-
-
-
 # Static Pages. Redirecting admin so admin cannot access these pages.
 Route::group(['before' => 'redirectAdmin'], function()
 {
@@ -30,22 +16,8 @@ Route::group(['before' => 'redirectAdmin'], function()
 # Registration
 Route::group(['before' => 'guest'], function()
 {
-	
-	
-	
 	Route::get('/register', 'RegistrationController@create');
 	Route::post('/register', ['as' => 'registration.store', 'uses' => 'RegistrationController@store']);
-	
-	
-	
-	//Data
-	
-	Route::get('historical', 'HistoricalController@getIndex');
-	Route::post('historical', 'HistoricalController@postIndex');
-	Route::get('historical/data', 'HistoricalController@getData');
-	
-	
-	
 });
 
 # Authentication
@@ -60,7 +32,43 @@ Route::group(['before' => 'guest'], function()
 	Route::post('forgot_password','RemindersController@postRemind');
 	Route::get('reset_password/{token}', 'RemindersController@getReset');
 	Route::post('reset_password/{token}', 'RemindersController@postReset');
+		
 	
+});
+
+Route::group(['before' => 'auth|NewUsers'], function()
+{
+	//Data
+//	Route::get('historical', 'HistoricalController@getIndex');
+//	Route::post('historical', 'HistoricalController@postIndex');
+//	Route::get('historical/data', 'HistoricalController@getData');
+});
+
+Route::group(['before' => 'auth|(standardUser||(SuperUsers||admin))'], function()
+# Standard User Routes
+{
+	//Forecast
+	
+	Route::get('forecast','ForecastController@getIndex');
+	Route::post('forecast','ForecastController@postIndex');
+        
+        // profile	
+        	Route::get('userProtected', 'StandardUserController@getUserProtected');
+                Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
+});
+
+Route::group(['before' => 'auth|(SuperUsers || admin)'], function()
+# Standard User Routes
+{
+
+        Route::get('histsum', 'HistSumController@getIndex');
+	Route::post('histsum', 'HistSumController@postIndex');
+	Route::get('histsum/data', 'HistSumController@getData');
+	//Data
+	
+	Route::get('historical', 'HistoricalController@getIndex');
+	Route::post('historical', 'HistoricalController@postIndex');
+	Route::get('historical/data', 'HistoricalController@getData');
 	
 
 	//Graph
@@ -73,96 +81,93 @@ Route::group(['before' => 'guest'], function()
 	Route::post('station', 'SelectController@station');
 	Route::post('season',  'SelectController@season');
 	Route::post('basemonth',  'SelectController@basemonth');
-	
-	
-	
-	
 	//Report
 	Route::get('report','ReportController@getIndex');
 	Route::post('report','ReportController@postIndex');
 	
-	//
-	
+	// Schedule
 	Route::get('schedule','ScheduleController@getIndex');
 	Route::post('schedule','ScheduleController@postIndex');
-	
-	
-	
-	
-});
+        
+        //NCEP reference data refresh
+        Route::get('refrefresh', 'RefRefreshController@getIndex');
+        Route::post('refrefresh', 'RefRefreshController@postIndex');
+        Route::get('refrefresh/data', 'RefRefreshController@getData');
 
-Route::group(['before' => 'auth|(standardUser || admin)'], function()
-# Standard User Routes
-{
-	// Profile 
-	
-	Route::get('userProtected', 'StandardUserController@getUserProtected');
-	Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
-	
-	
-	
 
-	
-	
+// Profile 
 
-	
-	
-	
+	//Route::get('userProtected', 'StandardUserController@getUserProtected');
+	//Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
 	//Import
 	Route::get('import', 'ImportController@getImport');
 	Route::post('import', 'ImportController@postImport');
 	Route::get('import/data', 'ImportController@getData');
 	Route::get('import/missing', 'ImportController@getMissing');
-	
 	Route::post('import/upload', 'ImportController@toDatabase');
-	
-	
 	Route::get('import/template', 'ImportController@getTemplate');
-	
 	Route::get('import/example', 'ImportController@getExample');
-	
-	
-	
-	
-	
-	
 	//Log
-	
 	Route::get('log','LogController@getLog');
 	Route::get('log/data','LogController@getData');
-	
-	
-
-	
-	
 	//Forecast
-	
-	Route::get('forecast','ForecastController@getIndex');
-	Route::post('forecast','ForecastController@postIndex');
-	
-	
-
-	
-	
-	
-
-
-
-
-
+	//Route::get('forecast','ForecastController@getIndex');
+	//Route::post('forecast','ForecastController@postIndex');
 });
 
 # Admin Routes
 Route::group(['before' => 'auth|admin'], function()
 {
-	Route::get('/admin', ['as' => 'admin_dashboard', 'uses' => 'AdminController@getHome']);
+    Route::get('/admin', ['as' => 'admin_dashboard', 'uses' => 'AdminController@getHome']);
     Route::resource('admin/profiles', 'AdminUsersController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
+	//Data
+	//Route::get('historical', 'HistoricalController@getIndex');
+	//Route::post('historical', 'HistoricalController@postIndex');
+	//Route::get('historical/data', 'HistoricalController@getData');
+
+	//Graph
+	//Route::get('graph', 'GraphController@getIndex');
+	//Route::post('graph', 'GraphController@postIndex');
+	
+	//Select DropDown
+	//Route::post('province',  'SelectController@province');
+	//Route::post('ampher',  'SelectController@ampher');
+	//Route::post('station', 'SelectController@station');
+	//::post('season',  'SelectController@season');
+	//Route::post('basemonth',  'SelectController@basemonth');
+	
+	//Report
+	//Route::get('report','ReportController@getIndex');
+	//Route::post('report','ReportController@postIndex');
+	
+	//schedule
+	//Route::get('schedule','ScheduleController@getIndex');
+	//Route::post('schedule','ScheduleController@postIndex');
+
+// Profile 
+	//Route::get('userProtected', 'StandardUserController@getUserProtected');
+	//Route::resource('profiles', 'UsersController', ['only' => ['show', 'edit', 'update']]);
+	
+	//Import
+	//Route::get('import', 'ImportController@getImport');
+	//Route::post('import', 'ImportController@postImport');
+	//Route::get('import/data', 'ImportController@getData');
+	//Route::get('import/missing', 'ImportController@getMissing');
+	
+	//Route::post('import/upload', 'ImportController@toDatabase');
+	//Route::get('import/template', 'ImportController@getTemplate');
+	//Route::get('import/example', 'ImportController@getExample');
+	//Log
+	//Route::get('log','LogController@getLog');
+	//Route::get('log/data','LogController@getData');
+	//Forecast
+	//Route::get('forecast','ForecastController@getIndex');
+	//Route::post('forecast','ForecastController@postIndex');
     
     
     
     //index
     Route::get('database', 'CRUDController@getIndex');
-    
     
     //Amphur CRUD
     Route::get('database/amphur', 'xAmphurController@index');
@@ -173,168 +178,106 @@ Route::group(['before' => 'auth|admin'], function()
         
     Route::get('database/amphur/create', 'xAmphurController@getCreate');
     Route::post('database/amphur/create', 'xAmphurController@postCreate');
-    
-    
     Route::post('database/amphur/{id}/delete', 'xAmphurController@postDelete');
     
     
     //Groups CRUD
     Route::get('database/groups', 'xGroupsController@index');
     Route::get('database/groups/data', 'xGroupsController@getData');
-    
     Route::get('database/groups/{id}/update', 'xGroupsController@getUpdate');
     Route::post('database/groups/{id}/update', 'xGroupsController@postUpdate');
-    
     Route::get('database/groups/create', 'xGroupsController@getCreate');
     Route::post('database/groups/create', 'xGroupsController@postCreate');
-    
-    
     Route::post('database/groups/{id}/delete', 'xGroupsController@postDelete');
-    
-    
-    
-    
-    
-    
     
     //Password_reminders CRUD
     Route::get('database/password_reminders', 'xPasswordRemindersController@index');
     Route::get('database/password_reminders/data', 'xPasswordRemindersController@getData');
-    
     Route::get('database/password_reminders/{id}/update', 'xPasswordRemindersController@getUpdate');
     Route::post('database/password_reminders/{id}/update', 'xPasswordRemindersController@postUpdate');
-    
     Route::get('database/password_reminders/create', 'xPasswordRemindersController@getCreate');
     Route::post('database/password_reminders/create', 'xPasswordRemindersController@postCreate');
-    
-    
     Route::post('database/password_reminders/{id}/delete', 'xPasswordRemindersController@postDelete');
-    
-    
+        
     
     //Permission_role CRUD
     Route::get('database/permission_role', 'xPermissionRoleController@index');
     Route::get('database/permission_role/data', 'xPermissionRoleController@getData');
-    
     Route::get('database/permission_role/{id}/update', 'xPermissionRoleController@getUpdate');
     Route::post('database/permission_role/{id}/update', 'xPermissionRoleController@postUpdate');
-    
     Route::get('database/permission_role/create', 'xPermissionRoleController@getCreate');
     Route::post('database/permission_role/create', 'xPermissionRoleController@postCreate');
-    
-    
     Route::post('database/permission_role/{id}/delete', 'xPermissionRoleController@postDelete');
     
     
     //Permissions CRUD
     Route::get('database/permissions', 'xPermissionsController@index');
     Route::get('database/permissions/data', 'xPermissionsController@getData');
-    
     Route::get('database/permissions/{id}/update', 'xPermissionsController@getUpdate');
     Route::post('database/permissions/{id}/update', 'xPermissionsController@postUpdate');
-    
     Route::get('database/permissions/create', 'xPermissionsController@getCreate');
     Route::post('database/permissions/create', 'xPermissionsController@postCreate');
-    
-    
     Route::post('database/permissions/{id}/delete', 'xPermissionsController@postDelete');
-    
-    
     
     //Riverbasin CRUD
     Route::get('database/riverbasin', 'xRiverbasinController@index');
     Route::get('database/riverbasin/data', 'xRiverbasinController@getData');
-    
     Route::get('database/riverbasin/{id}/update', 'xRiverbasinController@getUpdate');
-    Route::post('database/riverbasin/{id}/update', 'xRiverbasinController@postUpdate');
-    
+    Route::post('database/riverbasin/{id}/update', 'xRiverbasinController@postUpdate');    
     Route::get('database/riverbasin/create', 'xRiverbasinController@getCreate');
     Route::post('database/riverbasin/create', 'xRiverbasinController@postCreate');
-    
-    
     Route::post('database/riverbasin/{id}/delete', 'xRiverbasinController@postDelete');
-    
-    
     
     //Roles CRUD
     Route::get('database/roles', 'xRolesController@index');
     Route::get('database/roles/data', 'xRolesController@getData');
-    
     Route::get('database/roles/{id}/update', 'xRolesController@getUpdate');
     Route::post('database/roles/{id}/update', 'xRolesController@postUpdate');
-    
     Route::get('database/roles/create', 'xRolesController@getCreate');
     Route::post('database/roles/create', 'xRolesController@postCreate');
-    
-    
     Route::post('database/roles/{id}/delete', 'xRolesController@postDelete');
-    
-    
     
     //Tbl_ampher CRUD
     Route::get('database/tbl_ampher', 'xTblAmpherController@index');
     Route::get('database/tbl_ampher/data', 'xTblAmpherController@getData');
-    
     Route::get('database/tbl_ampher/{id}/update', 'xTblAmpherController@getUpdate');
     Route::post('database/tbl_ampher/{id}/update', 'xTblAmpherController@postUpdate');
-    
     Route::get('database/tbl_ampher/create', 'xTblAmpherController@getCreate');
     Route::post('database/tbl_ampher/create', 'xTblAmpherController@postCreate');
-    
-    
     Route::post('database/tbl_ampher/{id}/delete', 'xTblAmpherController@postDelete');
-    
-    
     
     //tbl_import_log CRUD
     Route::get('database/tbl_import_log', 'xTblImportLogController@index');
     Route::get('database/tbl_import_log/data', 'xTblImportLogController@getData');
-    
     Route::get('database/tbl_import_log/{id}/update', 'xTblImportLogController@getUpdate');
     Route::post('database/tbl_import_log/{id}/update', 'xTblImportLogController@postUpdate');
-    
     Route::get('database/tbl_import_log/create', 'xTblImportLogController@getCreate');
     Route::post('database/tbl_import_log/create', 'xTblImportLogController@postCreate');
-    
-    
     Route::post('database/tbl_import_log/{id}/delete', 'xTblImportLogController@postDelete');
-    
     
     //tbl_province CRUD
     Route::get('database/tbl_province', 'xTblProvinceController@index');
     Route::get('database/tbl_province/data', 'xTblProvinceController@getData');
-    
     Route::get('database/tbl_province/{id}/update', 'xTblProvinceController@getUpdate');
     Route::post('database/tbl_province/{id}/update', 'xTblProvinceController@postUpdate');
-    
     Route::get('database/tbl_province/create', 'xTblProvinceController@getCreate');
     Route::post('database/tbl_province/create', 'xTblProvinceController@postCreate');
-    
-    
     Route::post('database/tbl_province/{id}/delete', 'xTblProvinceController@postDelete');
-    
     
     //tbl_rain_measurement CRUD
     Route::get('database/tbl_rain_measurement', 'xTblRainMeasurementController@index');
     Route::get('database/tbl_rain_measurement/data', 'xTblRainMeasurementController@getData');
-    
     Route::get('database/tbl_rain_measurement/{id}/update', 'xTblRainMeasurementController@getUpdate');
     Route::post('database/tbl_rain_measurement/{id}/update', 'xTblRainMeasurementController@postUpdate');
-    
     Route::get('database/tbl_rain_measurement/create', 'xTblRainMeasurementController@getCreate');
     Route::post('database/tbl_rain_measurement/create', 'xTblRainMeasurementController@postCreate');
-    
-    
     Route::post('database/tbl_rain_measurement/{id}/delete', 'xTblRainMeasurementController@postDelete');
-    
     
     //tbl_rain_station CRUD
     Route::get('database/tbl_rain_station', 'xTblRainStationController@index');
     Route::get('database/tbl_rain_station/data', 'xTblRainStationController@getData');
-    
     Route::get('database/tbl_rain_station/{id}/update', 'xTblRainStationController@getUpdate');
     Route::post('database/tbl_rain_station/{id}/update', 'xTblRainStationController@postUpdate');
-    
     Route::get('database/tbl_rain_station/create', 'xTblRainStationController@getCreate');
     Route::post('database/tbl_rain_station/create', 'xTblRainStationController@postCreate');
     
@@ -428,88 +371,11 @@ Route::group(['before' => 'auth|admin'], function()
     
     
     Route::post('database/tbl_source/{id}/delete', 'xTblSourceController@postDelete');
-    
-    
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    Route::get('refrefresh', 'RefRefreshController@getIndex');
-    Route::post('refrefresh', 'RefRefreshController@postIndex');
-    
-    
-    
-    
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
 
-
-
+   // Route::get('refrefresh', 'RefRefreshController@getIndex');
+   // Route::post('refrefresh', 'RefRefreshController@postIndex');
     
-    
-    
-    
-    
-    
-
-
+ 
 });
 
 

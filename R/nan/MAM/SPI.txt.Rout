@@ -1,0 +1,43 @@
+
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> month=3
+> #month=1 #(JFM=1, FMA=2, MAM=3, ..., DJF=12)
+> n_simul=300
+> rf=read.table("RAINFALL.txt")
+> ss.rain=rf[ ,15+month]
+> fc.r=read.table(paste("out.txt",sep=""))
+> SPI.fc=matrix(nrow=n_simul,ncol=1)
+> for (j in 1:n_simul){
++ data=c(ss.rain,fc.r[j,1])
++ fit.cdf <- ecdf(data)
++ cdfs <- sapply(data,fit.cdf)
++ SPI <- qnorm(cdfs)
++ SPI.fc[j,1]=SPI[length(SPI)]
++ SPI.fc=round(SPI.fc,digits=2)
++ }
+> #file_names1=paste(mon_names,best_lag,"-mSPI.out",sep="")
+> #write(t(SPI.fc),file=file_names1,ncol=ncol(SPI.fc),append=FALSE,sep="\t")
+> write.table(SPI.fc, file=paste( "SPIO.txt", sep=""),col.names = FALSE, row.names = FALSE)
+> 
+> proc.time()
+   user  system elapsed 
+  0.461   0.021   0.480 

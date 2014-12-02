@@ -31,7 +31,7 @@ class ForecastTapi extends Forecast {
        
     }
 
-    public function Exportrainfall( $select_season) {
+    public function Exportrainfall( $select_season,$refyear) {
         
         $lstyear = parent::getlatestyear($this->BASIN_ID);
         $sql = "SELECT 
@@ -50,7 +50,7 @@ MAX(CASE WHEN moo = '11' THEN rx ELSE NULL END) as NOV,
 MAX(CASE WHEN moo = '12' THEN rx ELSE NULL END) as DEC
 FROM 
 (
-select  c.yee, c.moo, coalesce(a.r1,-9999) as rx   	
+select  c.yee, c.moo, coalesce(a.r1,-999) as rx   	
     		 from (select min(ye) as yee, min(mo) as moo from calendar_table where calendar_table.ye >= 1980 and calendar_table.ye <=$lstyear
              group by ye,mo ) c
     		 left join 
@@ -118,7 +118,7 @@ GROUP BY yee";
         
         // 2nd gather rain fall 4G
         //
-        $this->Exportrainfall($Input['season']);
+        $this->Exportrainfall($Input['season'],$Input["baseyear"]+$add_year);
         
         // 3rd modify parameter according to the web form
         //$cmdtxt = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.'ping'.DIRECTORY_SEPARATOR.$Input['season'].DIRECTORY_SEPARATOR.$Input['season'].'.txt'; 

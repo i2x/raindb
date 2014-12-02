@@ -1,5 +1,5 @@
 @extends('master')
-@section('title', 'Imoport')
+@section('title', 'Import')
 
 @section('content')
 
@@ -7,28 +7,10 @@
 {{ HTML::style('packages/jasny/css/jasny-bootstrap.min.css')}}
 {{ HTML::script('packages/jasny/js/jasny-bootstrap.min.js')}}
 
-
-
-
-
-
-
-
-
-
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
   	<li class="active">Import</li>
 	</ol>
-	
-	
-	
-	
-
-
-	
-	
-	
 	<?php 
 	if ($errors->first('file') != NULL)echo "<div class='alert alert-danger' role='alert'>".$errors->first('file') ."</div>";
 	echo $message;

@@ -9,7 +9,7 @@ class AdminUsersEditForm extends FormValidator {
    */
   protected $update_rules =
     [
-    'account_type' => 'integer|between:1,2',
+    'account_type' => 'integer|between:1,4',
     'email' => 'required|email|unique:users',
 		'first_name' => 'required',
 		'last_name' => 'required',

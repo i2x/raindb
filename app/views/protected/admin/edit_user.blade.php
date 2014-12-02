@@ -63,4 +63,10 @@
 		</div>
 	{{ Form::close() }}
 
+	{{ Form::model($user, ['method' => 'PATCH', 'route' => ['admin.profiles.destroy', $user->id]]) }}        
+        		<div class="form-group">
+			{{ Form::submit('Delete Profile', ['class' => 'btn btn-primary']) }}
+		</div>
+	{{ Form::close() }}
+
 @stop

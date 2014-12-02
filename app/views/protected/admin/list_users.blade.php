@@ -13,6 +13,7 @@
 	          <th>Email</th>
 	          <th>First Name</th>
 	          <th>Last Name</th>
+                  <th>Action</th>
 	        </tr>
       	</thead>
     
@@ -29,6 +30,7 @@
 		        </td>
 		        <td>{{ $user->first_name}}</td>
 		        <td>{{ $user->last_name}}</td>
+                        <td>{{ link_to_route('admin.profiles.edit', 'edit/delete', $user->id) }}<br>
 		     </tr>
 			@endforeach
 

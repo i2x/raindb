@@ -7,7 +7,7 @@ class ForecastPing extends Forecast {
         return false;
     }
     private function genNDJ($b){
-        if($this->isNDJ($b)==true) return " coalesce(meas_value2,-9999) as val2,";
+        if($this->isNDJ($b)==true) return " coalesce(meas_value2,-999) as val2,";
         return "";
     }
 
@@ -19,11 +19,11 @@ class ForecastPing extends Forecast {
         $outputfile = base_path().DIRECTORY_SEPARATOR.'R'.DIRECTORY_SEPARATOR.$basin.DIRECTORY_SEPARATOR.$season.DIRECTORY_SEPARATOR.'predictors.txt' ; //
         $cmd =
                 " select meas_year,meas_month, " .
-                " coalesce(meas_value1,-9999) as val1, " .
+                " coalesce(meas_value1,-999) as val1, " .
                 
                 $this->genNDJ($season).
-                " coalesce(meas_value3,-9999) as val3,  " .
-                " coalesce(meas_value4,-9999) as val4  " .
+                " coalesce(meas_value3,-999) as val3,  " .
+                " coalesce(meas_value4,-999) as val4  " .
                 " from tbl_ref_data4forecast_".$basin." " .
                 " where season ='$season' ".
                 " and  (".$year." )* 100+12>= meas_year*100 + meas_month order by meas_year,meas_month"
@@ -49,7 +49,7 @@ class ForecastPing extends Forecast {
            }
        }
        
-       $textoutput = str_replace('-9999','NA',$textoutput);
+       $textoutput = str_replace('-999','NA',$textoutput);
        
        file_put_contents($outputfile,$textoutput);
     }

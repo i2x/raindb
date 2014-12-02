@@ -1,9 +1,11 @@
 <?php 
 //Check Group admin
 $admin = false;
+$userloggedin=false;
 if (Sentry::check()){
 $group = Sentry::getUser()->getGroups()->toarray();
 if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
+if( $group[0]['pivot']['group_id'] == 1 || $group[0]['pivot']['group_id']==3 )$userloggedin = true;
 }
 ?>
 
@@ -85,34 +87,39 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 		
 		
 				<li class="{{ set_active('/') }}"><a href="{{ URL::to('/') }}">Home</a></li>
+                                <!--
 		        <li class="{{ set_active('historical') }}"><a href="{{ URL::to('historical') }}">Historical Data</a></li>
 		        
-<!--		        <li class="{{ set_active('about') }}"><a href="/about">About</a></li>
-		        <li class="{{ set_active('contact') }}"><a href="/contact">Contact</a></li> --> 
 		        <li class="{{ set_active('graph') }}"><a href="{{ URL::to('graph') }}">Graph</a></li>
-		        <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>
-		
+		        <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>-->
+ 		
 		
 		
 		@else
-		
-				<li class="{{ set_active('/') }}"><a href="{{ URL::to('/') }}">Home</a></li>
-		        <li class="{{ set_active('historical') }}"><a href="{{ URL::to('historical') }}">Historical Data</a></li>
-		        
-<!--		        <li class="{{ set_active('about') }}"><a href="/about">About</a></li>
-		        <li class="{{ set_active('contact') }}"><a href="/contact">Contact</a></li> --> 
+                    <li class="{{ set_active('/') }}"><a href="{{ URL::to('/') }}">Home</a></li>
+                        @if($group[0]['pivot']['group_id']!=3)
+					        <li class="{{ set_active('forecast') }}"><a href="{{ URL::to('forecast') }}">Forecast</a></li>		        
+                        @endif
+                        @if(!$userloggedin)
+                        <li class="{{ set_active('histsum') }}"><a href="{{ URL::to('histsum') }}">Historical Summary</a></li>
+                        <li class="{{ set_active('historical') }}"><a href="{{ URL::to('historical') }}">Historical Data</a></li>
 		        <li class="{{ set_active('graph') }}"><a href="{{ URL::to('graph') }}">Graph</a></li>
-		        <li class="{{ set_active('import') }}"><a href="{{ URL::to('import') }}">Import</a></li>
-		        <li class="{{ set_active('log') }}"><a href="{{URL::to('log') }}">Log</a></li>
 		        <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>
-		        <li class="{{ set_active('forecast') }}"><a href="{{ URL::to('forecast') }}">Forecast</a></li>
+
+                        <li class="{{ set_active('import') }}"><a href="{{ URL::to('import') }}">Import</a></li>
+  		        <li class="{{ set_active('schedule') }}"><a href="{{ URL::to('schedule') }}">Import Schedule</a></li>
+                        <li class="{{ set_active('log') }}"><a href="{{URL::to('log') }}">Log</a></li>
+
+
+		        <li class="{{ set_active('refrefresh') }}"><a href="{{ URL::to('refrefresh') }}">Refresh NCEP Data</a></li>                        
 		
-		
+                        @endif
 		
 		
 		
 		@endif
-		
+		        <li class="{{ set_active('about') }}"><a href="{{ URL::to('about') }}">About</a></li>
+		        <li class="{{ set_active('contact') }}"><a href="{{ URL::to('contact') }}">Contact</a></li> 		
 		
 		  </ul>
 		
@@ -127,7 +134,7 @@ if( $group[0]['pivot']['group_id'] == 2 )$admin = true;
 		      
 		    
 	   @if (!Sentry::check())
-					<li class="{{ set_active('register') }}"><a href="{{URL::to('register') }}">Sing up</a></li>
+					<li class="{{ set_active('register') }}"><a href="{{URL::to('register') }}">Sign up</a></li>
 					<li class="{{ set_active('login') }}"><a href="{{URL::to('login') }}">Login</a></li>
 		
 		

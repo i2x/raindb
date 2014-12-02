@@ -9,6 +9,8 @@
 		<li>Email Address: {{ $user->email }}</li>
 		<li>First Name: {{ $user->first_name }}</li>
 		<li>Last Name: {{ $user->last_name }}</li>
+                <li>Affiliation: {{ $user->affiliation }}</li>
+                <li>Affiliation Type: {{ $user->affiliationtype }}</li>
 	</ul>
 
 	@if(Sentry::check())

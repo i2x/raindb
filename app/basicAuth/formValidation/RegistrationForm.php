@@ -9,6 +9,9 @@ class RegistrationForm extends FormValidator {
 		'password' => 'required|confirmed',
 		'first_name' => 'required',
 		'last_name' => 'required',
+            'affiliation' => 'required',
+            'affiliationtype' => 'required',
+            'intendedusage' => 'required',
 	];
 }
 

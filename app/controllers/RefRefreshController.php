@@ -28,6 +28,34 @@ class RefRefreshController extends BaseController
                         ->with('message','NOAA Data Updated Sucessfully');
 	
 	}
+        public function getData(){
+            
+ 	$data = Riverbasin::join('tbl_ref_settings',
+				'tbl_ref_settings.basin_id','=','riverbasin.basin_id')
+				->join('tbl_ref_data',
+						'tbl_ref_data.refid','=','tbl_ref_settings.idtbl_ref_settings')
+				->select(				
+				DB::raw(
+				'riverbasin.basin_name,
+				tbl_ref_settings.reftype,
+				tbl_ref_settings.varname,		
+				max(tbl_ref_data.meas_year) as b,
+				min(tbl_ref_data.meas_year) as c'
+                                    )
+		)->groupBy('riverbasin.basin_name','tbl_ref_settings.reftype','tbl_ref_settings.varname')           
+
+->orderBy('riverbasin.basin_name','tbl_ref_settings.reftype','tbl_ref_settings.varname');
+//            $sql=
+//                    "select basin_name,reftype,varname,max(meas_year),min(meas_year)
+//from riverbasin
+//inner join tbl_ref_settings on tbl_ref_settings.basin_id=riverbasin.basin_id
+//inner join tbl_ref_data on tbl_ref_data.refid=tbl_ref_settings.idtbl_ref_settings
+//group by basin_name,reftype,varname
+//order by basin_name,reftype,varname";
+    
+            return  Datatables::of($data)->make();
+        }
+        
         public function getPosition($data,$find)
 	{                
 		return strpos($data, $find)+strlen($find);

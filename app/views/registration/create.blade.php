@@ -51,7 +51,22 @@
 								{{ Form::text('last_name', null, ['placeholder' => 'Last Name', 'class' => 'form-control', 'required' => 'required'])}}
 								{{ errors_for('last_name', $errors) }}
 							</div>
-
+							<!-- Affiliation  name field -->
+							<div class="form-group">
+								{{ Form::text('affiliation', null, ['placeholder' => 'Affiliation ', 'class' => 'form-control', 'required' => 'required'])}}
+								{{ errors_for('affiliation ', $errors) }}
+							</div>
+							<!-- Affiliation  type field -->
+		<div class="form-group">
+			{{ Form::label('affiliationtype', 'Affiliation Type:') }}
+			{{ Form::select('affiliationtype', $affiliationtype, 'Guess', ['class' => 'form-control']) }}
+			{{ errors_for('affiliationtype', $errors) }}
+		</div>
+ 							<!-- Indended usage field -->
+							<div class="form-group">
+								{{ Form::text('intendedusage', null, ['placeholder' => 'Intended Usage', 'class' => 'form-control', 'required' => 'required'])}}
+								{{ errors_for('intendedusage ', $errors) }}
+							</div>                                                       
 							<!-- Submit field -->
 							<div class="form-group">
 								{{ Form::submit('Create Account', ['class' => 'btn btn-lg btn-primary btn-block']) }}

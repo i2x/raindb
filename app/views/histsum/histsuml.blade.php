@@ -1,5 +1,5 @@
 @extends('master')
-@section('title', 'Historical Data')
+@section('title', 'Historical Summary')
 
 {{-- Content --}}
 @section('content')
@@ -7,7 +7,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
-  	<li class="active">Historical Data</li>
+  	<li class="active">Historical Summary</li>
 	</ol>
 
 	

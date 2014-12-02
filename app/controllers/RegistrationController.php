@@ -33,7 +33,14 @@ class RegistrationController extends \BaseController {
 	 */
 	public function create()
 	{
-		return View::make('registration.create');
+		$affiliationType  = AffiliationType::all();
+                $affname = array();
+                foreach ($affiliationType as $affi){
+                    $affname = array_add($affname,$affi->name,$affi->name);
+                }
+                
+		return View::make('registration.create',[ 'affiliationtype' => $affname]);
+                
 	}
 
 	/**
@@ -43,11 +50,11 @@ class RegistrationController extends \BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::only('email', 'password', 'password_confirmation', 'first_name', 'last_name');
+		$input = Input::only('email', 'password', 'password_confirmation', 'first_name', 'last_name','affiliation','affiliationtype','intendedusage');
 
 		$this->registrationForm->validate($input);
 
-		$input = Input::only('email', 'password', 'first_name', 'last_name');
+		$input = Input::only('email', 'password', 'first_name', 'last_name','affiliation','affiliationtype','intendedusage');
 		$input = array_add($input, 'activated', true);
 
 		$user = $this->user->create($input);
@@ -64,6 +71,7 @@ class RegistrationController extends \BaseController {
 					'email' => $user->email,
 						
 					'password' => input::get('password'),
+                            
 			
 			);
 			
@@ -73,12 +81,19 @@ class RegistrationController extends \BaseController {
 
 				$message->to( input::get('email'), ' ')->subject('Rain - Confirmation of Registration!'); // exsample
 			});
+                        
+                        Mail::send('emails.auth.adminregisternotify', $data, function($message) 
+			{
+				$message->from('example@rain.com', 'Auth'); // example
+                                $user = $this->user->find(16); // first user as admin
+				$message->to( $user->email, ' ')->subject('Rain - New user registered!'); // exsample
+			});
 			
 			
 		}
 
 		// Find the group using the group name
-    	$usersGroup = Sentry::findGroupByName('Users');
+    	$usersGroup = Sentry::findGroupByName('NewUsers');
 
     	// Assign the group to the user
     	$user->addGroup($usersGroup);

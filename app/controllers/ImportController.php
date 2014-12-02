@@ -137,7 +137,7 @@ class ImportController extends BaseController
 			*/
 			
 			
-			return View::make('import.preview')->with('fileName','<code>'.$fileName.'</code>');
+			//return View::make('import.preview')->with('fileName','<code>'.$fileName.'</code>');
 				
 			
 			
@@ -246,13 +246,18 @@ class ImportController extends BaseController
 		});
 		
 		
-		return View::make('import.preview')->with('fileName','<code>'.$fileName.'</code>');
+		
 			
 		
 		}
 		
-		
-		
+		$updatepart = "update tbl_rain_measurement 
+set meas_year = date_part('year',cast(meas_date as timestamp )),
+meas_month = date_part('month',cast(meas_date as timestamp )),
+meas_day = date_part('day',cast(meas_date as timestamp ))
+where meas_year is null";
+                DB::update($updatepart);
+		return View::make('import.preview')->with('fileName','<code>'.$fileName.'</code>');
 		
 		
 	}
@@ -382,55 +387,89 @@ class ImportController extends BaseController
 			'detail'     => 'import by $user',
 			
 		));		
-		$source = ImportPreview::get();
-		$insert = 0;
-		$update = 0;
-		foreach ($source as $source)
-		{ 
-			$target = DB::table('tbl_rain_measurement')
-			->where('station_id',$source['station_id'])
-			->where('meas_date',$source['meas_date'])
-			->where('source',$source['source']);
-			if($target->exists())
-			{
-				$target->update(
-						array(
-									
-								'max_temp' => $source['max_temp'],
-								'min_temp' => $source['min_temp'],
-								'rain' => $source['rain'],
-								'avgrh' => $source['avgrh'],
-								'mean_temp' => $source['mean_temp'],
-								'meas_year' => $source['meas_year'],
-								'max_temp' => $source['max_temp'],
-								'meas_month' => $source['meas_month'],
-								'meas_day' => $source['meas_day'],
-						));
-				$update++;
-			}
-			else
-			{
-				$target->insert(
-						array(
-								'station_id'=>$source['station_id'],
-								'meas_date'=>$source['meas_date'],
-								'source'=>$source['source'],
-								'max_temp' => $source['max_temp'],
-								'min_temp' => $source['min_temp'],
-								'rain' => $source['rain'],
-								'avgrh' => $source['avgrh'],
-								'mean_temp' => $source['mean_temp'],
-								'meas_year' => $source['meas_year'],
-								'max_temp' => $source['max_temp'],
-								'meas_month' => $source['meas_month'],
-								'meas_day' => $source['meas_day'],
-						));
-				
-				$insert++;
-		
-			}
-		
-		}
+                $copytable = "
+                    insert into tbl_rain_measurement
+(meas_date,station_id,max_temp,min_temp,rain,avgrh,evapor,mean_temp,source,meas_year,meas_month,meas_day)
+select 
+tbl_temp_measurement.meas_date,	tbl_temp_measurement.station_id,	tbl_temp_measurement.max_temp,
+	tbl_temp_measurement.min_temp,	tbl_temp_measurement.rain,	
+tbl_temp_measurement.avgrh,
+	tbl_temp_measurement.evapor,	tbl_temp_measurement.mean_temp,
+	tbl_temp_measurement.source,	tbl_temp_measurement.meas_year,	tbl_temp_measurement.meas_month,	tbl_temp_measurement.meas_day
+from tbl_temp_measurement
+left join tbl_rain_measurement 
+on (tbl_rain_measurement.meas_date = tbl_temp_measurement.meas_date
+and tbl_rain_measurement.station_id = tbl_temp_measurement.station_id)
+where tbl_rain_measurement.station_id is null
+";       
+
+$countinsert = "
+select 
+count(0)
+from tbl_temp_measurement
+left join tbl_rain_measurement 
+on (tbl_rain_measurement.meas_date = tbl_temp_measurement.meas_date
+and tbl_rain_measurement.station_id = tbl_temp_measurement.station_id)
+where tbl_rain_measurement.station_id is null";
+                $countinsertres = DB::select($countinsert);
+                var_dump( $countinsert);
+                DB::insert($copytable);
+                $insert = 0;
+                $update = 0;
+                
+//		$source = ImportPreview::get();
+//		$insert = 0;
+//		$update = 0;
+//		foreach ($source as $source)
+//		{ 
+//			$target = DB::table('tbl_rain_measurement')
+//			->where('station_id',$source['station_id'])
+//			->where('meas_date',$source['meas_date'])
+//			->where('source',$source['source']);
+//			if($target->exists())
+//			{
+//				$target->update(
+//						array(
+//									
+//								'max_temp' => $source['max_temp'],
+//								'min_temp' => $source['min_temp'],
+//								'rain' => $source['rain'],
+//								'avgrh' => $source['avgrh'],
+//								'mean_temp' => $source['mean_temp'],
+//								'meas_year' => $source['meas_year'],
+//								'max_temp' => $source['max_temp'],
+//								'meas_month' => $source['meas_month'],
+//								'meas_day' => $source['meas_day'],
+//						));
+//				$update++;
+//			}
+//			else
+//			{
+//                            try{
+//				$target->insert(
+//						array(
+//								'station_id'=>$source['station_id'],
+//								'meas_date'=>$source['meas_date'],
+//								'source'=>$source['source'],
+//								'max_temp' => $source['max_temp'],
+//								'min_temp' => $source['min_temp'],
+//								'rain' => $source['rain'],
+//								'avgrh' => $source['avgrh'],
+//								'mean_temp' => $source['mean_temp'],
+//								'meas_year' => $source['meas_year'],
+//								'max_temp' => $source['max_temp'],
+//								'meas_month' => $source['meas_month'],
+//								'meas_day' => $source['meas_day'],
+//						));
+//                            }catch (\Exception $e){
+//                                //
+//                            }
+//				
+//				$insert++;
+//		
+//			}
+//		
+//		}
 		
 		// send message upload success to $this->getIndex()
 		Session::put('success',  "<div 

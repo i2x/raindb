@@ -1,4 +1,4 @@
-@extends('protected.admin.master')
+@extends('master')
 @section('title', 'schedule  ')
 
 

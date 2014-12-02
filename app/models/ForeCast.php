@@ -70,7 +70,7 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
     public function Exportrainfall4G($select_basin,$basin_id,$select_season)
     {    	    	     
     //meas_year >= 1948 and meas_year <=2007 and
-    $cmd = " select  c.yee, c.moo, coalesce(a.r1,-9999) as rx   	
+    $cmd = " select  c.yee, c.moo, coalesce(a.r1,-999) as rx   	
     		 from (select min(ye) as yee, min(mo) as moo from calendar_table where calendar_table.ye >= 1948 and calendar_table.ye <=".$this->getlatestyear($basin_id)." 
              group by ye,mo ) c
     		 left join 
@@ -96,7 +96,7 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
                    $result->rx . "\r\n" ; 
        }           
 
-       $textoutput = str_replace('-9999','NA',$textoutput);
+       $textoutput = str_replace('-999','NA',$textoutput);
        
        file_put_contents($outputfile,$textoutput);       
     }
@@ -105,7 +105,7 @@ file_put_contents(Yii::app()->basePath . DIRECTORY_SEPARATOR .'rawdata'.DIRECTOR
    public function getlatestyear($basin_id)
    {
    	 $sql = "select date_part('year',max(meas_date)) as yy from tbl_rain_measurement inner join 
-			tbl_selected_stations on tbl_selected_stations.station_id = tbl_rain_measurement.station_id 
+			tbl_rain_station on tbl_rain_station.stationid = tbl_rain_measurement.station_id 
 			where basin_id = ".$basin_id;
    	 
    	         $_lastyear = DB::select(DB::raw($sql));

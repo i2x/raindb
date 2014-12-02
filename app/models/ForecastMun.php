@@ -10,7 +10,7 @@ class ForecastMun extends Forecast {
        $cmd = "
         update tbl_rainsum set rain = ccc.rx 
 from (
-select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx   	
+select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-999) as rx   	
     		 from (select min(ye) as yee, min(mo) as moo from calendar_table where calendar_table.ye >= 1948  
              group by ye,mo ) c
     		 left join 
@@ -29,16 +29,23 @@ select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx
     DB::select(DB::raw($cmd));     
         
     }
+    public function getval3($season,$result){
+        if($season=='MAM'){
+         return "NA" . "\t";
+        } else {
+            return $result->val3 . "\t";
+        }
+    }
     public function refExportToTextFile($basin, $season, $baseyear,$addyear) {
         $year=$baseyear+$addyear; 
         $outputfile = base_path() .DIRECTORY_SEPARATOR. 'R' .DIRECTORY_SEPARATOR. $basin . DIRECTORY_SEPARATOR . $season . DIRECTORY_SEPARATOR .'predictors.txt'; //
         $cmd =
                 " select meas_year,meas_month, " .
-                " coalesce(meas_value1,-9999) as val1, " .
-                " coalesce(meas_value2,-9999) as val2, "  .
-                " coalesce(meas_value3,-9999) as val3, "  .
-                " coalesce(meas_value4,-9999) as val4, "  .
-               " coalesce(meas_value5,-9999) as val5 "  .
+                " coalesce(meas_value1,-999) as val1, " .
+                " coalesce(meas_value2,-999) as val2, "  .
+                " coalesce(meas_value3,-999) as val3, "  .
+                " coalesce(meas_value4,-999) as val4, "  .
+               " coalesce(meas_value5,-999) as val5 "  .
                 " from tbl_ref_data4forecast_" . $basin . " " .
                 " where season ='$season' " .
                 " and  (".$year." )* 100+12>= meas_year*100 + meas_month order by meas_year,meas_month"
@@ -49,13 +56,12 @@ select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx
            $textoutput = $textoutput. $result->meas_year . "\t" . $result->meas_month . "\t" .
                    $result->val1 . "\t" .
                    $result->val2 . "\t" .
-                   $result->val3 . "\t" .
+                   $this->getval3($season,$result) .
                    $result->val4 . "\t". 
                    $result->val5 . "\n"; 
-
            }           
        
-       $textoutput = str_replace('-9999','NA',$textoutput);
+       $textoutput = str_replace('-999','NA',$textoutput);
        
        file_put_contents($outputfile,$textoutput);
     }
@@ -72,7 +78,7 @@ select  10 as basin_id, c.yee, c.moo, coalesce(a.r1,-9999) as rx
         // calculate lag time
         $add_year = 0;
         $curmonth = $Input['basemonth']; 
-        $lagtime = $this->season2month($Input['season']) - $curmonth;
+        $lagtime = $this->season2month($Input['season']) - $curmonth-1;
         if ($lagtime <= 0) {
             $lagtime = $lagtime + 12;
             $add_year = 1; // forecast next year

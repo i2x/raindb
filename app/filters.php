@@ -54,7 +54,8 @@ Route::filter('admin', function()
     if (!$user->inGroup($admin))
     {
     	
-    	Session::put('error_message', 'Permission denied.');
+Session::put('error_message', '(admin)Permission denied. For new user, you account is being reviewed by administrator.');
+    	
     	 
     	return Redirect::to('login');
     	 
@@ -67,6 +68,33 @@ Route::filter('standardUser', function()
 {
 	$user = Sentry::getUser();
     $users = Sentry::findGroupByName('Users');
+
+    if (!$user->inGroup($users))
+    {
+    	Session::put('error_message', '(standard user)Permission denied. For new user, you account is being reviewed by administrator.');
+    	
+    	return Redirect::to('login');
+    }
+});
+
+Route::filter('SuperUsers', function()
+{
+	$user = Sentry::getUser();
+    $users = Sentry::findGroupByName('Super Users');
+
+    if (!$user->inGroup($users))
+    {
+    	Session::put('error_message', '(super user)Permission denied. For new user, you account is being reviewed by administrator.');
+    	
+    	return Redirect::to('login');
+    }
+});
+
+
+Route::filter('NewUsers', function()
+{
+	$user = Sentry::getUser();
+    $users = Sentry::findGroupByName('NewUsers');
 
     if (!$user->inGroup($users))
     {

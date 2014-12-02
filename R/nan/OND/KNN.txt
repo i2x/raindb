@@ -147,7 +147,7 @@ i
 collect_all_year=t(collect_all_year)
 collect_all_year=data.frame(collect_all_year)
 #names(collect_all_year) <- paste(1977:(1977+year_range-1), sep="")
-write.table(collect_all_year, file=paste(month, "out.txt", sep=""),col.names = FALSE, row.names = FALSE)
+write.table(collect_all_year, file=paste( "out.txt", sep=""),col.names = FALSE, row.names = FALSE)
 collect_all_year=t(collect_all_year)
 skw=1:num_sim
 meann=1:num_sim

@@ -9,6 +9,7 @@ class AdminUsersController extends \BaseController {
 	 * @var $user
 	 */
 	protected $user;
+        protected $id;
 
 	/**
 	* @var adminUsersEditForm
@@ -81,6 +82,8 @@ class AdminUsersController extends \BaseController {
 		return View::make('protected.admin.edit_user', ['user' => $user, 'groups' => $array_groups, 'user_group' =>$user_group]);
 	}
 
+
+        
 	/**
 	 * Update the specified resource in storage.
 	 *
@@ -89,9 +92,8 @@ class AdminUsersController extends \BaseController {
 	 */
 	public function update($id)
 	{
-
-		$user = $this->user->find($id);
-
+                $this->id = $id;
+		$user = $this->user->find($id);                
 
 		if (! Input::has("password"))
 		{
@@ -105,7 +107,14 @@ class AdminUsersController extends \BaseController {
 
 			$this->user->updateGroup($id, Input::get('account_type'));
 
-
+			Mail::send('emails.auth.update', array('name' => $user->first_name.' '.$user->last_name), function($message) 
+			{
+				$message->from('example@rain.com', 'Auth'); // example
+                                $user = $this->user->find($this->id);
+				$message->to($user->email, ' ')->subject('Rain - Account updated sucessfully!'); // exsample
+			});
+                        
+                        
 			return Redirect::route('admin.profiles.edit', $user->id)->withFlashMessage('User has been updated successfully!');
 		}
 
@@ -122,6 +131,12 @@ class AdminUsersController extends \BaseController {
 			$user->save();
 
 			$this->user->updateGroup($id, Input::get('account_type'));
+			Mail::send('emails.auth.update', array('name' => $user->first_name.' '.$user->last_name), function($message) 
+			{
+				$message->from('example@rain.com', 'Auth'); // example
+                                $user = $this->user->find($this->id);
+				$message->to($user->email, ' ')->subject('Rain - Account updated sucessfully!'); // exsample
+			});
 
 			return Redirect::route('admin.profiles.edit', $user->id)->withFlashMessage('User (and password) has been updated successfully!');
 
@@ -136,6 +151,14 @@ class AdminUsersController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+		$user = $this->user->find($id);
+
+		$user_group = $user->getGroups()->first()->name;
+
+		$groups = Sentry::findAllGroups();
+
+
+		return View::make('protected.admin.list_user');
 		//
 	}
 

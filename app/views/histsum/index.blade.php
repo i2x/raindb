@@ -1,4 +1,4 @@
-<title>Rain - Historical Data</title>
+<title>Rain - History Sumary</title>
 {{View::make('master')}}
 
 {{ HTML::script('packages/jquery/jquery.min.js'); }}
