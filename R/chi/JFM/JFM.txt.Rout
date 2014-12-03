@@ -162,7 +162,7 @@ locfit 1.5-9.1 	 2013-03-22
 > month
 [1] 1
 > i
-[1] 15
+[1] 5
 > collect_all_year=t(collect_all_year)
 > collect_all_year=data.frame(collect_all_year)
 > #names(collect_all_year) <- paste(1977:(1977+year_range-1), sep="")
@@ -186,4 +186,4 @@ locfit 1.5-9.1 	 2013-03-22
 > 
 > proc.time()
    user  system elapsed 
-  0.927   0.029   0.953 
+  0.953   0.031   1.163 

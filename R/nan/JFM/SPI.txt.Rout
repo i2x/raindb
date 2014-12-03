@@ -25,8 +25,22 @@ Type 'q()' to quit R.
 > rf=read.table("RAINFALL.txt")
 > ss.rain=rf[ ,15+month]
 > fc.r=read.table(paste("out.txt",sep=""))
-Error in file(file, "rt") : cannot open the connection
-Calls: read.table -> file
+> SPI.fc=matrix(nrow=n_simul,ncol=1)
+> for (j in 1:n_simul){
++ data=c(ss.rain,fc.r[j,1])
++ fit.cdf <- ecdf(data)
++ cdfs <- sapply(data,fit.cdf)
++ SPI <- qnorm(cdfs)
++ SPI.fc[j,1]=SPI[length(SPI)]
++ SPI.fc=round(SPI.fc,digits=2)
++ }
+> #file_names1=paste(mon_names,best_lag,"-mSPI.out",sep="")
+> #write(t(SPI.fc),file=file_names1,ncol=ncol(SPI.fc),append=FALSE,sep="\t")
+> write.table(SPI.fc, file=paste( "SPIO.txt", sep=""),col.names = FALSE, row.names = FALSE)
+Error in file(file, ifelse(append, "a", "w")) : 
+  cannot open the connection
+Calls: write.table -> file
 In addition: Warning message:
-In file(file, "rt") : cannot open file 'out.txt': No such file or directory
+In file(file, ifelse(append, "a", "w")) :
+  cannot open file 'SPIO.txt': Permission denied
 Execution halted

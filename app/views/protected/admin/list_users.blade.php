@@ -5,7 +5,7 @@
 @section('content')
 
 <h2>Registered Users</h2>
-	<p>Here you would normally search for users but since this is just a demo, I'm listing all of them.</p>
+	<p></p>
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 	        <tr>

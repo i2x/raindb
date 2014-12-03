@@ -153,12 +153,8 @@ class AdminUsersController extends \BaseController {
 	{
 		$user = $this->user->find($id);
 
-		$user_group = $user->getGroups()->first()->name;
-
-		$groups = Sentry::findAllGroups();
-
-
-		return View::make('protected.admin.list_user');
+                $user->delete();
+		return View::make('protected.admin.destroy_user');
 		//
 	}
 

@@ -47,7 +47,7 @@ locfit 1.5-9.1 	 2013-03-22
 > rain_file="rain"
 > rain_name=paste(rain_file,".txt",sep="")
 > rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=(n_rain+2))
-Read 2304 items
+Read 2412 items
 > n_rr=nrow(rf)
 > sy_rain=rf[1,1]
 > ye_rain=rf[n_rr,1]
@@ -89,7 +89,7 @@ Read 5712 items
 > yf=(ye-sy+1)*12		# yf is the number of data to fit model
 > ty=ye-sy+1		# number of fitting years
 > yr=c(sy:ye)		# fitting year
-> best_lag=7		# the lag time of forecast (change as needed)
+> best_lag=4		# the lag time of forecast (change as needed)
 > 
 > mth=2			# starting month of season
 > mon=4			# ending month of season
@@ -369,4 +369,4 @@ Read 5712 items
 > 
 > proc.time()
    user  system elapsed 
-  0.558   0.033   0.912 
+  0.588   0.033   0.886 

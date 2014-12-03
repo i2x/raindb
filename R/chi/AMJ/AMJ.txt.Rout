@@ -17,6 +17,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+[Previously saved workspace restored]
+
 > #setwd("4-6")
 > library(locfit)
 locfit 1.5-9.1 	 2013-03-22
@@ -50,9 +52,6 @@ locfit 1.5-9.1 	 2013-03-22
 + rf=RF[, month+15]}
 > ###########read combination case ###############
 > lag=read.table("st_lag.txt")#for (lag in 1:12) {  ###<<<<<<<<<<<<<<<<
-Warning message:
-In read.table("st_lag.txt") :
-  incomplete final line found by readTableHeader on 'st_lag.txt'
 > lag=sum(lag)  ##<<<<<<<<<<<<<<<<<<
 > collect_all_year=NULL
 > i=lag+3
@@ -176,4 +175,4 @@ In cbind(V4[, 15 + month - i], RF[, 15 + month - i]) :
 > 
 > proc.time()
    user  system elapsed 
-  0.895   0.037   1.173 
+  0.907   0.028   1.131 

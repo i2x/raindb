@@ -62,4 +62,4 @@ Read 2304 items
 > 
 > proc.time()
    user  system elapsed 
-  0.533   0.024   0.595 
+  0.552   0.019   0.589 

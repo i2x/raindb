@@ -64,7 +64,7 @@ se=(ye-const+1)*12	# ending point of fitting
 yf=(ye-sy+1)*12		# yf is the number of data to fit model
 ty=ye-sy+1		# number of fitting years
 yr=c(sy:ye)		# fitting year
-best_lag=6		# the lag time of forecast (change as needed)
+best_lag=4		# the lag time of forecast (change as needed)
 
 mth=1			# starting month of season
 mon=3			# ending month of season

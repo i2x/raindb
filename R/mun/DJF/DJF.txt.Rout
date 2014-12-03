@@ -61,7 +61,7 @@ Read 2304 items
 > n_pred=length(pred_index)
 > pred_fname=paste("predictors.txt",sep="")
 > pred=matrix(scan(pred_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
-Read 5628 items
+Read 5544 items
 > n_rp=nrow(pred)
 > n_cp=ncol(pred)
 > sy_pred=pred[1,1]
@@ -72,7 +72,7 @@ Read 5628 items
 > # LOAD GCM DATA
 > gcm_fname=paste("predictors.txt",sep="")
 > gcm_pred=matrix(scan(gcm_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
-Read 5628 items
+Read 5544 items
 > gcm_rp=nrow(gcm_pred)
 > gcm_cp=ncol(gcm_pred)
 > sy_gcm=gcm_pred[1,1]
@@ -89,7 +89,7 @@ Read 5628 items
 > yf=(ye-sy+1)*12		# yf is the number of data to fit model
 > ty=ye-sy+1		# number of fitting years
 > yr=c(sy:ye)		# fitting year
-> best_lag=5		# the lag time of forecast (change as needed)
+> best_lag=11		# the lag time of forecast (change as needed)
 > 
 > mth=3			# starting month of season
 > mon=11			# ending month of season
@@ -314,63 +314,6 @@ Read 5628 items
 + file_names2=paste(mon_names,best_lag,"-mForecast.Rdata",sep="")
 + save(ensemblef_1,file=file_names2)
 + }		# lag loop
-> 
-> #---------------------------------------------------------------
-> # Now save the initial values
-> f_names=paste("InitialValue_",mon_names,".Rdata",sep="")
-> save(mon_names,pred_index,G_rain,no_rain,best_lag,n_simul,sfy,yef,file=f_names)
-> 
-> #---------TERMINATE THE MODIFIED K-NN MODEL---------------------
-> 
-> #---------------------------------------------------------------
-> #	PROBABILITY OF THE ANOMALOUS EVENTS
-> #---------------------------------------------------------------
-> # LOAD INITIAL SET UP OF K-NN MODEL
-> load("InitialValue_DJF.Rdata")
-> 
-> # PDF PLOT
-> #library(sm)		# Load the package "sm"
-> 
-> b_lag=best_lag		# best lag among 12 lags (change as needed)
-> yr_pdf=sfy:(yef-1)		# years making PDF plot
-> nyr=length(yr_pdf)
-> #limit=c(381.7,528.9)	# p20th and p80th of seasonal rainfall (change as needed)
-> limit=c(30.3,68.9)	# p30th and p70th of seasonal rainfall (change as needed)
-> #conf_d=c(348.9,400.1)
-> #conf_w=c(479.0,530.1)
-> nlim=length(limit)
-> prob=matrix(ncol=(nlim+2),nrow=nyr)
-> prob[,1]=yr_pdf
-> 
-> for(v in b_lag:b_lag)	# lag loop
-+ {
-+ file_names=paste(mon_names,best_lag,"-mForecast.Rdata",sep="")
-+ load(file_names)
-+ for(i in 1:nyr)		# year loop
-+ {
-+ ensem_p=subset(ensemblef_1,ensemblef_1[,1]==yr_pdf[i])
-+ ensem_s=ensem_p[,2:(n_simul+1)]
-+ n_ensem=length(ensem_s)
-+ 
-+ D=length(ensem_s[ensem_s<limit[1]])
-+ prob[,2]=D/n_ensem
-+ 
-+ W=length(ensem_s[ensem_s>limit[2]])
-+ prob[,4]=W/n_ensem
-+ 
-+ prob[,3]=1-prob[,2]-prob[,4]
-+ prob=round(prob,digits=3)
-+ }	# year loop
-+ }	# lag loop
-> file_name=paste("PDF_",mon_names,"_",b_lag,"-mForecast.out",sep="")
-> title=paste("Probabilities of anomalous events (D N W) of ",mon_names,sep="")
-> write(title,file=file_name,append=FALSE)
-> write(t(prob),ncol=ncol(prob),file=file_name,sep="\t",append=TRUE)
-> remark=paste("Remark: D is rainfall<",limit[1]," mm; W is rainfall>",limit[2]," mm; Otherwise, N",sep="")
-> write(remark,file=file_name,append=TRUE)
-> 
-> #----------TERMINATE THE PROBABILITY CALCULATION-------------------
-> 
-> proc.time()
-   user  system elapsed 
-  0.589   0.046   0.998 
+Error in Xf[p1, ] : subscript out of bounds
+Calls: rbind
+Execution halted

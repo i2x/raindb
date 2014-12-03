@@ -56,11 +56,11 @@
 				<div style="text-align:center">
 					<p><a href="{{ URL::to('forgot_password')}}">Forgot Password?</a></p>
 
-					<p><strong>User:</strong> user@user.com<br>
+					<!--<p><strong>User:</strong> user@user.com<br>
 					<strong> User Password:</strong> 123456</p>
 
 					<p><strong>Admin:</strong> admin@admin.com<br>
-					<strong>Admin Password:</strong> 123456</p>
+					<strong>Admin Password:</strong> 123456</p>-->
 				</div>
 
 

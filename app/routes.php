@@ -10,7 +10,9 @@ Route::group(['before' => 'redirectAdmin'], function()
 {
 	Route::get('/', ['as' => 'home', 'uses' => 'PagesController@getHome']);
 	Route::get('/about', ['as' => 'about', 'uses' => 'PagesController@getAbout']);
-	Route::get('/contact', ['as' => 'contact', 'uses' => 'PagesController@getContact']);
+	//Route::get('/contact', ['as' => 'contact', 'uses' => 'PagesController@getContact']);
+        Route::resource('/contact', 'ContactController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
+
 });
 
 # Registration

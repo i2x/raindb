@@ -17,6 +17,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+[Previously saved workspace restored]
+
 > #setwd("2-4")
 > library(locfit)
 locfit 1.5-9.1 	 2013-03-22
@@ -166,7 +168,7 @@ locfit 1.5-9.1 	 2013-03-22
 > month
 [1] 2
 > i
-[1] 4
+[1] 6
 > collect_all_year=t(collect_all_year)
 > collect_all_year=data.frame(collect_all_year)
 > #names(collect_all_year) <- paste(1977:(1977+year_range-1), sep="")
@@ -190,4 +192,4 @@ locfit 1.5-9.1 	 2013-03-22
 > 
 > proc.time()
    user  system elapsed 
-  0.946   0.030   1.417 
+  0.947   0.037   1.192 

@@ -63,9 +63,12 @@
 		</div>
 	{{ Form::close() }}
 
-	{{ Form::model($user, ['method' => 'PATCH', 'route' => ['admin.profiles.destroy', $user->id]]) }}        
+	{{ Form::model($user, ['method' => 'DELETE', 'route' => ['admin.profiles.destroy', $user->id]]) }}        
         		<div class="form-group">
-			{{ Form::submit('Delete Profile', ['class' => 'btn btn-primary']) }}
+			{{ 
+                        Form::submit('Delete Profile', ['class' => 'btn btn-primary','onclick'=>"if(!confirm('Are you sure to delete this item?')){return false;};"]
+                        )
+                        }}
 		</div>
 	{{ Form::close() }}
 

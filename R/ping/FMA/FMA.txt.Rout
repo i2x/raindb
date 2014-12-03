@@ -1,7 +1,7 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -16,6 +16,8 @@ Type 'contributors()' for more information and
 Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
+
+[Previously saved workspace restored]
 
 > #----------------------------------------------
 > #    		MODIFIED K-NN MODEL
@@ -42,10 +44,10 @@ locfit 1.5-9.1 	 2013-03-22
 > mon_names=c("FMA")
 > G_rain=c("Averg50")
 > n_rain=length(G_rain)
-> rain_file="PingRain"
+> rain_file="rain"
 > rain_name=paste(rain_file,".txt",sep="")
 > rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=(n_rain+2))
-Read 2160 items
+Read 2412 items
 > n_rr=nrow(rf)
 > sy_rain=rf[1,1]
 > ye_rain=rf[n_rr,1]
@@ -57,7 +59,7 @@ Read 2160 items
 > pred_index=c("SAT","SLP","SXW","SYW")	# predictors of seasonal rainfall
 > unit=c("C","mb","m/s","m/s")
 > n_pred=length(pred_index)
-> pred_fname=paste(mon_names,"_predictors.txt",sep="")
+> pred_fname=paste("predictors.txt",sep="")
 > pred=matrix(scan(pred_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
 Read 4896 items
 > n_rp=nrow(pred)
@@ -68,7 +70,7 @@ Read 4896 items
 > fpreds1=pred[,3:n_cp]
 > 
 > # LOAD GCM DATA
-> gcm_fname=paste(mon_names,"_predictors.txt",sep="")
+> gcm_fname=paste("predictors.txt",sep="")
 > gcm_pred=matrix(scan(gcm_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
 Read 4896 items
 > gcm_rp=nrow(gcm_pred)
@@ -87,7 +89,7 @@ Read 4896 items
 > yf=(ye-sy+1)*12		# yf is the number of data to fit model
 > ty=ye-sy+1		# number of fitting years
 > yr=c(sy:ye)		# fitting year
-> best_lag=7		# the lag time of forecast (change as needed)
+> best_lag=9		# the lag time of forecast (change as needed)
 > 
 > mth=2			# starting month of season
 > mon=4			# ending month of season
@@ -366,4 +368,4 @@ Read 4896 items
 > 
 > proc.time()
    user  system elapsed 
-   0.71    0.00    0.75 
+  0.580   0.043   0.880 

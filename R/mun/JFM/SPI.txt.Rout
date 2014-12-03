@@ -22,7 +22,7 @@ Type 'q()' to quit R.
 > rain_file="rain"
 > rain_name=paste(rain_file,".txt",sep="")
 > rf=matrix(scan(rain_name,na.strings="NA"),byrow=T,ncol=3)
-Read 2304 items
+Read 2412 items
 > n_rr=nrow(rf)
 > sy_rain=rf[1,1]
 > ye_rain=rf[n_rr,1]
@@ -62,4 +62,4 @@ Read 2304 items
 > 
 > proc.time()
    user  system elapsed 
-  0.531   0.020   0.551 
+  0.553   0.024   0.604 

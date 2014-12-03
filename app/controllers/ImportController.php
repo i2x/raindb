@@ -379,12 +379,12 @@ where meas_year is null";
 	
 	public function toDatabase()
 	{
-		
+		$att = Sentry::getUser()->email;
 		$fileName = Session::get('filename');
 		File::move(base_path('temp/').$fileName, base_path('upload_files/').$fileName);//Move File Form 'temp' To 'uploadFiles'UploadFiles
 		ImportLog::insert(array(
 			'filename'   => $fileName,
-			'detail'     => 'import by $user',
+			'detail'     => 'imported by '.$att,
 			
 		));		
                 $copytable = "

@@ -61,7 +61,7 @@ Read 2304 items
 > n_pred=length(pred_index)
 > pred_fname=paste("predictors.txt",sep="")
 > pred=matrix(scan(pred_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
-Read 5376 items
+Read 5712 items
 > n_rp=nrow(pred)
 > n_cp=ncol(pred)
 > sy_pred=pred[1,1]
@@ -72,7 +72,7 @@ Read 5376 items
 > # LOAD GCM DATA
 > gcm_fname=paste("predictors.txt",sep="")
 > gcm_pred=matrix(scan(gcm_fname,na.strings="NA"),byrow=T,ncol=(n_pred+2))
-Read 5376 items
+Read 5712 items
 > gcm_rp=nrow(gcm_pred)
 > gcm_cp=ncol(gcm_pred)
 > sy_gcm=gcm_pred[1,1]
@@ -89,7 +89,7 @@ Read 5376 items
 > yf=(ye-sy+1)*12		# yf is the number of data to fit model
 > ty=ye-sy+1		# number of fitting years
 > yr=c(sy:ye)		# fitting year
-> best_lag=1		# the lag time of forecast (change as needed)
+> best_lag=8		# the lag time of forecast (change as needed)
 > 
 > mth=4			# starting month of season
 > mon=6			# ending month of season
@@ -369,4 +369,4 @@ Read 5376 items
 > 
 > proc.time()
    user  system elapsed 
-  0.570   0.038   0.911 
+  0.583   0.036   0.898 
