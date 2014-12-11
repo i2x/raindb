@@ -14,12 +14,6 @@
 
 	<div class="container">
 
-
-
-
-
-
-
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
   	<li class="active">Historical Data</li>
@@ -31,60 +25,18 @@
 	<?php 
 	
 	//if(isset($oldInput))print_r($oldInput);
+        //'class' => 'btn btn-primary btn-sm'
 	?>
-		{{ Form::open(array('url' => 'historical', 'method' => 'POST')) }}
-	<div class="col-md-12 ">
-		
-				<div class="row">
+            <div class='col-md-12'>
+        <button id='hideshow'>Hide/Show</button>
+        <a class="btn" href="http://ssf.haii.or.th/raindb/public/index.php/historical">Clear</a>
 
-		
-				<div class="col-md-2 column">
-				{{ Form::select('basin',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
-				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
-				array('class'=>'chosen-select','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 160px;"))}}
-				</div>
-				
-				
-				<div class="col-md-2 column">
-				{{ Form::select('province',array(''=>'') + Province::lists('province_name','province_id'),
-				isset($oldInput['province']) ? $oldInput['province'] : null ,
-				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
-				</div>
-	
-				
-				<div class="col-md-2 column">
-			
-				{{ Form::select(
-				'ampher',array(''=>'')+Ampher::lists('name','ampher_id'),
-				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
-				array('class'=>'chosen-select','data-placeholder'=>
-				'Select Amphur'
-				
-				,'id'=>'ampher','style'=>"width: 160px;"))}}
-				</div>
-				
-				<div class="col-md-2 column">
-			
-				{{ Form::select('station',array(''=>'')+Station::lists('name','stationid'),
-				isset($oldInput['station']) ? $oldInput['station']  : null 
-				,
-				array('class'=>'chosen-select',
-				'data-placeholder'=>'Select Station',
-				'id'=>'station','style'=>"width: 160px;"))}}
-				
-				</div>
-				
-		
-				
-				
-								
-			
-				</div>
-				
+
+            </div>
+	<div id='searchform' class="col-md-12 ">
+            {{ Form::open(array('url' => 'historical', 'method' => 'POST')) }}	
 				<div class ="row">
-				<br>
 				<div class="col-md-2 column">
-				
 				<div class="input-group date">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
   				<input type="text" class="form-control"
@@ -94,18 +46,11 @@
    				 {
    				 	if(!empty($oldInput['start']))echo " value = ". $oldInput['start'];
    				 }
-   				 
    				 ?>
-  				
-  				>
+  				/>
 				</div>	
-				
-				
-				
 				</div>
-				
-					<div class="col-md-2 column">
-				
+				<div class="col-md-2 column">
 				<div class="input-group date">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
   				<input type="text" class="form-control"
@@ -117,37 +62,71 @@
    				 }
    				 
    				 ?>
-  				
-  				>
+  				/>
 				</div>	
-				
-				
-				
 				</div>
-				
-				<div class="col-md-4 column">
+				<div class="col-md-3 column">
 				{{ Form::checkbox('only_rainy_day', 'true',
 				isset($oldInput['only_rainy_day']) ? true : false 
 				)}}
 				{{Form::label('rainy_day', 'Only Rainy Day')}}
+				{{Form::submit('Submit', array())}}
+				</div>	
+				</div>
+		  
+			  <div class="row"><br/></div>
+                          
+				<div class="row">
+
+                                
+				<div class="col-md-3 column">
+                                    Basin:<br/>
+				{{ Form::select('basin[]',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
+				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
+				array('multiple','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 200px;height:280px"))}}
+				</div>
+				<!--'class'=>'chosen-select',-->
 				
+				<div class="col-md-3 column">
+                                    Province:<br/>
+				{{ Form::select('province[]',array(''=>'') + Province::lists('province_name','province_id'),
+				isset($oldInput['province']) ? $oldInput['province'] : null ,
+				array('multiple','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 200px;height:280px"))}}
+				</div>
+	
+				
+				<div class="col-md-3 column">
+			Ampher:<br/>
+				{{ Form::select(
+				'ampher[]',array(''=>'')+Ampher::lists('name','ampher_id'),
+				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
+				array('multiple','data-placeholder'=>
+				'Select Amphur'
+				
+				,'id'=>'ampher','style'=>"width: 200px;height:280px"))}}
 				</div>
 				
+				<div class="col-md-3 column">
+			Station:<br/>
+				{{ Form::select('station[]',array(''=>'')+Station::lists('name','stationid'),
+				isset($oldInput['station']) ? $oldInput['station']  : null 
+				,
+				array('multiple',
+				'data-placeholder'=>'Select Station',
+				'id'=>'station','style'=>"width: 200px;height:280px"))}}
+				
+				</div>
+									
 				</div>
 				
-			
-				
-				<div class="row"> <br></div>
-			  {{Form::submit('submit', array('class' => 'btn btn-primary btn-sm'))}}
+
 			  
-			  
-			  <div class="row"> <br></div>
-			  
-			  
+                          
 			   
 			 {{ Form::close() }}
 						
 	</div>
+            
 				
 
 <script type="text/javascript">
@@ -163,9 +142,12 @@ $(document).ready(function(){
 	
 
 
-	$('.chosen-select').chosen();
+	//$('.chosen-select').chosen();
 
-
+    $('#hideshow').click( function() {        
+         $('#searchform').toggle('show');
+    });
+    
 	$('#basin').change(function(){
 		var value = $("#basin").val();
 		

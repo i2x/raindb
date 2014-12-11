@@ -239,6 +239,15 @@
   				<div id="container2"  "     style="width:84.5%;"></div>
 				</div>
 		</div>
+        
+		<div class="tab-content">
+  				<div class="tab-pane fade in active" id="rain" >
+ 				<div id="container" ></div>
+				</div>
+				<div class="tab-pane fade " id="temp">
+  				<div id="container2"  "     style="width:84.5%;"></div>
+				</div>
+		</div>        
 
 <script type="text/javascript" charset="UTF-8">
 $(function () {

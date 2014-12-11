@@ -144,7 +144,7 @@ class ReportController extends Controller
 
 			$weekly = DB::select(DB::raw("
 			
-			SELECT 		date_part('year',meas_date) AS _YEAR,
+			SELECT 		date_part('year',meas_date) AS _YEAR, date_part('month',min(meas_date)) as _MONTH,
 		    date_part( 'week', meas_date ) AS _week,
 			SUM(  rain ) AS _weeksum,
 			".$sql."
@@ -153,7 +153,7 @@ class ReportController extends Controller
 			WHERE  station_id in (".$condition.")
 			".$start." ".$end."			
 			GROUP BY date_part('year',meas_date) ,date_part( 'week', meas_date) 
-			ORDER by _YEAR,_week ASC
+			ORDER by _YEAR,_MONTH,_week ASC
 					
 			
 			"));

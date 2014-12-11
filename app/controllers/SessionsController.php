@@ -55,7 +55,7 @@ class SessionsController extends \BaseController {
 	    if ($user->inGroup($admin)) return Redirect::intended('admin');
 	    elseif ($user->inGroup($users)) return Redirect::intended('/');
             elseif ($user->inGroup($newuser)) return Redirect::intended('/');
-             elseif ($user->inGroup($superuser)) return Redirect::intended('/');
+            elseif ($user->inGroup($superuser)) return Redirect::intended('/');
 
 
 	}

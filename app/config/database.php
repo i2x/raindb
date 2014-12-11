@@ -69,7 +69,7 @@ return array(
 			'host'     => 'localhost',
 			'database' => 'rain',
 			'username' => 'postgres',
-			//'password' => 'phisan243',
+			
 			'password' => '9066',
 				
 			'charset'  => 'utf8',

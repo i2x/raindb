@@ -71,7 +71,7 @@ class RegistrationController extends \BaseController {
 					'email' => $user->email,
 						
 					'password' => input::get('password'),
-                            
+                                        
 			
 			);
 			
@@ -82,12 +82,17 @@ class RegistrationController extends \BaseController {
 				$message->to( input::get('email'), ' ')->subject('Rain - Confirmation of Registration!'); // exsample
 			});
                         
-                        Mail::send('emails.auth.adminregisternotify', $data, function($message) 
+                        $admingroup = Sentry::findGroupByName('Admins');
+                        $admin = Sentry::findAllUsersInGroup($admingroup);
+                                foreach($admin as $a){
+                      
+                        Mail::send('emails.auth.adminregisternotify', $data, function($message)use (&$a) 
 			{
 				$message->from('example@rain.com', 'Auth'); // example
-                                $user = $this->user->find(16); // first user as admin
-				$message->to( $user->email, ' ')->subject('Rain - New user registered!'); // exsample
+				$message->to( $a->email, ' ')->subject('Rain - New user registered!'); // exsample
+                                
 			});
+                                }
 			
 			
 		}

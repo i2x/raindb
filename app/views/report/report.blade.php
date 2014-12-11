@@ -35,7 +35,7 @@ if (isset($weekly))
 		else 
 		{
 			
-			$_week = $_week.',\''.$value->_year."\ (".$value->_week.")".'\'';
+			$_week = $_week.',\''.$value->_year."-".$value->_month."\ (".$value->_week.")".'\'';
 			$_weeksum = $_weeksum.','.$value->_weeksum;
 			$_weekmax = $_weekmax.','.$value->_weekmax;
 			$_weekmin = $_weekmin.','.$value->_weekmin;
@@ -313,7 +313,7 @@ $(function () {
         },
         xAxis: {
             categories: [<?php echo substr($_week,1) ?>],
-	       	minTickInterval: 12,                 
+	                    
                 	
         },
 

@@ -75,13 +75,14 @@ class HistoricalController extends BaseController
 			
 		$Input = Session::get('input');
 		
+		//var_dump($Input);
+                
 		
 		
-		
-			if($Input['basin'] != NULL)$data->where('basin_id',$Input['basin']);
-			if($Input['station'] != NULL)$data->where('stationid',$Input['station']);
-			if($Input['province'] != NULL)$data->where('province',$Input['province']);
-			if($Input['ampher'] != NULL)$data->where('ampher',$Input['ampher']);
+			if($Input['basin'] != NULL)$data->whereIn('basin_id',$Input['basin']);//
+			if($Input['station'] != NULL)$data->whereIn('stationid',$Input['station']);
+			if($Input['province'] != NULL)$data->whereIn('province',$Input['province']);
+			if($Input['ampher'] != NULL)$data->whereIn('ampher',$Input['ampher']);
 			if($Input['start'] != NULL)$data->where('meas_date','>=',$Input['start']);
 			if($Input['end'] != NULL)$data->where('meas_date','<=',$Input['end'].' 23:59:59');
 			if(isset($Input['only_rainy_day']))$data->where('rain','>',0);

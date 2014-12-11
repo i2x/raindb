@@ -83,6 +83,13 @@ Route::group(['before' => 'auth|(SuperUsers || admin)'], function()
 	Route::post('station', 'SelectController@station');
 	Route::post('season',  'SelectController@season');
 	Route::post('basemonth',  'SelectController@basemonth');
+        
+	Route::get('province',  'SelectController@province');
+	Route::get('ampher',  'SelectController@ampher');
+	Route::get('station', 'SelectController@station');
+	Route::get('season',  'SelectController@season');
+	Route::get('basemonth',  'SelectController@basemonth');
+        
 	//Report
 	Route::get('report','ReportController@getIndex');
 	Route::post('report','ReportController@postIndex');
