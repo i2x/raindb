@@ -103,9 +103,9 @@ if( $group[0]['pivot']['group_id'] == 1 || $group[0]['pivot']['group_id']==3 )$u
                         @if(!$userloggedin)
                         <li class="{{ set_active('histsum') }}"><a href="{{ URL::to('histsum') }}">Historical Summary</a></li>
                         <li class="{{ set_active('historical') }}"><a href="{{ URL::to('historical') }}">Historical Data</a></li>
-		        <li class="{{ set_active('graph') }}"><a href="{{ URL::to('graph') }}">Graph</a></li>
-		        <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>
-
+		        <li class="{{ set_active('graph') }}"><a href="{{ URL::to('graph') }}">Graph & Report</a></li>
+		       <!-- <li class="{{ set_active('report') }}"><a href="{{ URL::to('report') }}">Report</a></li>
+                       -->
                         <li class="{{ set_active('import') }}"><a href="{{ URL::to('import') }}">Import</a></li>
   		        <li class="{{ set_active('schedule') }}"><a href="{{ URL::to('schedule') }}">Import Schedule</a></li>
                         <li class="{{ set_active('log') }}"><a href="{{URL::to('log') }}">Log</a></li>

@@ -1,4 +1,4 @@
-<title>Rain - Report</title>
+<title>Rain - Graph & Report</title>
 {{View::make('master')}}
 
 {{ HTML::script('packages/jquery/jquery.min.js'); }}
@@ -22,7 +22,7 @@
 
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
-  	<li class="active">Graph</li>
+  	<li class="active">Graph & Report</li>
 	</ol>
 	
 	
@@ -170,7 +170,9 @@ $(document).ready(function(){
 
 	$('.chosen-select').chosen();
 
-
+    $('#hideshow').click( function() {        
+         $('#searchform').toggle('show');
+    });
 	$('#basin').change(function(){
 		var value = $("#basin").val();
 		

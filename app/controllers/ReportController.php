@@ -145,7 +145,7 @@ class ReportController extends Controller
 			$weekly = DB::select(DB::raw("
 			
 			SELECT 		date_part('year',meas_date) AS _YEAR, date_part('month',min(meas_date)) as _MONTH,
-		    date_part( 'week', meas_date ) AS _week,
+		    date_part( 'week', meas_date ) AS _week, min(date_part( 'day', meas_date )) as _day
 			SUM(  rain ) AS _weeksum,
 			".$sql."
 			MAX(  rain )   AS _weekmax		

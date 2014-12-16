@@ -1,13 +1,17 @@
-<title>Rain - Graph</title>
+<title>Rain - Graph & Report</title>
 {{View::make('master')}}
 
 {{ HTML::script('packages/jquery/jquery.min.js'); }}
 {{ HTML::style('packages/chosen/chosen.min.css')}}
 {{ HTML::script('packages/chosen/chosen.jquery.min.js')}}
 {{ HTML::script('packages/highcharts/js/highcharts.js')}}
+{{ HTML::script('packages/highcharts/js/highcharts-more.js')}}
+
 {{ HTML::script('packages/highcharts/js/modules/exporting.js')}}
 {{ HTML::script('packages/datepicker/js/bootstrap-datepicker.js')}}
 {{ HTML::style('packages/datepicker/css/datepicker3.css')}}
+
+
 
 
 
@@ -18,168 +22,120 @@
 
 	<ol class="breadcrumb">
   	<li><a href="#">Home</a></li>
-  	<li class="active">Graph</li>
+  	<li class="active">Graph &  Report</li>
 	</ol>
 	
 	
 	
 	<?php 
+                    $graphTitle="'";
             
             		try {
-					$test = Station::where('stationid','=',$oldInput['station'])->get();
-					foreach ($test as $value)
-
-					$graphTitle= '\''.$value->name.'\'';
+					$test = Station::whereIn('stationid',$oldInput['station'])->get();
+					foreach ($test as $value){
+                                            $graphTitle=  $graphTitle.$value->name.'('.$value->stationid.')'.' ';
+                                        }
+                                        
+                                        $graphTitle=  $graphTitle."'";
+                                        
 					$graphSubtitle = '\'start: '.$oldInput['start'].'   end:'.
 					$oldInput['end'].'\'';
             			
             		} catch (Exception $e) {
 					$graphTitle = '\'N/A\'';
 					$graphSubtitle = '\'N/A\'';
-            		}
-            		
+
+                        }
             		
             		?>	
 	
+<?php 
+// report block
+
+$_month = $_week = '';
+$_monthsum = $_weeksum = '';
+$_monthavg = $_weekavg = '';
+$_monthmin =  $_weekmin = '';
+$_monthmax = $_weekmax = '';
+if (isset($weekly))
+{
+	
+
+
+	foreach ($weekly as $value)
+	{
+		if($value->_weekavg == NULL || $value->_weekmin == NULL)
+		{
+			
+		}
+		else 
+		{
+			
+			$_week = $_week.',\''.$value->_year."-".$value->_month."-".$value->_day."\ (".$value->_week.")".'\'';
+			$_weeksum = $_weeksum.','.$value->_weeksum;
+			$_weekmax = $_weekmax.','.$value->_weekmax;
+			$_weekmin = $_weekmin.','.$value->_weekmin;
+			$_weekavg = $_weekavg.','.$value->_weekavg;
+			
+		}
+	
+		
+	}
+	
+
+
+
+foreach ($monthly as $value)
+{
+	
+	if(isset($value->_monthmin))
+	{
+	$jd=gregoriantojd($value->_month,1,1);
+	
+	$_month = $_month.',\''.jdmonthname($jd,0)." \'".substr($value->_year, 2).'\'';
+	$_monthsum = $_monthsum.','.$value->_monthsum;
+	$_monthavg = $_monthavg.','.$value->_monthavg;
+	$_monthmin = $_monthmin.','.$value->_monthmin;
+	$_monthmax = $_monthmax.','.$value->_monthmax;
+	}
+}
+}
+
+
+
+
+?>
 	
 		
 
-	{{ Form::open(array('url' => 'graph', 'method' => 'POST')) }}
-	<div class="col-md-12 ">
-		
-				<div class="row">
+            <div class='col-md-12'>
+        <button id='hideshow'>Hide/Show</button>
+        <a class="btn" href="http://ssf.haii.or.th/raindb/public/index.php/graph">Clear</a>
 
-		
-				<div class="col-md-2 column">
-				
-				
-				{{ Form::select('basin',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
-				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
-				array('class'=>'chosen-select','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 160px;"))}}
-				
-				
-				
-				
-				
-				</div>
-				<?php 
-				
-				?>
-				
-				<div class="col-md-2 column">
-				
-				@if($oldInput['basin'] != NULL)
-				
-				{{ Form::select('province',array(''=>'')+SelectController::save_province($oldInput['basin'])
-				,
-				isset($oldInput['province']) ? $oldInput['province'] : null 
-				,
-				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
-				@else
-				
-				{{ Form::select('province',array(''=>'') + Province::lists('province_name','province_id'),
-				isset($oldInput['province']) ? $oldInput['province'] : null ,
-				array('class'=>'chosen-select','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 160px;"))}}
-				
-				@endif
-				
-				
-				</div>
 
-				
-				<div class="col-md-2 column">
-			
-				@if($oldInput['province'] != NULL)
-				
-				{{ Form::select(
-				'ampher',array(''=>'')+SelectController::save_amphur($oldInput['province']),
-				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
-				array('class'=>'chosen-select','data-placeholder'=>
-				'Select Amphur'
-				
-				,'id'=>'ampher','style'=>"width: 160px;"))}}
-				
-				@else
-				
-				
-				{{ Form::select(
-				'ampher',array(''=>''),
-				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
-				array('class'=>'chosen-select','data-placeholder'=>
-				'Select Amphur'
-				
-				,'id'=>'ampher','style'=>"width: 160px;"))}}
-				
-				@endif
-			
-				
-				</div>
-				
-				<div class="col-md-2 column">
-				
-				@if($oldInput['ampher'] != NULL)
-			
-				
-				{{ Form::select('station',array(''=>'')+SelectController::save_station($oldInput['ampher']),
-				isset($oldInput['station']) ? $oldInput['station']  : null 
-				,
-				array('class'=>'chosen-select',
-				'data-placeholder'=>'Select Station',
-				'id'=>'station','style'=>"width: 160px;"))}}
-				
-				
-				@else
-				
-				
-				{{ Form::select('station',array(''=>''),
-				isset($oldInput['station']) ? $oldInput['station']  : null 
-				,
-				array('class'=>'chosen-select',
-				'data-placeholder'=>'Select Station',
-				'id'=>'station','style'=>"width: 160px;"))}}
-				
-				@endif
-			
-		
-				
-				</div>
-				
-		
-				
-				
-								
-			
-				</div>
-				
+            </div>
+	<div id='searchform' class="col-md-12 " style="display:none">
+            {{ Form::open(array('url' => 'graph', 'method' => 'POST')) }}	
 				<div class ="row">
-				<br>
 				<div class="col-md-2 column">
-				
 				<div class="input-group date">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
   				<input type="text" class="form-control"
-  				name = "start"  placeholder = "Start Date"
+  				name = "start"  placeholder = "*Start Date"
   				<?php 
 	 			if(isset($oldInput['start']))
    				 {
    				 	if(!empty($oldInput['start']))echo " value = ". $oldInput['start'];
    				 }
-   				 
    				 ?>
-  				
-  				>
+  				/>
 				</div>	
-				
-				
-				
 				</div>
-				
-					<div class="col-md-2 column">
-				
+				<div class="col-md-2 column">
 				<div class="input-group date">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
   				<input type="text" class="form-control"
-  				name = "end"  placeholder = "End Date"
+  				name = "end"  placeholder = "*End Date"
   				<?php 
 	 			if(isset($oldInput['end']))
    				 {
@@ -187,38 +143,70 @@
    				 }
    				 
    				 ?>
-  				
-  				>
+  				/>
 				</div>	
-				
-				
-				
 				</div>
-				
-				<div class="col-md-4 column">
+				<div class="col-md-3 column">
 				{{ Form::checkbox('only_rainy_day', 'true',
 				isset($oldInput['only_rainy_day']) ? true : false 
 				)}}
 				{{Form::label('rainy_day', 'Only Rainy Day')}}
+				{{Form::submit('Submit', array())}}
+				</div>	
+				</div>
+		  
+			  <div class="row"><br/></div>
+                          
+				<div class="row">
+
+                                
+				<div class="col-md-3 column">
+                                    Basin:<br/>
+				{{ Form::select('basin[]',array(''=>'') + Riverbasin::lists('basin_name','basin_id'),
+				isset($oldInput['basin']) ? $oldInput['basin'] : null ,
+				array('multiple','data-placeholder'=>'Select basin','id'=>'basin','style'=>"width: 200px;height:280px"))}}
+				</div>
+				<!--'class'=>'chosen-select',-->
 				
+				<div class="col-md-3 column">
+                                    Province:<br/>
+				{{ Form::select('province[]',array(''=>'') + Province::lists('province_name','province_id'),
+				isset($oldInput['province']) ? $oldInput['province'] : null ,
+				array('multiple','data-placeholder'=>'Select Province','id'=>'province','style'=>"width: 200px;height:280px"))}}
+				</div>
+	
+				
+				<div class="col-md-3 column">
+			Ampher:<br/>
+				{{ Form::select(
+				'ampher[]',array(''=>'')+Ampher::lists('name','ampher_id'),
+				isset($oldInput['ampher']) ? $oldInput['ampher']  : null ,
+				array('multiple','data-placeholder'=>
+				'Select Amphur'
+				
+				,'id'=>'ampher','style'=>"width: 200px;height:280px"))}}
 				</div>
 				
+				<div class="col-md-3 column">
+			Station:<br/>
+				{{ Form::select('station[]',array(''=>'')+Station::lists('name','stationid'),
+				isset($oldInput['station']) ? $oldInput['station']  : null 
+				,
+				array('multiple',
+				'data-placeholder'=>'Select Station',
+				'id'=>'station','style'=>"width: 200px;height:280px"))}}
+				
+				</div>
+									
 				</div>
 				
-			
-				
-				<div class="row"> <br></div>
-			  {{Form::submit('submit', array('class' => 'btn btn-primary btn-sm'))}}
+
 			  
-			  
-			  <div class="row"> <br></div>
-			  
-			  
+                          
 			   
 			 {{ Form::close() }}
 						
-	</div>
-				
+	</div>				
 				
 
 
@@ -233,25 +221,16 @@
 
 		<div class="tab-content">
   				<div class="tab-pane fade in active" id="rain" >
- 				<div id="container" ></div>
+ 				<div id="raingraph" ></div>
 				</div>
 				<div class="tab-pane fade " id="temp">
-  				<div id="container2"  "     style="width:84.5%;"></div>
+  				<div id="tempgraph"      style="width:84.5%;"></div>
 				</div>
 		</div>
-        
-		<div class="tab-content">
-  				<div class="tab-pane fade in active" id="rain" >
- 				<div id="container" ></div>
-				</div>
-				<div class="tab-pane fade " id="temp">
-  				<div id="container2"  "     style="width:84.5%;"></div>
-				</div>
-		</div>        
 
 <script type="text/javascript" charset="UTF-8">
 $(function () {
-    $('#container').highcharts({
+    $('#raingraph').highcharts({
         chart: {
             zoomType: 'x'
                 
@@ -271,7 +250,8 @@ $(function () {
         title: {
             text: <?php echo $graphTitle ?>	,
             		  style: {
-            	            "font-family":'verdana'
+            	            "font-family":'verdana',
+                            "font-size": "16px"
             	    },
         },
         subtitle: {
@@ -284,8 +264,13 @@ $(function () {
         xAxis: {
      
 
-        	categories: [<?php echo $data['date_list']?>],
-        	minTickInterval: 30                     
+
+        type: 'datetime',
+        labels: {
+            format: '{value:%Y-%m-%d}',
+            rotation: 60,
+            align: 'left'
+        }                    
     	
         
         },
@@ -295,7 +280,7 @@ $(function () {
             }
         },
         legend: {
-            enabled: false
+            enabled: true
         },
         
 
@@ -326,12 +311,22 @@ $(function () {
             }
         },
 
-        series: [{
+        series: [
+<?php 
+$icount = 0;
+$stationss = $oldInput['station'];
+foreach($data['graphs'] as $g){ 
+
+    ?>
+    {
             type: 'area',
-            name: 'rainfall',
-       
-            data: [<?php echo $data['graph']?>]
-        }]
+            name: 'ID{{$stationss[$icount]}}',
+            pointStart: Date.UTC({{$data['date_year']}}, {{$data['date_month']-1}}, {{$data['date_day']}}),
+            pointInterval: 24 * 36e5,      
+            data: [<?php echo $g; $icount++;?>]
+        },
+<?php } ?>       
+    ]
     });
 });
 
@@ -340,7 +335,7 @@ $(function () {
 $(function () {
 
 	
-    $('#container2').highcharts({
+    $('#tempgraph').highcharts({
         chart: {
             zoomType: 'x'
             
@@ -385,9 +380,12 @@ $(function () {
         xAxis: {
      
 
-        	categories: [<?php echo $data['date_list']?>],
-        	minTickInterval: 30                     
-        	                   
+        type: 'datetime',
+        labels: {
+            format: '{value:%Y-%m-%d}',
+            rotation: 60,
+            align: 'left'
+        }        	                   
         	                    
     	
         
@@ -400,17 +398,319 @@ $(function () {
         
 
         series: [{
-            type: 'line',
+            type: 'area',
             name: 'mean',
+            pointStart: Date.UTC({{$data['date_year']}}, {{$data['date_month']-1}}, {{$data['date_day']}}),
+            pointInterval: 24 * 36e5,      
             
        
-            data: [<?php echo $data['mean_temp']?>]
+            data: [<?php echo $data['mean_temps'][0]?>]
         }]
     });
 });
 
+</script>
+
+@if (isset($weekly) )
+	
+	
+	<ul class="nav nav-tabs" id="Tab2_">
+	  	<li class="active"><a href="#motab" data-toggle="tab">Monthly</a></li>
+	
+  		<li ><a href="#weeklytab" data-toggle="tab">Weekly</a></li>
+
+		</ul>
+
+		<div class="tab-content">
+  				<div class="tab-pane fade in active" id="motab" >
+  				
+  				 <div id="monthlyreport" ></div>
+  				 <div id="monthlyboxplot" ></div>
+ 		
+ 				
+				</div>
+				<div class="tab-pane fade " id="weeklytab">
+				
+				
+			    <div id="weeklyreport"  style="width:84.5%" ></div>
+ 				<div id="weeklyboxplot"  style="width:84.5%" ></div>
+				
+				
+
+  				
+				</div>
+		</div>
+
+<script type="text/javascript">
+$(function () {
+    $('#weeklyreport').highcharts({
+        chart: {
+            type: 'column',
+            zoomType: 'x'
+                
+        },
+        title: {
+            text: 'Weekly '
+        },
+        subtitle: {
+            text: ' '
+        },
+        xAxis: {
+            categories: [<?php echo substr($_week,1) ?>],
+	                    
+                	
+        },
+
+        yAxis: {
+            title: {
+                text: 'rainfall (mm)'
+            }
+        },
+
+        series: [{
+            name: 'Avg',
+            data: [<?php echo substr($_weekavg,1) ?>]
+
+        },{
+            name: 'Min',
+            data: [<?php echo substr($_weekmin,1) ?>]
+       },
 
 
+       {
+           name: 'Max',
+           data: [<?php echo substr($_weekmax,1) ?>]
+       },
+
+         {
+            name: 'Sum',
+            data: [<?php echo substr($_weeksum,1) ?>]
+
+        }, 
+
+
+
+        ]
+    });
+
+
+    $('#weeklyboxplot').highcharts({
+
+	    chart: {
+	        type: 'boxplot',
+            zoomType: 'x'
+    	        
+	    },
+	    
+	    title: {
+	        text: '  '
+	    },
+	    
+	    legend: {
+	        enabled: false
+	    },
+	
+	    xAxis: {
+	        categories: <?php echo $categories_boxplot_week?> ,
+	       	minTickInterval: 10,                 
+	    	    	
+	        title: {
+	        }
+	    },
+	    
+	    yAxis: {
+	        title: {
+	            text: 'rainfall (mm)'
+	        },
+	        plotLines: [{
+	            value: 932,
+	            color: 'red',
+	            width: 1,
+	            label: {
+	                text: 'Theoretical mean: 932',
+	                align: 'center',
+	                style: {
+	                    color: 'gray'
+	                }
+	            }
+	        }]  
+	    },
+	
+	    series: [{
+	        name: 'Observations',
+	        data:<?php echo $boxplot_week?>,
+	        tooltip: {
+	            headerFormat: '<em>Experiment No {point.key}</em><br/>'
+	        }
+	    }, ]
+	
+	});
+
+
+
+    
+});
+
+
+
+
+
+
+
+$(function () {
+
+
+
+
+
+	    
+    $('#monthlyreport').highcharts({
+        chart: {
+            type: 'column',
+            zoomType: 'x'
+                
+        },
+        title: {
+             text: '<?php
+
+             	if ($oldInput['station'] != NULL )
+             	{
+             	$stationNames = Station::select('name')->whereIn('stationid' ,$oldInput['station'] )->get();
+             	try {
+                    foreach($stationNames as $stationName)
+             		echo $stationName->name. " ";
+             	} catch (Exception $e) {
+
+             	}
+         
+             	}?> '
+        },
+        
+        subtitle: {
+
+           
+
+            
+            text:  '<?php
+
+                
+                	if(isset($oldInput['start'])){
+
+						echo ' start: ';
+						echo '<code>'.$oldInput['start'].'</code>';
+						}
+                	
+                	
+                	if(isset($oldInput['end'])){
+                	
+                		echo ' end: ';
+                		echo '<code>'.$oldInput['end'].'</code>';
+                	}
+                	
+        		
+                	else 
+                	{
+                		echo '<code>example</code>';
+                	}
+                	
+                	?>'
+        },
+        xAxis: {
+            categories: [<?php echo substr($_month,1) ?>],
+            minTickInterval: 4                      
+            
+        
+        },
+
+
+        yAxis: {
+            title: {
+                text: 'rainfall (mm) '
+            }
+        },
+
+        
+        series: [{
+            name: 'Avg',
+            data: [<?php echo substr($_monthavg,1) ?>]
+
+        },{
+            name: 'Min',
+            data: [<?php echo substr($_monthmin,1) ?>]
+        },
+
+  
+
+        {
+            name: 'Max',
+            data: [<?php echo substr($_monthmax,1) ?>]
+        },
+
+        {
+            name: 'Sum',
+            data: [<?php echo substr($_monthsum,1) ?>]
+
+        }, 
+
+
+        ]
+    });
+
+
+    $('#monthlyboxplot').highcharts({
+
+	    chart: {
+	        type: 'boxplot',
+	            zoomType: 'x'
+			        
+	    },
+	    
+	    title: {
+	        //text: 'Box Plot Monthly'
+	    	text: ' '
+	    },
+	    
+	    legend: {
+	        enabled: false
+	    },
+	
+	    xAxis: {
+	        categories: <?php echo $categories_boxplot_month?>,
+	        title: {
+	        },
+        	minTickInterval: 4                    
+    	
+	    },
+	    
+	    yAxis: {
+	        title: {
+	            text: 'rainfall (mm)'
+	        },
+	   
+	    },
+	
+	    series: [{
+	        name: 'Rain',
+	        data:<?php echo $boxplot_month?>,
+	        tooltip: {
+
+	            valueSuffix: ' mm'
+			        
+	        }
+	    }]
+	
+	});
+    
+});
+</script>
+@endif
+
+
+
+
+
+
+<script type="text/javascript">
 
 $(document).ready(function(){
 
@@ -422,7 +722,9 @@ $(document).ready(function(){
 
 	$('.chosen-select').chosen();
 
-
+    $('#hideshow').click( function() {        
+         $('#searchform').toggle('show');
+    });
 	$('#basin').change(function(){
 		var value = $("#basin").val();
 		
